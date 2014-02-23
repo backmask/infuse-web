@@ -1,0 +1,34 @@
+{
+  "name": "infuse-web",
+  "version": "0.0.0",
+  "dependencies": {
+    "angular": "1.2.13",
+    "json3": "latest",
+    "es5-shim": "latest",
+    "jquery": "latest",
+    "bootstrap": "latest",
+    "angular-resource": "1.2.13",
+    "angular-cookies": "1.2.13",
+    "angular-sanitize": "1.2.13",
+    "angular-route": "1.2.13",
+    "d3js": "*",
+    "leapjs": "latest"
+  },
+  "devDependencies": {
+    "angular-mocks": "1.2.13",
+    "angular-scenario": "1.2.13"
+  },
+  "authors": [
+    "Thomas Delayen <thomas.delayen@backmask.fr>"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "app/bower_components",
+    "test",
+    "tests"
+  ]
+}
