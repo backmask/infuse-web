@@ -1,5 +1,21 @@
-.line {
+svg {
+  font: 10px sans-serif;
+  margin: 0;
+}
+
+path, line {
   fill: none;
   stroke: #000;
+}
+
+.line {
   stroke-width: 1.5px;
+}
+
+.axis {
+  shape-rendering: crispEdges;
+}
+
+.axis line {
+  stroke-opacity: .1;
 }
