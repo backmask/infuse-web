@@ -7,7 +7,7 @@ angular.module('d3')
       transclude: true,
       scope: {
         width: '@',
-        height: '@',
+        height: '@'
       },
       controller: function($scope) {
         if (!angular.isDefined($scope.width)) { $scope.width = 200; }
@@ -22,7 +22,7 @@ angular.module('d3')
         this.width = $scope.graphWidth;
         this.height = $scope.graphHeight - 1;
       },
-      link: function(scope, element, attrs) {
+      link: function(scope, element, attrs, ctrl, transclude) {
         var yAxis = d3.svg.axis()
           .scale(d3.scale.linear().domain([-1, 1]).range([scope.graphHeight, 0]))
           .ticks(scope.graphHeight / 10)
@@ -33,8 +33,18 @@ angular.module('d3')
           .attr('class', 'y axis')
           .attr('transform', 'translate(' + scope.graphWidth + ',' + scope.top + ')')
           .call(yAxis);
+
+        d3.select(element[0]).append('rect')
+          .attr('width', scope.graphWidth)
+          .attr('height', scope.graphHeight)
+          .attr('class', 'graph-border')
+          .attr('transform', 'translate(' + scope.left + ',' + scope.top + ')')
+
+        transclude(scope.$parent, function(content) {
+          element.find('g[name=graph]').append(content);
+        });
       },
-      template: '<g ng-transclude transform="translate({{left}}, {{top+1}})"></g>'
+      template: '<g name="graph" transform="translate({{left}}, {{top+1}})"></g>'
     };
   })
   .directive('d3Series', function(d3) {
@@ -72,9 +82,9 @@ angular.module('d3')
 
         scope.$watchCollection('data', function(val) {
           if (val.length > scope.width) {
-            val = val.slice(val.length - scope.width);
+            scope.data = val.slice(val.length - scope.width);
           }
-          repaint(val);
+          repaint(scope.data);
         });
 
         element[0].parentNode.removeChild(element[0]);

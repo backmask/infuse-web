@@ -2,6 +2,6 @@
 
 angular.module('infuseWebApp')
   .factory('Leap', function() {
-    var leap = new Leap.Controller({host: '192.168.0.49'});
+    var leap = new Leap.Controller();
     return leap;
   });
