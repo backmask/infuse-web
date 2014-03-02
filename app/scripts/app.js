@@ -1,10 +1,18 @@
 'use strict';
 
+angular.module('infuseWebAppDevice', []);
+angular.module('infuseWebAppCommon', []);
 angular.module('d3', []);
 angular.module('infuseWebApp', [
   'ngCookies',
   'ngResource',
   'ngSanitize',
   'ngRoute',
-  'd3'
+  'ngAnimate',
+  'd3',
+  'ui.bootstrap',
+  'infuseWebAppConnect',
+  'infuseWebAppNotification',
+  'infuseWebAppCommon',
+  'infuseWebAppDevice'
 ]);

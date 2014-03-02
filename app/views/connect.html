@@ -1,0 +1,55 @@
+<!-- Connection type selection -->
+<div class="form-group input-group">
+  <div class="btn-group btn-group-justified">
+    <label class="btn btn-default" ng-model="connectionType" btn-radio="'device'">Device</label>
+    <label class="btn btn-default" ng-model="connectionType" btn-radio="'manual'">Manual</label>
+    <label class="btn btn-default" ng-model="connectionType" btn-radio="'history'">History</label>
+  </div>
+</div>
+
+<!-- Device mode -->
+<div ng-controller="DeviceCtrl" ng-if="connectionType == 'device'">
+  <ul class="list-group devices">
+    <li class="list-group-item device" ng-repeat="device in devices">
+      <img ng-src="{{device.icon}}" class="pull-left img-circle" />
+      <div class="pull-left text">
+        <span>{{device.name}}</span><br/>
+        <small>{{device.description}}</small>
+      </div>
+      <div class="actions" show-on-hover-parent>
+        <a class="btn btn-default"><span class="glyphicon glyphicon-cog"></span></a>
+        <a class="btn btn-primary" ng-click="device.connect()">Connect</a>
+      </div>
+      <div style="clear:both"></div>
+    </li>
+  </ul>
+</div>
+
+<!-- Manual mode -->
+<div ng-controller="ManualCtrl" ng-if="connectionType == 'manual'">
+  <form name="form" class="css-form" novalidate>
+    <div class="form-group input-group">
+      <span class="input-group-addon">@</span>
+      <input type="text" class="form-control" placeholder="Host" ng-model="host" name="host" required>
+    </div>
+    <div class="form-group input-group">
+      <span class="input-group-addon">:</span>
+      <input type="text" class="form-control" placeholder="Port" ng-model="port" name="port" min="0" max="65535" required>
+    </div>
+
+    <div ng-if="connectionType == 'manual'" class="row">
+      <div class="col-xs-4">
+        <a class="btn btn-primary" ng-click="connect()" ng-disabled="connecting">
+          {{ connecting ? 'Connecting' : 'Connect' }}
+        </a>
+      </div>
+      <div class="col-xs-8">
+        <alert type="warning" ng-show="submitted && form.$invalid">
+          <div ng-show="submitted && form.host.$error.required">Hostname is required</div>
+          <div ng-show="submitted && form.port.$error.required">Port is required</div>
+        </alert>
+        <alert type="'error'" ng-show="error">Connection error</alert>
+      </div>
+    </div>
+  </form>
+</div>

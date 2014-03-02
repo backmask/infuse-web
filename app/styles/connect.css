@@ -1,0 +1,29 @@
+.list-group.devices {
+  margin-bottom: 0;
+}
+
+.list-group-item.device {
+  padding:8px;
+}
+
+.list-group-item.device {
+  padding:8px;
+}
+
+.list-group-item.device:hover {
+  background-color: #f5f5f5;
+}
+
+.device .text {
+  margin-left: 8px;
+  line-height: 1.25em;
+}
+
+.device .text span {
+  font-weight: bold;
+}
+
+.device .actions {
+  position: absolute;
+  right: 8px;
+}

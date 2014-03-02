@@ -1,0 +1,54 @@
+.notifications {
+  background-color: #fafafa;
+  border-left: 1px solid #CCC;
+  padding: 5px;
+  overflow-y: auto;
+}
+
+.notifications .alert {
+  border-radius: 0;
+  margin-bottom: 5px;
+  padding: 5px;
+}
+
+.notifications .alert-verbose {
+  color: #707070;
+  background-color: #e4e4e4;
+  border-color: #d6d6d6;
+  font-size: 0.8em;
+  padding: 2px 5px 2px 5px;
+}
+
+.notifications .alert-emphasize {
+  margin-bottom: 15px;
+  font-size: 1.2em;
+  box-shadow: 0 0 2px #444;
+}
+
+.notifications .alert.ng-enter,
+.notifications .alert.ng-leave,
+.notifications .alert.ng-move {
+  -webkit-transition: 0.5s ease-in-out all;
+  -moz-transition: 0.5s ease-in-out all;
+  -o-transition: 0.5s ease-in-out all;
+  transition: 0.5s ease-in-out all;
+}
+
+.notifications .alert.ng-enter,
+.notifications .alert.ng-move {
+  opacity: 0;
+  max-height: 0;
+  margin-bottom: 0;
+  padding-top:0;
+  padding-bottom:0;
+  overflow: hidden;
+}
+
+.notifications .alert.ng-move.ng-move-active,
+.notifications .alert.ng-enter.ng-enter-active {
+  opacity: 1;
+  margin-bottom: 5px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  max-height: 100px;
+}

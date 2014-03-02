@@ -12,7 +12,9 @@
     "angular-sanitize": "1.2.13",
     "angular-route": "1.2.13",
     "d3js": "*",
-    "leapjs": "latest"
+    "leapjs": "latest",
+    "angular-bootstrap": "~0.10.0",
+    "angular-animate": "~1.2.13"
   },
   "devDependencies": {
     "angular-mocks": "1.2.13",
