@@ -1,33 +1,49 @@
 'use strict';
 
 angular.module('infuseWebAppDevice')
-  .config(function(deviceProvider, leapProvider) {
-    deviceProvider.devices.push({
+  .run(function(device, leapDriverFactory) {
+    device.register({
       name: 'Leap motion',
       description: 'Local connection',
       icon: 'images/leap.png',
-      driverFactory: leapProvider,
+      driverFactory: leapDriverFactory.build,
       configuration: {}
     });
   })
-  .provider('leap', function() {
-    this.controller = false;
-    this.configuration = {};
-    this.$get = function() {
-      var controller = this.controller;
-      var cfg = this.configuration;
+  .factory('leapDriverFactory', function() {
+    var r = {};
 
-      return {
-        setConfiguration:
-        connect: function() {
-          devices.push(device);
-        },
-        getAll: function() {
-          return devices;
-        }
-      };
+    r.build = function(scope, configuration) {
+      var driver = new Leap.Controller(configuration);
+      scope.pristine = true;
+      scope.connected = false;
+      scope.error = false;
+      scope.status = '';
+
+      driver.on('connect', function() {
+        scope.$apply(function() {
+          scope.pristine = false;
+          scope.connected = true;
+          scope.error = false;
+          scope.status = '';
+        });
+      });
+
+      driver.on('disconnect', function() {
+        scope.$apply(function() {
+          scope.connected = false;
+        });
+      });
+
+      scope.onData = function(callback) {
+        driver.on('frame', callback);
+      }
+
+      return scope;
     }
-  });
+
+    return r;
+  })
   .factory('Leap', function() {
     var leap = new Leap.Controller();
     return leap;

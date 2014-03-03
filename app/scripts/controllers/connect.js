@@ -8,6 +8,32 @@ angular.module('infuseWebAppConnect', [
   ])
   .controller('DeviceCtrl', function ($scope, notifier, device) {
     $scope.devices = device.getAll();
+    $scope.connectedDevices = [];
+
+    $scope.connect = function(dev) {
+      dev.connecting = true;
+      notifier.notify('verbose', 'Connecting to ' + dev.name);
+
+      var s = dev.driverFactory($scope.$new(), dev.configuration);
+      $scope.connectedDevices.push(s);
+
+      s.$watch('connected', function(newValue) {
+        if (newValue) {
+          notifier.notify('success', 'Connected to device ' + dev.name);
+          dev.connecting = false;
+        } else if (!s.pristine) {
+          notifier.notify('verbose emphasize', 'Disconnected from device ' + dev.name);
+          dev.connecting = false;
+        }
+      });
+
+      s.$watch('error', function(newValue) {
+        if (newValue) {
+          notifier.notify('error', 'Error with device ' + dev.name + ' ' + dev.status);
+          dev.connecting = false;
+        }
+      });
+    }
   })
   .controller('ManualCtrl', function ($scope, socket, notifier) {
     $scope.submitted = false;
@@ -18,6 +44,7 @@ angular.module('infuseWebAppConnect', [
 
       if ($scope.form.$valid) {
         $scope.connecting = true;
+        notifier.notify('verbose', 'Connecting to ' + e.target.URL);
         var s = socket.connect($scope.host, $scope.port);
         s.onopen = function(e) {
           notifier.notify('success', 'Connection opened to ' + e.target.URL);
