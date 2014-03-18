@@ -1,20 +1,33 @@
 'use strict';
 
 angular.module('infuseWebAppDevice')
-  .provider('device', function() {
-    this.devices = [];
+  .factory('connection', function() {
+    var activeConnections = [];
+    var r = {};
 
-    this.$get = function() {
-      var devices = this.devices;
-      return {
-        register: function(device) {
-          devices.push(device);
-        },
-        getAll: function() {
-          return devices;
-        }
-      };
-    }
+    r.connect = function(connection) {
+      activeConnections.push(connection);
+    };
+
+    r.getAll = function() {
+      return activeConnections;
+    };
+
+    return r;
+  })
+  .factory('device', function() {
+    var registeredDevices = [];
+    var r = {};
+
+    r.register = function(device) {
+      registeredDevices.push(device);
+    };
+
+    r.getRegisteredDevices = function() {
+      return registeredDevices;
+    };
+
+    return r;
   })
   .run(function(device, infuseDriverFactory) {
     device.register({
@@ -22,9 +35,7 @@ angular.module('infuseWebAppDevice')
       description: 'ws://localhost:2935',
       icon: 'images/infuse.png',
       driverFactory: infuseDriverFactory.build,
-      configuration: {
-        url: 'ws://localhost:2935'
-      }
+      url: 'ws://localhost:2935'
     });
   })
   .factory('infuseDriverFactory', function() {
@@ -32,6 +43,9 @@ angular.module('infuseWebAppDevice')
 
     r.build = function(scope, configuration) {
       var driver = new WebSocket(configuration.url);
+      scope.name = configuration.name;
+      scope.description = configuration.description;
+      scope.icon = configuration.icon;
       scope.pristine = true;
       scope.connected = false;
       scope.error = false;
@@ -64,6 +78,10 @@ angular.module('infuseWebAppDevice')
 
       scope.onData = function(callback) {
         driver.onmessage = callback;
+      }
+
+      scope.close = function() {
+        driver.close();
       }
 
       return scope;

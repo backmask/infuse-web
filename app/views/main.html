@@ -19,7 +19,9 @@
         </accordion-heading>
         <div ng-include src="'views/connect.html'"></div>
       </accordion-group>
-      <accordion-group heading="Active connections"></accordion-group>
+      <accordion-group heading="Active connections" is-open="true">
+        <div ng-include src="'views/active-connections.html'"></div>
+      </accordion-group>
     </accordion>
   </div>
 </div>

@@ -4,35 +4,21 @@ angular.module('infuseWebAppConnect', [
     'infuseWebAppRemote',
     'infuseWebAppNotification',
     'infuseWebAppCommon',
-    'infuseWebAppDevice'
+    'infuseWebAppDevice',
+    'infuseWebAppActiveConnections'
   ])
-  .controller('DeviceCtrl', function ($scope, notifier, device) {
-    $scope.devices = device.getAll();
-    $scope.connectedDevices = [];
+  .controller('DeviceCtrl', function ($scope, notifier, device, connectionManager) {
+    $scope.devices = device.getRegisteredDevices();
 
     $scope.connect = function(dev) {
       dev.connecting = true;
-      notifier.notify('verbose', 'Connecting to ' + dev.name);
 
-      var s = dev.driverFactory($scope.$new(), dev.configuration);
-      $scope.connectedDevices.push(s);
+      var s = dev.driverFactory($scope.$new(), dev);
+      connectionManager.handleConnection(s);
 
-      s.$watch('connected', function(newValue) {
-        if (newValue) {
-          notifier.notify('success', 'Connected to device ' + dev.name);
-          dev.connecting = false;
-        } else if (!s.pristine) {
-          notifier.notify('verbose emphasize', 'Disconnected from device ' + dev.name);
-          dev.connecting = false;
-        }
-      });
-
-      s.$watch('error', function(newValue) {
-        if (newValue) {
-          notifier.notify('error', 'Error with device ' + dev.name + ' ' + dev.status);
-          dev.connecting = false;
-        }
-      });
+      s.$watch('pristine == false', function() {
+        dev.connecting = false;
+      })
     }
   })
   .controller('ManualCtrl', function ($scope, socket, notifier) {

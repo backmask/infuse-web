@@ -14,5 +14,6 @@ angular.module('infuseWebApp', [
   'infuseWebAppConnect',
   'infuseWebAppNotification',
   'infuseWebAppCommon',
-  'infuseWebAppDevice'
+  'infuseWebAppDevice',
+  'infuseWebAppActiveConnections'
 ]);

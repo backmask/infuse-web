@@ -1,0 +1,12 @@
+<div ng-controller="ActiveConnectionsCtrl">
+  <ul class="list-group devices">
+    <li class="list-group-item device" ng-repeat="device in connectedDevices">
+      <img ng-src="{{device.icon}}" class="pull-left img-circle" />
+      <div class="pull-left text">
+        <span>{{device.name}}</span><br/>
+        <small>{{device.description}}</small>
+      </div>
+      <div style="clear:both"></div>
+    </li>
+  </ul>
+</div>
