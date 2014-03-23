@@ -3,6 +3,7 @@
 angular.module('infuseWebAppDevice', []);
 angular.module('infuseWebAppCommon', []);
 angular.module('d3', []);
+angular.module('infuseWebAppInstrument', []);
 angular.module('infuseWebApp', [
   'ngCookies',
   'ngResource',
@@ -15,5 +16,6 @@ angular.module('infuseWebApp', [
   'infuseWebAppNotification',
   'infuseWebAppCommon',
   'infuseWebAppDevice',
-  'infuseWebAppActiveConnections'
+  'infuseWebAppActiveConnections',
+  'infuseWebAppInstrument'
 ]);

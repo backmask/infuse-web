@@ -6,7 +6,16 @@
         <span>{{device.name}}</span><br/>
         <small>{{device.description}}</small>
       </div>
+      <div class="pull-right text">
+        <span class="glyphicon glyphicon-arrow-up red"></span>
+        {{ device.uploadSpeed() | shortNumber : device.unit }}ps
+        <span class="glyphicon glyphicon-arrow-down green"></span>
+        {{ device.downloadSpeed() | shortNumber : device.unit }}ps
+      </div>
       <div style="clear:both"></div>
     </li>
   </ul>
+  <div ng-show="!connectedDevices.length">
+    No active connections
+  </div>
 </div>

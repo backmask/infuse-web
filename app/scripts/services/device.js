@@ -43,6 +43,8 @@ angular.module('infuseWebAppDevice')
 
     r.build = function(scope, configuration) {
       var driver = new WebSocket(configuration.url);
+      var onDataCallbacks = [];
+      var onSendCallbacks = [];
       scope.name = configuration.name;
       scope.description = configuration.description;
       scope.icon = configuration.icon;
@@ -50,6 +52,9 @@ angular.module('infuseWebAppDevice')
       scope.connected = false;
       scope.error = false;
       scope.status = '';
+      scope.download = 0;
+      scope.upload = 0;
+      scope.unit = 'B';
 
       driver.onopen = function() {
         scope.$apply(function() {
@@ -76,8 +81,24 @@ angular.module('infuseWebAppDevice')
         });
       }
 
+      driver.onmessage = function(data) {
+        scope.download += data.length;
+        angular.forEach(onDataCallbacks, function(cb) {
+          cb(data);
+        });
+      }
+
       scope.onData = function(callback) {
-        driver.onmessage = callback;
+        onDataCallbacks.push(callback);
+      }
+
+      scope.onSend = function(callback) {
+        onSendCallbacks.push(callback);
+      }
+
+      scope.send = function(data) {
+        scope.upload += data.length;
+        driver.send(data);
       }
 
       scope.close = function() {

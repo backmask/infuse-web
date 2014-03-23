@@ -1,11 +1,6 @@
 <div class="row fill">
   <div class="col-md-8 content fill" ng-controller="LeapCtrl">
     {{position}}<br/>
-    <svg d3-plot width="150" height="150">
-      <d3-series label="x" color="#FF0000" data="x"></d3-series>
-      <d3-series label="y" color="#00AA00" data="y"></d3-series>
-      <d3-series label="z" color="#0000FF" data="z"></d3-series>
-    </svg>
   </div>
 
   <div class="col-md-2 notifications fill" ng-include src="'views/notifications.html'"></div>
