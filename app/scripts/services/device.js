@@ -29,15 +29,6 @@ angular.module('infuseWebAppDevice')
 
     return r;
   })
-  .run(function(device, infuseDriverFactory) {
-    device.register({
-      name: 'Infuse',
-      description: 'ws://localhost:2935',
-      icon: 'images/infuse.png',
-      driverFactory: infuseDriverFactory.build,
-      url: 'ws://localhost:2935'
-    });
-  })
   .factory('infuseDriverFactory', function() {
     var r = {};
 

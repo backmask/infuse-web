@@ -1,24 +1,6 @@
 'use strict';
 
 angular.module('infuseWebAppDevice')
-  .run(function(device, leapDriverFactory) {
-    device.register({
-      name: 'Leap motion',
-      description: 'Local connection',
-      icon: 'images/leap.png',
-      driverFactory: leapDriverFactory.build,
-      configuration: {}
-    });
-    device.register({
-      name: 'Leap motion (host)',
-      description: '192.168.0.49',
-      icon: 'images/leap.png',
-      driverFactory: leapDriverFactory.build,
-      configuration: {
-        host: '192.168.0.49'
-      }
-    });
-  })
   .factory('leapDriverFactory', function() {
     var r = {};
 
@@ -35,6 +17,7 @@ angular.module('infuseWebAppDevice')
       scope.download = 0;
       scope.upload = 0;
       scope.unit = 'f';
+      scope.noUpload = true;
 
       driver.on('connect', function() {
         console.log('connected');

@@ -1,4 +1,4 @@
-<div ng-controller="ActiveConnectionsCtrl">
+<div ng-controller="ActiveConnectionsCtrl" id="active-connections">
   <ul class="list-group devices">
     <li class="list-group-item device" ng-repeat="device in connectedDevices">
       <img ng-src="{{device.icon}}" class="pull-left img-circle" />
@@ -6,11 +6,15 @@
         <span>{{device.name}}</span><br/>
         <small>{{device.description}}</small>
       </div>
-      <div class="pull-right text">
-        <span class="glyphicon glyphicon-arrow-up red"></span>
-        {{ device.uploadSpeed() | shortNumber : device.unit }}ps
-        <span class="glyphicon glyphicon-arrow-down green"></span>
-        {{ device.downloadSpeed() | shortNumber : device.unit }}ps
+      <div class="pull-right text device-speed">
+        <span ng-if="!device.noUpload">
+          <span class="glyphicon glyphicon-arrow-up red"></span>
+          {{ device.uploadSpeed() | shortNumber : device.unit }}ps
+        </span>
+        <span ng-if="!device.noDownload">
+          <span class="glyphicon glyphicon-arrow-down green"></span>
+          {{ device.downloadSpeed() | shortNumber : device.unit }}ps
+        </span>
       </div>
       <div style="clear:both"></div>
     </li>
