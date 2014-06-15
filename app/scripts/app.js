@@ -1,9 +1,10 @@
 'use strict';
 
-angular.module('infuseWebAppDevice', []);
 angular.module('infuseWebAppCommon', []);
 angular.module('d3', []);
+angular.module('infuseWebAppVisualization', []);
 angular.module('infuseWebAppInstrument', []);
+angular.module('infuseWebAppDevice', ['infuseWebAppVisualization']);
 angular.module('infuseWebApp', [
   'ngCookies',
   'ngResource',
@@ -17,5 +18,6 @@ angular.module('infuseWebApp', [
   'infuseWebAppCommon',
   'infuseWebAppDevice',
   'infuseWebAppActiveConnections',
-  'infuseWebAppInstrument'
-]);
+  'infuseWebAppInstrument',
+  'infuseWebAppVisualization'
+]).controller('blankCtrl', function() {});

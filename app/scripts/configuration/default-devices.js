@@ -2,12 +2,16 @@
 
 angular.module('infuseWebAppDevice')
   // Infuse
-  .run(function(device, infuseDriverFactory) {
+  .run(function(device, infuseDriverFactory, infuseVisualizationFactory) {
     device.register({
       name: 'Infuse',
       description: 'ws://vm:2935',
       icon: 'images/infuse.png',
       driverFactory: infuseDriverFactory.build,
+      visualizationFactory: infuseVisualizationFactory.build,
+      init: function(driver) {
+        return driver.doLogin('root', 'oh_you');
+      },
       url: 'ws://vm:2935'
     });
   })

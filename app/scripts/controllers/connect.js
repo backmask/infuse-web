@@ -13,10 +13,12 @@ angular.module('infuseWebAppConnect', [
     $scope.connect = function(dev) {
       dev.connecting = true;
 
-      var s = dev.driverFactory($scope.$new(), dev);
-      connectionManager.handleConnection(s);
+      var deviceScope = $scope.$new();
+      dev.driverFactory(deviceScope, dev);
+      dev.visualizationFactory(deviceScope);
+      connectionManager.handleConnection(deviceScope);
 
-      s.$watch('pristine == false', function() {
+      deviceScope.$watch('pristine == false', function() {
         dev.connecting = false;
       })
     }

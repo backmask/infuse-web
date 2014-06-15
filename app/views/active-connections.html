@@ -16,6 +16,14 @@
           {{ device.downloadSpeed() | shortNumber : device.unit }}ps
         </span>
       </div>
+      <div class="actions" show-on-hover-parent>
+        <a class="btn btn-success" ng-click="configure(device)">
+          <span class="glyphicon glyphicon-wrench"></span>
+        </a>
+        <a class="btn btn-danger" ng-click="disconnect(device)">
+          <span class="glyphicon glyphicon-remove"></span>
+        </a>
+      </div>
       <div style="clear:both"></div>
     </li>
   </ul>

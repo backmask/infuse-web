@@ -2,9 +2,10 @@
 
 angular.module('infuseWebAppActiveConnections', [
     'infuseWebAppNotification',
-    'infuseWebAppInstrument'
+    'infuseWebAppInstrument',
+    'infuseWebAppVisualization'
   ])
-  .factory('connectionManager', function(notifier, instrumentConvert) {
+  .factory('connectionManager', function(notifier, instrumentConvert, visualizationManager) {
     var r = {};
     var managedConnections = [];
 
@@ -22,6 +23,13 @@ angular.module('infuseWebAppActiveConnections', [
           notifier.notify('success', 'Connected to ' + connection.name);
         } else if (!connection.pristine) {
           notifier.notify('verbose emphasize', 'Disconnected from ' + connection.name);
+          managedConnections.splice(managedConnections.indexOf(connection), 1);
+        }
+      });
+
+      connection.$watch('initialized', function(newValue) {
+        if (newValue) {
+          visualizationManager.visualize(connection.defaultView);
         }
       });
 
@@ -32,6 +40,11 @@ angular.module('infuseWebAppActiveConnections', [
       });
     };
 
+    r.closeConnection = function(connection) {
+      notifier.notify('verbose', 'Disconnecting from ' + connection.name);
+      connection.close();
+    }
+
     r.getManagedConnections = function() {
       return managedConnections;
     }
@@ -40,6 +53,7 @@ angular.module('infuseWebAppActiveConnections', [
   })
   .controller('ActiveConnectionsCtrl', function($scope, $interval, connectionManager) {
     $scope.connectedDevices = connectionManager.getManagedConnections();
+    $scope.disconnect = connectionManager.closeConnection;
   })
   .filter('shortNumber', function(numberFilter) {
     return function(input, unit) {

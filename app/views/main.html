@@ -1,6 +1,5 @@
 <div class="row fill">
-  <div class="col-md-8 content fill" ng-controller="LeapCtrl">
-    {{position}}<br/>
+  <div class="col-md-8 content fill" ng-include src="'views/visualization.html'">
   </div>
 
   <div class="col-md-2 notifications fill" ng-include src="'views/notifications.html'"></div>
@@ -9,7 +8,7 @@
     <accordion close-others="false">
       <accordion-group is-open="true">
         <accordion-heading>
-          <span class="glyphicon glyphicon-plus"></span>
+          <span class="glyphicon glyphicon-book"></span>
           New connection
         </accordion-heading>
         <div ng-include src="'views/connect.html'"></div>
