@@ -5,6 +5,11 @@
   overflow-y: auto;
 }
 
+.notifications:first-letter {
+  text-transform: uppercase;
+}
+
+
 .notifications .alert {
   border-radius: 0;
   margin-bottom: 5px;
@@ -51,4 +56,10 @@
   padding-top: 5px;
   padding-bottom: 5px;
   max-height: 100px;
+}
+
+.notifications .detailed div[name=details] {
+  font-size: 0.8em;
+  max-height: 50px;
+  overflow: auto;
 }

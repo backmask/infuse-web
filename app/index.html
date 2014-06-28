@@ -36,19 +36,20 @@
     <script src="bower_components/json3/lib/json3.min.js"></script>
     <![endif]-->
 
-    <script src="bower_components/d3js/build/d3.v3.min.js"></script>
     <!-- build:js scripts/vendor.js -->
     <!-- bower:js -->
     <script src="bower_components/jquery/dist/jquery.js"></script>
     <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/json3/lib/json3.js"></script>
     <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
     <script src="bower_components/angular-resource/angular-resource.js"></script>
     <script src="bower_components/angular-cookies/angular-cookies.js"></script>
     <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
     <script src="bower_components/angular-route/angular-route.js"></script>
-    <script src="bower_components/leapjs/leap.js"></script>
+    <script src="bower_components/leapjs/leap-0.6.1.js"></script>
     <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
     <script src="bower_components/angular-animate/angular-animate.js"></script>
+    <script src="bower_components/d3/d3.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
@@ -61,10 +62,12 @@
         <script src="scripts/controllers/notification.js"></script>
         <script src="scripts/controllers/active-connections.js"></script>
         <script src="scripts/controllers/visualization.js"></script>
+        <script src="scripts/controllers/visualization/overview.js"></script>
         <script src="scripts/directives/d3-plot.js"></script>
         <script src="scripts/directives/d3-graph.js"></script>
         <script src="scripts/directives/common.js"></script>
         <script src="scripts/directives/instrument.js"></script>
+        <script src="scripts/directives/dynamic-include.js"></script>
         <script src="scripts/services/device.js"></script>
         <script src="scripts/services/leap.js"></script>
         <script src="scripts/services/d3.js"></script>

@@ -29,13 +29,13 @@ angular.module('infuseWebAppActiveConnections', [
 
       connection.$watch('initialized', function(newValue) {
         if (newValue) {
-          visualizationManager.visualize(connection.defaultView);
+          visualizationManager.visualize(connection.defaultView, connection.$new());
         }
       });
 
       connection.$watch('error', function(newValue) {
         if (newValue) {
-          notifier.notify('error', 'Connection error on ' + connection.name + ' ' + connection.status);
+          notifier.notify('error', 'Connection error on ' + connection.name + ', reason: ' + connection.status);
         }
       });
     };

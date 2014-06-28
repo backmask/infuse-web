@@ -2,23 +2,23 @@
   "name": "infuse-web",
   "version": "0.0.0",
   "dependencies": {
-    "angular": "1.2.13",
+    "angular": "latest",
     "json3": "latest",
     "es5-shim": "latest",
     "jquery": "latest",
     "bootstrap": "latest",
-    "angular-resource": "1.2.13",
-    "angular-cookies": "1.2.13",
-    "angular-sanitize": "1.2.13",
-    "angular-route": "1.2.13",
-    "d3js": "*",
+    "angular-resource": "latest",
+    "angular-cookies": "latest",
+    "angular-sanitize": "latest",
+    "angular-route": "latest",
     "leapjs": "latest",
-    "angular-bootstrap": "~0.10.0",
-    "angular-animate": "~1.2.13"
+    "angular-bootstrap": "latest",
+    "angular-animate": "latest",
+    "d3": "latest"
   },
   "devDependencies": {
-    "angular-mocks": "1.2.13",
-    "angular-scenario": "1.2.13"
+    "angular-mocks": "latest",
+    "angular-scenario": "latest"
   },
   "authors": [
     "Thomas Delayen <thomas.delayen@backmask.fr>"

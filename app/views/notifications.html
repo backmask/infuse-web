@@ -1,5 +1,9 @@
 <div ng-controller="NotificationCtrl">
-  <div class="alert {{notification.type | convertTypeCss}}" ng-repeat="notification in notifications" ng-animate="'animate'">
-    {{notification.message}}
+  <div class="alert {{notification.type | convertTypeCss}}"
+       ng-class="{ detailed: notification.details }"
+       ng-repeat="notification in notifications"
+       ng-animate="'animate'">
+    <div name="message">{{notification.message}}</div>
+    <div name="details">{{notification.details}}</div>
   </div>
 </div>

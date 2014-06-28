@@ -8,6 +8,11 @@ path, line {
   stroke: #000;
 }
 
+rect {
+  fill: none;
+  pointer-events: all;
+}
+
 .graph-border {
 	fill:none;
 	stroke:#000;

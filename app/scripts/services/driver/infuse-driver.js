@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('infuseWebAppDevice')
-  .factory('infuseDriverFactory', function($q) {
+  .factory('infuseDriverFactory', function($q, notifier) {
     var r = {};
 
     r.build = function(scope, configuration) {
@@ -29,7 +29,15 @@ angular.module('infuseWebAppDevice')
           scope.status = '';
 
           if (configuration.init)
-            configuration.init(scope).then(function() { scope.initialized = true; });
+            configuration.init(scope).then(
+              function(d) {
+                scope.initialized = true;
+              },
+              function(e) {
+                scope.error = true;
+                scope.status = e.error.message;
+              }
+            );
           else scope.initialized = true;
         });
       }
@@ -50,7 +58,8 @@ angular.module('infuseWebAppDevice')
         });
       }
 
-      driver.onmessage = function(data) {
+      driver.onmessage = function(message) {
+        var data = JSON.parse(message.data);
         scope.download += data.length;
         angular.forEach(onDataCallbacks, function(cb) {
           cb(data);
@@ -92,6 +101,7 @@ angular.module('infuseWebAppDevice')
           clearTimeout(responseTimeout);
           delete responseCallbacks[context];
           if (data.error) {
+            notifier.error(method + ' failed', data.error.message);
             deferredResponse.reject(data);
           } else {
             deferredResponse.resolve(data);
@@ -107,11 +117,12 @@ angular.module('infuseWebAppDevice')
       }
 
       scope.doLogin = function(user, password) {
-        return scope.doRequest("/login", { user: user, password: password });
+        return scope.doRequest("login", { login: user, password: password })
+          .then(function(e) { notifier.verbose('Logged as ' + e.data.logged_as); });
       }
 
       scope.doGetOverview = function() {
-        return scope.doRequest("/overview");
+        return scope.doRequest("overview");
       }
 
       return scope;

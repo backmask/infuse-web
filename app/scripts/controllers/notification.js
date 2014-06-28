@@ -5,9 +5,16 @@ angular.module('infuseWebAppNotification', [])
     var notifications = [];
     var r = {};
 
-    r.notify = function(type, message) {
-      notifications.unshift({ type: type, message: message });
+    r.notify = function(type, message, details) {
+      notifications.unshift({ type: type, message: message, details: details });
     };
+
+    r.error = r.notify.bind(null, 'error');
+    r.warning = r.notify.bind(null, 'warning');
+    r.info = r.notify.bind(null, 'info');
+    r.success = r.notify.bind(null, 'success');
+    r.verbose = r.notify.bind(null, 'verbose');
+
 
     r.getNotifications = function() {
       return notifications;
