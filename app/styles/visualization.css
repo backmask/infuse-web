@@ -1,0 +1,27 @@
+.content {
+  padding-left: 0px;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.visualization-wrapper {
+  padding: 15px 0 0 15px;
+}
+
+.visualization {
+  padding: 5px;
+  border: 1px solid #ccc;
+  margin: 0;
+}
+
+.visualization .title {
+  color: #666;
+  font-size: 0.8em;
+  font-weight: bold;
+  display: block;
+}
+
+.visualization .verbose {
+  color: #aaa;
+  font-weight: normal;
+}

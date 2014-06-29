@@ -19,6 +19,8 @@ html, body {
   background-color: #EEE;
   border-left: 1px solid #CCC;
   padding:0;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 .sidebar .panel {

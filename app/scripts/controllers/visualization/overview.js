@@ -1,5 +1,5 @@
 angular.module('infuseWebAppVisualization')
-  .controller('OverviewCtrl', function ($scope) {
+  .controller('OverviewCtrl', function ($scope, $interval) {
     $scope.overview = {
       nodes: [],
       links: []
@@ -11,14 +11,14 @@ angular.module('infuseWebAppVisualization')
 
     var refresh = function(wsData) {
       var gw = wsData.data.gateway;
-      var nodes = [{ color: rootColor, id: 'root' }];
+      var nodes = [{ color: rootColor, id: 'root', tooltip: $scope.name }];
       var links = [];
 
       gw.forEach(function(gwNode) {
-        nodes.push({ color: gatewayColor, id: gwNode.port });
+        nodes.push({ color: gatewayColor, id: gwNode.port, tooltip: "Gateway " + gwNode.port });
         links.push({ from: 'root', to: gwNode.port });
         gwNode.clients.forEach(function(client) {
-          nodes.push({ color: clientColor, id: client.uuid });
+          nodes.push({ color: clientColor, id: client.uuid, tooltip: "Client " + client.uuid });
           links.push({ from: gwNode.port, to: client.uuid });
         });
       });
@@ -28,4 +28,9 @@ angular.module('infuseWebAppVisualization')
     };
 
     $scope.doGetOverview().then(refresh);
+    var autoRefresh = $interval(function() {
+      $scope.doGetOverview().then(refresh);
+    }, 1000);
+
+    $scope.$on('$destroy', $interval.cancel.bind(null, autoRefresh));
   });

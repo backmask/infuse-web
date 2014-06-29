@@ -19,6 +19,7 @@ angular.module('d3')
             height = $scope.height;
 
         var nodesMap = {};
+        var linksMap = {};
 
         var tick = function() {
           link.attr("x1", function(d) { return d.source.x; })
@@ -39,7 +40,8 @@ angular.module('d3')
               x: width / 2,
               y: height / 2,
               id: node.id,
-              color: node.color
+              color: node.color,
+              tooltip: node.tooltip
             };
 
             nodes.push(newNode);
@@ -47,10 +49,15 @@ angular.module('d3')
           });
 
           newValue[1].forEach(function(link) {
+            var linkId = link.from + ':' + link.to;
+            if (linksMap[linkId])
+              return;
+
             links.push({
               source: nodesMap[link.from],
               target: nodesMap[link.to]
             });
+            linksMap[linkId] = true;
           });
 
           link = link.data(links);
@@ -64,6 +71,21 @@ angular.module('d3')
               .attr("class", "node")
               .style("fill", function(d) { return d.color; })
               .attr("r", 5)
+              .on("mouseover", function(d) {
+                if (!d.tooltip) return;
+                var nPosition = this.getScreenCTM()
+                  .translate(+ this.getAttribute("cx"), + this.getAttribute("cy"));
+                tooltipText.html(d.tooltip);
+                tooltip
+                  .style("opacity", 1)
+                  .style("position", "absolute")
+                  .style("left", (nPosition.e - $(tooltip[0]).width() / 2) + "px")
+                  .style("top", (nPosition.f - $(tooltip[0]).height() - 10) + "px");
+              })
+              .on("mouseout", function(d) {
+                tooltip
+                  .style("opacity", 0);
+              })
               .call(force.drag);
 
           force.start();
@@ -85,6 +107,14 @@ angular.module('d3')
         svg.append("rect")
             .attr("width", width)
             .attr("height", height);
+
+        var tooltip = d3.select(element[0]).append("div")
+          .attr("class", "tooltip top")
+          .style("pointer-events", "none")
+          .style("opacity", 0);
+        tooltip.append("div").attr("class", "tooltip-arrow");
+        var tooltipText = tooltip.append("div").attr("class", "tooltip-inner");
+
 
         var nodes = force.nodes(),
             links = force.links(),

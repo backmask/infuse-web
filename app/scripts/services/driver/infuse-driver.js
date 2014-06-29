@@ -60,8 +60,8 @@ angular.module('infuseWebAppDevice')
 
       driver.onmessage = function(message) {
         var data = JSON.parse(message.data);
-        scope.download += data.length;
-        angular.forEach(onDataCallbacks, function(cb) {
+        scope.download += message.data.length;
+        onDataCallbacks.forEach(function(cb) {
           cb(data);
         });
 

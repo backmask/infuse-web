@@ -1,6 +1,15 @@
 'use strict';
 
 angular.module('infuseWebAppVisualization')
+  .factory('noVisualizationFactory', function() {
+    return {
+      build: function(scope) {
+        scope.views = [];
+        scope.defaultView = null;
+        return scope;
+      }
+    };
+  })
   .factory('infuseVisualizationFactory', function() {
     var r = {};
     var views = [];

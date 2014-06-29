@@ -16,12 +16,13 @@ angular.module('infuseWebAppDevice')
     });
   })
   // Leap motion
-  .run(function(device, leapDriverFactory) {
+  .run(function(device, leapDriverFactory, noVisualizationFactory) {
     device.register({
       name: 'Leap motion',
       description: 'Local connection',
       icon: 'images/leap.png',
       driverFactory: leapDriverFactory.build,
+      visualizationFactory: noVisualizationFactory.build,
       configuration: {}
     });
   })

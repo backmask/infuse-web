@@ -19,7 +19,7 @@ angular.module('infuseWebAppInstrument')
         var distance = scope[field] - previousDistance;
 
         previousSpeed.unshift((distance / intervalDelta) * 1000);
-        while (previousSpeed.length > 5) {
+        while (previousSpeed.length > 20) {
           previousSpeed.pop();
         }
 

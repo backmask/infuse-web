@@ -1,5 +1,9 @@
 <div ng-controller="VisualizationCtrl">
   <div ng-repeat="vis in visualizations">
-    <dynamic-include src="vis.template" controller="vis.controller" scope="vis.scope" />
+    <div class="visualization-wrapper col-md-4">
+      <div class="visualization">
+        <dynamic-include src="vis.template" controller="vis.controller" scope="vis.scope"></dynamic-include>
+      </div>
+    </div>
   </div>
 </div>
