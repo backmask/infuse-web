@@ -4,17 +4,18 @@ angular.module('d3')
   .directive('d3Graph', function(d3) {
     return {
       restrict: 'E',
+      transclude: true,
       scope: {
         width: '@',
         height: '@',
         nodes: '=',
         links: '='
       },
-      controller: function($scope) {
-        if (!angular.isDefined($scope.width)) { $scope.width = 200; }
-        if (!angular.isDefined($scope.height)) { $scope.height = 100; }
-      },
-      link: function($scope, element, attrs, ctrl) {
+      link: function($scope, element, attrs, ctrl, transclude) {
+        transclude($scope, function(content) {
+          element.append(content);
+        });
+        var nodeRadius = 5;
         var width = $scope.width,
             height = $scope.height;
 
@@ -36,13 +37,9 @@ angular.module('d3')
             if (nodesMap[node.id])
               return;
 
-            var newNode = {
-              x: width / 2,
-              y: height / 2,
-              id: node.id,
-              color: node.color,
-              tooltip: node.tooltip
-            };
+            var newNode = angular.copy(node);
+            newNode.x = width / 2;
+            newNode.y = height / 2;
 
             nodes.push(newNode);
             nodesMap[node.id] = newNode;
@@ -70,21 +67,25 @@ angular.module('d3')
           node.enter().insert("circle", ".cursor")
               .attr("class", "node")
               .style("fill", function(d) { return d.color; })
-              .attr("r", 5)
+              .attr("r", nodeRadius)
               .on("mouseover", function(d) {
-                if (!d.tooltip) return;
-                var nPosition = this.getScreenCTM()
-                  .translate(+ this.getAttribute("cx"), + this.getAttribute("cy"));
-                tooltipText.html(d.tooltip);
+                if (!tooltip) return;
+                var nPosition = $(this).position();
+                  //.translate(this.getAttribute("cx"), this.getAttribute("cy"));
+                $scope.$apply(function() {
+                    $scope.tooltip = d;
+                    $scope.nodeHovered = true;
+                });
                 tooltip
-                  .style("opacity", 1)
                   .style("position", "absolute")
-                  .style("left", (nPosition.e - $(tooltip[0]).width() / 2) + "px")
-                  .style("top", (nPosition.f - $(tooltip[0]).height() - 10) + "px");
+                  .style("left", (nPosition.left + nodeRadius - $(tooltip[0]).width() / 2) + "px")
+                  .style("top", (nPosition.top - nodeRadius - $(tooltip[0]).height()) + "px");
               })
               .on("mouseout", function(d) {
-                tooltip
-                  .style("opacity", 0);
+                if (!tooltip) return;
+                $scope.$apply(function() {
+                    $scope.nodeHovered = false;
+                });
               })
               .call(force.drag);
 
@@ -108,19 +109,16 @@ angular.module('d3')
             .attr("width", width)
             .attr("height", height);
 
-        var tooltip = d3.select(element[0]).append("div")
-          .attr("class", "tooltip top")
-          .style("pointer-events", "none")
-          .style("opacity", 0);
-        tooltip.append("div").attr("class", "tooltip-arrow");
-        var tooltipText = tooltip.append("div").attr("class", "tooltip-inner");
-
+        var domTooltip = element.find('.tooltip')[0];
+        var tooltip = domTooltip ? d3.select(domTooltip) : null;
 
         var nodes = force.nodes(),
             links = force.links(),
             node = svg.selectAll(".node"),
             link = svg.selectAll(".link");
 
+        $scope.tooltip = false;
+        $scope.nodeHovered = false;
         $scope.$watchCollection('[nodes, links]', restart);
       }
     };

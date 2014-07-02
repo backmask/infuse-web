@@ -4,6 +4,7 @@ angular.module('infuseWebAppVisualization')
       nodes: [],
       links: []
     };
+    $scope.tooltip = { x: 1, y: 1};
 
     var rootColor = '#0085ff';
     var gatewayColor = '#24c980';
