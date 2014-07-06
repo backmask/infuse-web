@@ -69,20 +69,19 @@ angular.module('d3')
               .style("fill", function(d) { return d.color; })
               .attr("r", nodeRadius)
               .on("mouseover", function(d) {
-                if (!tooltip) return;
-                var nPosition = $(this).position();
-                  //.translate(this.getAttribute("cx"), this.getAttribute("cy"));
                 $scope.$apply(function() {
-                    $scope.tooltip = d;
+                    $scope.nodeSelected = d;
                     $scope.nodeHovered = true;
                 });
+
+                if (!tooltip) return;
+                var nPosition = $(this).position();
                 tooltip
                   .style("position", "absolute")
                   .style("left", (nPosition.left + nodeRadius - $(tooltip[0]).width() / 2) + "px")
                   .style("top", (nPosition.top - nodeRadius - $(tooltip[0]).height()) + "px");
               })
               .on("mouseout", function(d) {
-                if (!tooltip) return;
                 $scope.$apply(function() {
                     $scope.nodeHovered = false;
                 });
@@ -117,7 +116,7 @@ angular.module('d3')
             node = svg.selectAll(".node"),
             link = svg.selectAll(".link");
 
-        $scope.tooltip = false;
+        $scope.nodeSelected = false;
         $scope.nodeHovered = false;
         $scope.$watchCollection('[nodes, links]', restart);
       }

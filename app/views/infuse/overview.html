@@ -7,5 +7,11 @@
   height="200"
   nodes="overview.nodes"
   links="overview.links">
-  <d3-tooltip show="nodeHovered">x: {{tooltip.x}} y: {{tooltip.y}}</d3-tooltip>
+  <d3-tooltip show="nodeHovered">
+    <span class="title">
+      {{nodeSelected.info.title}}
+      <span class="verbose">{{nodeSelected.info.description}}</span>
+    </span>
+    <format-object ignore-null data="nodeSelected.info.details"></format-object>
+  </d3-tooltip>
 </d3-graph>

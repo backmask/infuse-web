@@ -12,14 +12,33 @@ angular.module('infuseWebAppVisualization')
 
     var refresh = function(wsData) {
       var gw = wsData.data.gateway;
-      var nodes = [{ color: rootColor, id: 'root', tooltip: $scope.name }];
+      var nodes = [{
+        color: rootColor,
+        id: 'root',
+        info: {
+          title: 'Infuse',
+          description: $scope.description.replace('ws://', '').split(':')[0]
+        }}];
       var links = [];
 
       gw.forEach(function(gwNode) {
-        nodes.push({ color: gatewayColor, id: gwNode.port, tooltip: "Gateway " + gwNode.port });
+        nodes.push({
+          color: gatewayColor,
+          id: gwNode.port,
+          info: {
+            title: 'Gateway',
+            description: gwNode.protocol + " @" + gwNode.port
+          }});
         links.push({ from: 'root', to: gwNode.port });
         gwNode.clients.forEach(function(client) {
-          nodes.push({ color: clientColor, id: client.uuid, tooltip: "Client " + client.uuid });
+          nodes.push({
+            color: clientColor,
+            id: client.uuid,
+            info: {
+              title: 'Client',
+              description: client.uuid,
+              details: client.description
+            }});
           links.push({ from: gwNode.port, to: client.uuid });
         });
       });
@@ -30,7 +49,9 @@ angular.module('infuseWebAppVisualization')
 
     $scope.doGetOverview().then(refresh);
     var autoRefresh = $interval(function() {
-      $scope.doGetOverview().then(refresh);
+      if ($scope.connected) {
+        $scope.doGetOverview().then(refresh);
+      }
     }, 1000);
 
     $scope.$on('$destroy', $interval.cancel.bind(null, autoRefresh));
