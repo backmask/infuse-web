@@ -23,6 +23,7 @@ angular.module('infuseWebAppDevice')
         scope.$apply(function() {
           scope.pristine = false;
           scope.connected = true;
+          scope.initialized = true;
           scope.error = false;
           scope.status = '';
         });
@@ -43,6 +44,17 @@ angular.module('infuseWebAppDevice')
 
       scope.onData = function(callback) {
         onDataCallbacks.push(callback);
+        return {
+          close: function() {
+            var cb = callback;
+            for (var i = 0; i < onDataCallbacks.length; ++i) {
+              if (onDataCallbacks[i] === cb) {
+                onDataCallbacks.splice(i, 1);
+                return;
+              }
+            }
+          }
+        };
       }
 
       scope.onSend = function(callback) {}

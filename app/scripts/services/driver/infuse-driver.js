@@ -28,7 +28,7 @@ angular.module('infuseWebAppDevice')
           scope.error = false;
           scope.status = '';
 
-          if (configuration.init)
+          if (configuration.init) {
             configuration.init(scope).then(
               function(d) {
                 scope.initialized = true;
@@ -38,7 +38,9 @@ angular.module('infuseWebAppDevice')
                 scope.status = e.error.message;
               }
             );
-          else scope.initialized = true;
+          } else {
+            scope.initialized = true;
+          }
         });
       }
 
