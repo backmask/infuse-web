@@ -6,12 +6,14 @@ angular.module('infuseWebAppVisualization')
     var activeVisualizations = [];
 
     r.visualize = function(vis, scope) {
-      var visCopy = {
-        template: vis.template,
-        controller: vis.controller,
-        scope: scope
-      };
+      var visCopy = angular.copy(vis);
+      visCopy.scope = scope;
+      visCopy.stop = function() { r.stopVisualization(visCopy); }
       activeVisualizations.push(visCopy);
+    }
+
+    r.stopVisualization = function(vis) {
+      activeVisualizations.splice(activeVisualizations.indexOf(vis), 1);
     }
 
     r.getVisualizations = function() {

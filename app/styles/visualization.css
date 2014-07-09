@@ -14,11 +14,40 @@
   margin: 0;
 }
 
+.visualization .color-tag {
+  width: 20px;
+  height: 3px;
+  position: absolute;
+  left: 15px;
+  top: 15px;
+}
+
+.visualization .dc-alert {
+  display: inline-block;
+  font-size: 0.8em;
+  padding: 0 2px 0 2px;
+  margin: 0 0 0 5px;
+  border: 0;
+  border-radius: 0;
+}
+
+.visualization .actions {
+  position: absolute;
+  right: 0;
+  top: 15px;
+  padding:5px;
+  opacity: 0;
+}
+
+.visualization .actions:hover {
+  opacity: 0.8;
+}
+
 .visualization .title {
   color: #666;
   font-size: 0.8em;
   font-weight: bold;
-  display: block;
+  display: inline-block;
 }
 
 .visualization .verbose {

@@ -14,7 +14,8 @@
     "leapjs": "latest",
     "angular-bootstrap": "latest",
     "angular-animate": "latest",
-    "d3": "latest"
+    "d3": "latest",
+    "randomColor": "~0.1.1"
   },
   "devDependencies": {
     "angular-mocks": "latest",

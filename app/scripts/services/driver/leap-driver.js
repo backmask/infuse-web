@@ -30,9 +30,7 @@ angular.module('infuseWebAppDevice')
       });
 
       driver.on('disconnect', function() {
-        scope.$apply(function() {
-          scope.connected = false;
-        });
+        scope.connected = false;
       });
 
       driver.on('frame', function(data) {
@@ -47,17 +45,14 @@ angular.module('infuseWebAppDevice')
         return {
           close: function() {
             var cb = callback;
-            for (var i = 0; i < onDataCallbacks.length; ++i) {
-              if (onDataCallbacks[i] === cb) {
-                onDataCallbacks.splice(i, 1);
-                return;
-              }
-            }
+            onDataCallbacks.splice(onDataCallbacks.indexOf(cb), 1);
           }
         };
       }
 
       scope.onSend = function(callback) {}
+
+      scope.close = driver.disconnect.bind(driver);
 
       scope.stream = {
         xyz: {

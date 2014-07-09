@@ -1,20 +1,20 @@
 <div ng-controller="ActiveConnectionsCtrl" id="active-connections">
   <ul class="list-group devices">
-    <li class="list-group-item device" ng-repeat="device in connectedDevices">
+    <li class="list-group-item device" style="border-left:3px solid {{device.color}}" ng-repeat="device in connectedDevices">
       <img ng-src="{{device.icon}}" class="pull-left img-circle" />
       <div class="pull-left text">
         <span>{{device.name}}</span><br/>
         <small>{{device.description}}</small>
       </div>
       <div class="pull-right text device-speed">
-        <span ng-if="!device.noUpload">
+        <div ng-if="!device.noUpload">
           <span class="glyphicon glyphicon-arrow-up red"></span>
           {{ device.uploadSpeed() | shortNumber : device.unit }}ps
-        </span>
-        <span ng-if="!device.noDownload">
+        </div>
+        <div ng-if="!device.noDownload">
           <span class="glyphicon glyphicon-arrow-down green"></span>
           {{ device.downloadSpeed() | shortNumber : device.unit }}ps
-        </span>
+        </div>
       </div>
       <div class="actions" show-on-hover-parent>
         <a class="btn btn-success" ng-click="configure(device)">

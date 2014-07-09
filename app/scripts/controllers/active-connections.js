@@ -13,6 +13,7 @@ angular.module('infuseWebAppActiveConnections', [
       managedConnections.push(connection);
       connection.downloadSpeed = instrumentConvert.toSpeed(connection, 'download');
       connection.uploadSpeed = instrumentConvert.toSpeed(connection, 'upload');
+      connection.color = randomColor({ luminosity: 'bright'});
 
       if (connection.pristine) {
         notifier.notify('verbose', 'Connecting to ' + connection.name);

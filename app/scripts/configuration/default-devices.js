@@ -5,7 +5,7 @@ angular.module('infuseWebAppDevice')
   .run(function(device, infuseDriverFactory, infuseVisualizationFactory) {
     device.register({
       name: 'Infuse',
-      description: 'ws://vm:2935',
+      description: 'vm',
       icon: 'images/infuse.png',
       driverFactory: infuseDriverFactory.build,
       visualizationFactory: infuseVisualizationFactory.build,

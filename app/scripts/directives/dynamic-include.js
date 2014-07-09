@@ -10,7 +10,7 @@ angular.module('infuseWebAppCommon')
       link: function(scope, elt, attrs, controller) {
         var tmpl = '<div ng-include src="\'' + scope.src + '\'" ng-controller="' + scope.controller + '"></div>';
         var included =  $compile(tmpl)(scope.scope);
-        elt.replaceWith(included);
+        elt.append(included);
       }
     };
   }
