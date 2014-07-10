@@ -16,8 +16,8 @@ angular.module('d3')
           element.append(content);
         });
         var nodeRadius = 5;
-        var width = $scope.width,
-            height = $scope.height;
+        var width = $scope.width;
+        var height = $scope.height;
 
         var nodesMap = {};
         var linksMap = {};
@@ -32,7 +32,7 @@ angular.module('d3')
               .attr("cy", function(d) { return d.y; });
         }
 
-        var restart = function(newValue, oldValue) {
+        var refreshNodes = function(newValue, oldValue) {
           newValue[0].forEach(function(node) {
             if (nodesMap[node.id])
               return;
@@ -57,6 +57,10 @@ angular.module('d3')
             linksMap[linkId] = true;
           });
 
+          restart();
+        }
+
+        var restart = function() {
           link = link.data(links);
 
           link.enter().insert("line", ".node")
@@ -91,23 +95,23 @@ angular.module('d3')
           force.start();
         }
 
-        var fill = d3.scale.category20();
+        var onResize = function() {
+          width = $(svg[0]).width();
+          height = $(svg[0]).height();
+          force = force.size([width, height]).resume();
+        }
 
+        var fill = d3.scale.category20();
         var force = d3.layout.force()
-            .size([width, height])
-            .nodes([])
-            .linkDistance(45)
-            .charge(-40)
-            .on("tick", tick);
+          .size([width, height])
+          .nodes([])
+          .linkDistance(45)
+          .charge(-40)
+          .on("tick", tick);
 
         var svg = d3.select(element[0]).append("svg")
-            .attr("width", width)
-            .attr("height", height);
-
-        svg.append("rect")
-            .attr("width", width)
-            .attr("height", height);
-
+          .attr("width", width)
+          .attr("height", height);
         var domTooltip = element.find('.tooltip')[0];
         var tooltip = domTooltip ? d3.select(domTooltip) : null;
 
@@ -118,7 +122,10 @@ angular.module('d3')
 
         $scope.nodeSelected = false;
         $scope.nodeHovered = false;
-        $scope.$watchCollection('[nodes, links]', restart);
+
+        d3.select(window).on('resize', onResize);
+        $scope.$watchCollection('[nodes, links]', refreshNodes);
+        onResize();
       }
     };
   });
