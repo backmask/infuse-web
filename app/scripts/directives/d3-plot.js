@@ -1,53 +1,69 @@
 'use strict';
 
 angular.module('d3')
-  .directive('d3Plot', function(d3) {
+  .directive('d3Plot', function(d3, $window) {
     return {
-      restrict: 'A',
+      restrict: 'E',
       transclude: true,
       scope: {
         width: '@',
         height: '@'
       },
       controller: function($scope) {
-        if (!angular.isDefined($scope.width)) { $scope.width = 200; }
-        if (!angular.isDefined($scope.height)) { $scope.height = 100; }
-        $scope.top = 20;
+        $scope.top = 10;
         $scope.left = 0;
         $scope.right = 30;
-        $scope.bottom = 20;
-        $scope.graphWidth = $scope.width - $scope.left - $scope.right;
-        $scope.graphHeight = $scope.height - $scope.top - $scope.bottom;
-
-        this.width = $scope.graphWidth;
-        this.height = $scope.graphHeight - 1;
+        $scope.bottom = 10;
       },
       link: function(scope, element, attrs, ctrl, transclude) {
-        var yAxis = d3.svg.axis()
-          .scale(d3.scale.linear().domain([-1, 1]).range([scope.graphHeight, 0]))
-          .ticks(scope.graphHeight / 10)
-          .tickSize(-scope.graphWidth)
-          .orient('right');
+        var onResize = function() {
+          var width = $(svg[0]).width();
+          var height = $(svg[0]).height();
+          var graphWidth = width - scope.left - scope.right;
+          var graphHeight = height - scope.top - scope.bottom;
+          scope.$parent.$broadcast('graphResized', graphWidth, graphHeight);
 
-        d3.select(element[0]).append('g')
-          .attr('class', 'y axis')
-          .attr('transform', 'translate(' + scope.graphWidth + ',' + scope.top + ')')
-          .call(yAxis);
+          yAxis.scale(d3.scale.linear().domain([-1, 1]).range([graphHeight, 0]))
+            .ticks(graphHeight / 10)
+            .tickSize(-graphWidth);
 
-        d3.select(element[0]).append('rect')
-          .attr('width', scope.graphWidth)
-          .attr('height', scope.graphHeight)
-          .attr('class', 'graph-border')
-          .attr('transform', 'translate(' + scope.left + ',' + scope.top + ')')
+          yAxisContainer
+            .attr('transform', 'translate(' + graphWidth + ',' + scope.top + ')')
+            .call(yAxis);
+
+          graphBackground
+            .attr('width', graphWidth)
+            .attr('height', graphHeight)
+            .attr('transform', 'translate(' + scope.left + ',' + scope.top + ')');
+
+          seriesContainer
+            .attr('transform', 'translate(' + scope.left + ',' + (scope.top+1) + ')');
+        }
+
+        var svg = d3.select(element[0]).append("svg")
+          .attr("width", scope.width)
+          .attr("height", scope.height);
+
+        var yAxis = d3.svg.axis().orient('right');
+
+        var yAxisContainer = svg.append('g')
+          .attr('class', 'y axis');
+
+        var graphBackground = svg.append('rect')
+          .attr('class', 'graph-border');
+
+        var seriesContainer = svg.append('g');
 
         transclude(scope.$parent, function(content) {
-          element.find('g[name=graph]').append(content);
+          $(seriesContainer[0]).append(content);
         });
-      },
-      template: '<g name="graph" transform="translate({{left}}, {{top+1}})"></g>'
+
+        angular.element($window).bind('resize', onResize);
+        onResize();
+      }
     };
   })
-  .directive('d3Series', function(d3) {
+  .directive('d3Series', function(d3, $window) {
     return {
       restrict: 'E',
       require: '^d3Plot',
@@ -56,17 +72,26 @@ angular.module('d3')
         data: '='
       },
       link: function(scope, element, attrs, d3Plot) {
-        scope.width = d3Plot.width;
-        scope.height = d3Plot.height;
-        scope.data = angular.isDefined(scope.data) ? scope.data : d3.range(scope.width).map(d3.functor(0));
+        scope.width = 0;
+        scope.height = 0;
 
-        var x = d3.scale.linear()
-          .domain([0, scope.width])
-          .range([0, scope.width]);
+        var onResize = function(event, width, height) {
+          scope.width = width;
+          scope.height = height;
 
-        var y = d3.scale.linear()
-          .domain([-1, 1])
-          .range([scope.height, 0]);
+          x.domain([0, width])
+            .range([0, width]);
+
+          y.domain([-1, 1])
+           .range([height, 0]);
+        }
+
+        var repaint = function(data) {
+          path.attr("d", line(data));
+        }
+
+        var x = d3.scale.linear();
+        var y = d3.scale.linear();
 
         var line = d3.svg.line()
           .x(function(d, i) { return x(i); })
@@ -76,10 +101,6 @@ angular.module('d3')
           .style('stroke', scope.color)
           .attr('class', 'line');
 
-        var repaint = function(data) {
-          path.attr("d", line(data));
-        }
-
         scope.$watchCollection('data', function(val) {
           if (val.length > scope.width) {
             scope.data = val.slice(val.length - scope.width);
@@ -88,6 +109,8 @@ angular.module('d3')
         });
 
         element[0].parentNode.removeChild(element[0]);
+        onResize(0 ,0);
+        scope.$on('graphResized', onResize);
         repaint(scope.data);
       }
     };

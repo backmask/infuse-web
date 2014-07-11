@@ -15,9 +15,14 @@ angular.module('d3')
         transclude($scope, function(content) {
           element.append(content);
         });
+
+        var svg = d3.select(element[0]).append("svg")
+          .attr("width", $scope.width)
+          .attr("height", $scope.height);
+
         var nodeRadius = 5;
-        var width = $scope.width;
-        var height = $scope.height;
+        var width = $(svg[0]).width();
+        var height = $(svg[0]).height();
 
         var nodesMap = {};
         var linksMap = {};
@@ -109,9 +114,6 @@ angular.module('d3')
           .charge(-40)
           .on("tick", tick);
 
-        var svg = d3.select(element[0]).append("svg")
-          .attr("width", width)
-          .attr("height", height);
         var domTooltip = element.find('.tooltip')[0];
         var tooltip = domTooltip ? d3.select(domTooltip) : null;
 
