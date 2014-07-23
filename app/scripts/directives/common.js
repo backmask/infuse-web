@@ -21,16 +21,25 @@ angular.module('infuseWebAppCommon')
       link: function(scope, element, attrs) {
         var ignoreNull = angular.isDefined(attrs.ignoreNull);
 
+        var hasToBeDisplayed = function(val) {
+          if (!ignoreNull || val === false)
+            return true;
+          if (angular.isArray(val) || angular.isObject(val))
+            return val.length > 0;
+          return val;
+        };
+
         var pretty = function(val) {
           if (angular.isArray(val) || angular.isObject(val)) {
             var container = document.createElement('ul');
             for (var k in val) {
-              if (ignoreNull && !k[val] && k[val] !== false) {
+              if (!hasToBeDisplayed(val[k])) {
                 continue;
               }
 
               var eltContainer = document.createElement('li');
-              if (angular.isObject(val)) {
+              var child = pretty(val[k]);
+              if (!angular.isArray(val)) {
                 eltContainer.appendChild(document.createTextNode(k + ": "));
               }
               eltContainer.appendChild(pretty(val[k]));

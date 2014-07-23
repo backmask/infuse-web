@@ -8,7 +8,8 @@ angular.module('infuseWebAppVisualization')
 
     var rootColor = '#0085ff';
     var gatewayColor = '#24c980';
-    var clientColor = '#999';
+    var clientColor = '#FFB800';
+    var nodeClientColor = '#999';
 
     var refresh = function(wsData) {
       var gw = wsData.data.gateway;
@@ -21,7 +22,7 @@ angular.module('infuseWebAppVisualization')
         }}];
       var links = [];
 
-      gw.forEach(function(gwNode) {
+      gw.nodes.forEach(function(gwNode) {
         nodes.push({
           color: gatewayColor,
           id: gwNode.port,
@@ -32,7 +33,7 @@ angular.module('infuseWebAppVisualization')
         links.push({ from: 'root', to: gwNode.port });
         gwNode.clients.forEach(function(client) {
           nodes.push({
-            color: clientColor,
+            color: nodeClientColor,
             id: client.uuid,
             info: {
               title: 'Client',
@@ -41,6 +42,22 @@ angular.module('infuseWebAppVisualization')
             }});
           links.push({ from: gwNode.port, to: client.uuid });
         });
+      });
+
+      gw.clients.forEach(function(client) {
+        nodes.push({
+          color: clientColor,
+          id: client.uuid,
+          info: {
+            title: client.name,
+            description: client.adapterName,
+            details: {
+              uuid: client.uuid,
+              input: client.input,
+              output: client.output
+            }
+          }});
+        links.push({ from: 'root', to: client.uuid });
       });
 
       $scope.overview.nodes = nodes;
