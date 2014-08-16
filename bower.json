@@ -15,7 +15,8 @@
     "angular-bootstrap": "latest",
     "angular-animate": "latest",
     "d3": "latest",
-    "randomColor": "~0.1.1"
+    "randomColor": "~0.1.1",
+    "angular-local-storage": "~0.0.5"
   },
   "devDependencies": {
     "angular-mocks": "latest",

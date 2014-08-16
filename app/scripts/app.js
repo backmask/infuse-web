@@ -13,6 +13,7 @@ angular.module('infuseWebApp', [
   'ngAnimate',
   'd3',
   'ui.bootstrap',
+  'LocalStorageModule',
   'infuseWebAppConnect',
   'infuseWebAppNotification',
   'infuseWebAppCommon',

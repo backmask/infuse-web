@@ -10,19 +10,56 @@
 <!-- Device mode -->
 <div ng-controller="DeviceCtrl" ng-if="connectionType == 'device'">
   <ul class="list-group devices">
+
+    <!-- Device list -->
     <li class="list-group-item device" ng-repeat="device in devices">
       <img ng-src="{{device.icon}}" class="pull-left img-circle" />
       <div class="pull-left text">
         <span>{{device.name}}</span><br/>
         <small>{{device.description}}</small>
       </div>
-      <div class="actions" show-on-hover-parent>
-        <!-- <a class="btn btn-default"><span class="glyphicon glyphicon-cog"></span></a> -->
+      <div class="actions" ng-if="!device.configMode" show-on-hover-parent>
+        <a class="btn btn-default" ng-if="device.settings" ng-click="configure(device)"><span class="glyphicon glyphicon-cog"></span></a>
         <a class="btn btn-primary" ng-disabled="device.connecting" ng-click="connect(device)">Connect</a>
       </div>
+
+      <!-- Device configuration -->
+      <div ng-if="device.configMode" class="configuration">
+        <div class="actions">
+          <a class="btn btn-default" ng-click="cancelModifications(device)"><span class="glyphicon glyphicon-remove"></span></a>
+          <a class="btn btn-danger" ng-click="remove(device)"><span class="glyphicon glyphicon-trash"></span></a>
+          <a class="btn btn-success" ng-click="saveModifications(device)"><span class="glyphicon glyphicon-ok"></span></a>
+        </div>
+        <div style="clear:both"></div>
+        <form class="form-horizontal" role="form">
+          <div ng-repeat="(key, value) in device.editableSettings" class="config-row">
+            <label for="{{key}}" class="col-sm-2 control-label">{{key}}</label>
+            <div class="col-sm-10">
+              <input class="form-control" name="{{key}}" ng-model="device.editableSettings[key]" value="{{value}}" />
+            </div>
+          </div>
+        </form>
+      </div>
+
       <div style="clear:both"></div>
     </li>
+
+    <!-- New device dropdown -->
+    <li class="list-group-item add dropdown-toggle" dropdown>
+      <span class="glyphicon glyphicon-plus"></span> Register new device
+      <ul class="dropdown-menu add-dropdown">
+        <li ng-repeat="(name, configurator) in deviceConfigurators" ng-click="add(name)">
+          <img ng-src="{{configurator.defaultSettings.icon}}" class="pull-left img-circle" />
+          <div class="pull-left text">
+            <span class="name">{{name}}</span><br/>
+            <small>{{configurator.description}}</small>
+          </div>
+          <div style="clear:both"></div>
+        </li>
+      </ul>
+    </li>
   </ul>
+
 </div>
 
 <!-- Manual mode -->
@@ -37,7 +74,7 @@
       <input type="text" class="form-control" placeholder="Port" ng-model="port" name="port" min="0" max="65535" required>
     </div>
 
-    <div ng-if="connectionType == 'manual'" class="row">
+    <div class="row">
       <div class="col-xs-4">
         <a class="btn btn-primary" ng-click="connect()" ng-disabled="connecting">
           {{ connecting ? 'Connecting' : 'Connect' }}

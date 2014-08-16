@@ -9,6 +9,7 @@ angular.module('infuseWebAppConnect', [
   ])
   .controller('DeviceCtrl', function ($scope, notifier, device, connectionManager) {
     $scope.devices = device.getRegisteredDevices();
+    $scope.deviceConfigurators = device.getRegisteredConfigurators();
 
     $scope.connect = function(dev) {
       dev.connecting = true;
@@ -21,6 +22,28 @@ angular.module('infuseWebAppConnect', [
       deviceScope.$watch('pristine == false', function() {
         dev.connecting = false;
       })
+    }
+
+    $scope.add = function(configurator) {
+      device.register(configurator);
+    }
+
+    $scope.remove = function(dev) {
+      device.unregister(dev);
+    }
+
+    $scope.configure = function(dev) {
+      dev.editableSettings = angular.copy(dev.settings);
+      dev.configMode = true;
+    }
+
+    $scope.saveModifications = function(dev) {
+      device.reconfigure(dev, dev.editableSettings);
+      dev.configMode = false;
+    }
+
+    $scope.cancelModifications = function(dev) {
+      dev.configMode = false;
     }
   })
   .controller('ManualCtrl', function ($scope, socket, notifier) {
