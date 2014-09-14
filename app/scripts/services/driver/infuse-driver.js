@@ -127,6 +127,11 @@ angular.module('infuseWebAppDevice')
         return scope.doRequest("overview");
       }
 
+      scope.doClientConnect = function(clientUuid) {
+        return scope.doRequest("client/connect", { uuid: clientUuid })
+          .then(function(e) { notifier.verbose('Client connected with id ' + e.data.connection_uuid); })
+      }
+
       return scope;
     }
 

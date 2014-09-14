@@ -66,12 +66,23 @@
   font-size: 1em;
 }
 
+.visualization .tooltip .format-object {
+  padding-top: 5px;
+  display: inline-block;
+  border-top: 1px solid #333;
+}
+
 .visualization .tooltip .title .verbose {
   color: #AAA;
   font-weight: normal;
 }
 
-.format-object ul, .format-object li {
-  padding-left: 0;
+.visualization .tooltip .tooltip-inner .connect {
+  text-align: right;
+  padding-bottom: 3px;
+}
+
+.format-object ul {
+  padding-left: 15px;
   text-align: left;
 }

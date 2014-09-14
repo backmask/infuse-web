@@ -9,20 +9,19 @@
   border-radius: 0;
   margin-bottom: 5px;
   padding: 5px;
+  font-size: 0.8em;
 }
 
 .notifications .alert-verbose {
   color: #707070;
   background-color: #e4e4e4;
   border-color: #d6d6d6;
-  font-size: 0.8em;
   padding: 2px 5px 2px 5px;
 }
 
 .notifications .alert-emphasize {
-  margin-bottom: 15px;
-  font-size: 1.2em;
-  box-shadow: 0 0 2px #444;
+  box-shadow: rgb(68, 68, 68) 0px 0px 10px -4px inset;
+  border-color: rgb(170, 170, 170);
 }
 
 .notifications .alert.ng-enter,
@@ -54,7 +53,6 @@
 }
 
 .notifications .detailed div[name=details] {
-  font-size: 0.8em;
   max-height: 50px;
   overflow: auto;
 }

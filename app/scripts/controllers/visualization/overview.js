@@ -51,6 +51,10 @@ angular.module('infuseWebAppVisualization')
           info: {
             title: client.name,
             description: client.adapterName,
+            isClient: true,
+            connect: function() {
+              $scope.doClientConnect(client.uuid);
+            },
             details: {
               uuid: client.uuid,
               input: client.input,
