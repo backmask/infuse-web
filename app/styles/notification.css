@@ -5,11 +5,6 @@
   overflow-y: auto;
 }
 
-.notifications:first-letter {
-  text-transform: uppercase;
-}
-
-
 .notifications .alert {
   border-radius: 0;
   margin-bottom: 5px;

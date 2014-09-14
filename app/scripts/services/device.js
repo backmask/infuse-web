@@ -41,6 +41,7 @@ angular.module('infuseWebAppDevice')
 
     r.reconfigure = function(device, settings) {
       angular.copy(r.configure(device.configurator, settings), device);
+      localStorageService.set('devices', registeredDevices);
     }
 
     r.registerConfigurator = function(name, configurator) {
