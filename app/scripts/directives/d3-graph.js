@@ -38,41 +38,47 @@ angular.module('d3')
         }
 
         var refreshNodes = function(newValue, oldValue) {
+          var newNodes = [];
           newValue[0].forEach(function(node) {
             if (nodesMap[node.id])
+            {
+              newNodes.push(nodesMap[node.id]);
               return;
+            }
 
             var newNode = angular.copy(node);
             newNode.x = width / 2;
             newNode.y = height / 2;
 
-            nodes.push(newNode);
+            newNodes.push(newNode);
             nodesMap[node.id] = newNode;
           });
 
+          var newLinks = [];
           newValue[1].forEach(function(link) {
             var linkId = link.from + ':' + link.to;
-            if (linksMap[linkId])
-              return;
-
-            links.push({
+            newLinks.push({
               source: nodesMap[link.from],
               target: nodesMap[link.to]
             });
-            linksMap[linkId] = true;
           });
+
+          force.nodes(newNodes);
+          force.links(newLinks);
 
           restart();
         }
 
         var restart = function() {
-          link = link.data(links);
+          link = link.data(force.links());
 
+          link.exit().remove();
           link.enter().insert("line", ".node")
               .attr("class", "link");
 
-          node = node.data(nodes);
+          node = node.data(force.nodes());
 
+          node.exit().remove();
           node.enter().insert("circle", ".cursor")
               .attr("class", "node")
               .style("fill", function(d) { return d.color; })
@@ -117,9 +123,7 @@ angular.module('d3')
         var domTooltip = element.find('.tooltip')[0];
         var tooltip = domTooltip ? d3.select(domTooltip) : null;
 
-        var nodes = force.nodes(),
-            links = force.links(),
-            node = svg.selectAll(".node"),
+        var node = svg.selectAll(".node"),
             link = svg.selectAll(".link");
 
         $scope.nodeSelected = false;

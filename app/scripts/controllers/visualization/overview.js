@@ -11,8 +11,14 @@ angular.module('infuseWebAppVisualization')
     var clientColor = '#FFB800';
     var clientInstanceColor = '#FFECBB';
     var nodeClientColor = '#999';
+    var previousData = {};
 
     var refresh = function(wsData) {
+      if (angular.equals(wsData, previousData)) {
+        return;
+      }
+
+      previousData = wsData;
       var gw = wsData.data.gateway;
       var nodes = [{
         color: rootColor,
