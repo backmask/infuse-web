@@ -9,9 +9,12 @@
       <span class="verbose">{{nodeSelected.info.description}}</span>
     </span>
     <format-object ignore-null data="nodeSelected.info.details"></format-object>
-    <div ng-if="nodeSelected.info.isClient" class="connect">
-      <a class="btn btn-primary btn-xs" ng-click="nodeSelected.info.connect()">
+    <div ng-if="nodeSelected.info.hasActions" class="connect">
+      <a ng-if="nodeSelected.info.isClient" class="btn btn-primary btn-xs" ng-click="nodeSelected.info.connect()">
         Connect
+      </a>
+      <a ng-if="nodeSelected.info.isClientInstance" class="btn btn-danger btn-xs" ng-click="nodeSelected.info.disconnect()">
+        Disconnect
       </a>
     </div>
   </d3-tooltip>

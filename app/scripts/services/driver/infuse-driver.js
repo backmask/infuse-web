@@ -132,6 +132,11 @@ angular.module('infuseWebAppDevice')
           .then(function(e) { notifier.verbose('Client connected with id ' + e.data.connection_uuid); })
       }
 
+      scope.doClientDisconnect = function(connectionUuid) {
+        return scope.doRequest("client/disconnect", { uuid: connectionUuid })
+          .then(function(e) { notifier.verbose('Disconnected client with connection-id ' + connectionUuid); })
+      }
+
       return scope;
     }
 

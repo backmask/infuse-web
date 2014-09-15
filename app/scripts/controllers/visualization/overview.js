@@ -9,6 +9,7 @@ angular.module('infuseWebAppVisualization')
     var rootColor = '#0085ff';
     var gatewayColor = '#24c980';
     var clientColor = '#FFB800';
+    var clientInstanceColor = '#FFECBB';
     var nodeClientColor = '#999';
 
     var refresh = function(wsData) {
@@ -51,6 +52,7 @@ angular.module('infuseWebAppVisualization')
           info: {
             title: client.name,
             description: client.adapterName,
+            hasActions: true,
             isClient: true,
             connect: function() {
               $scope.doClientConnect(client.uuid);
@@ -61,6 +63,23 @@ angular.module('infuseWebAppVisualization')
               output: client.output
             }
           }});
+
+        client.connected.forEach(function(clientInstance) {
+          nodes.push({
+          color: clientInstanceColor,
+          id: clientInstance,
+          info: {
+            title: 'Active instance',
+            description: clientInstance,
+            hasActions: true,
+            isClientInstance: true,
+            disconnect: function() {
+              $scope.doClientDisconnect(clientInstance);
+            }
+          }});
+          links.push({ from: client.uuid, to: clientInstance });
+        });
+
         links.push({ from: 'root', to: client.uuid });
       });
 
