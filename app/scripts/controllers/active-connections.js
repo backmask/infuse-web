@@ -52,9 +52,13 @@ angular.module('infuseWebAppActiveConnections', [
 
     return r;
   })
-  .controller('ActiveConnectionsCtrl', function($scope, $interval, connectionManager) {
+  .controller('ActiveConnectionsCtrl', function($scope, $interval, connectionManager, visualizationManager) {
     $scope.connectedDevices = connectionManager.getManagedConnections();
     $scope.disconnect = connectionManager.closeConnection;
+
+    $scope.visualize = function(connection, view) {
+      visualizationManager.visualize(view, connection.$new());
+    }
   })
   .filter('shortNumber', function(numberFilter) {
     return function(input, unit) {

@@ -17,7 +17,17 @@
         </div>
       </div>
       <div class="actions" show-on-hover-parent>
-        <a class="btn btn-success" ng-click="configure(device)">
+        <div style="display:inline-block" class="dropdown-toggle" dropdown>
+          <a class="btn btn-default">
+            <span class="glyphicon glyphicon-eye-open"></span>
+          </a>
+          <ul class="dropdown-menu add-dropdown">
+            <li ng-repeat="view in device.views" ng-click="visualize(device, view)">
+              <span class="name">{{view.name}}</span>
+            </li>
+          </ul>
+        </div>
+        <a class="btn btn-default" ng-click="configure(device)">
           <span class="glyphicon glyphicon-wrench"></span>
         </a>
         <a class="btn btn-danger" ng-click="disconnect(device)">

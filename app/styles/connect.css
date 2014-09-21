@@ -27,6 +27,7 @@
 
 .add-dropdown li {
   padding:3px;
+  cursor:pointer;
 }
 
 .add-dropdown li:hover {
