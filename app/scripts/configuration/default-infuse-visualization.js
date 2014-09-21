@@ -8,7 +8,7 @@ angular.module('infuseWebAppVisualization')
       controller: "OverviewCtrl"
     }, {
       name: "Processing pipeline",
-      template: "view/infuse/processing-pipeline.html",
+      template: "views/infuse/processing-pipeline.html",
       controller: "ProcessingPipelineCtrl"
     }]);
   });

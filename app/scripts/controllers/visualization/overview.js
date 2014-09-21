@@ -14,15 +14,18 @@ angular.module('infuseWebAppVisualization')
     var previousData = {};
 
     var refresh = function(wsData) {
-      if (angular.equals(wsData, previousData)) {
+      if (angular.equals(wsData.data, previousData)) {
         return;
       }
 
-      previousData = wsData;
+      previousData = wsData.data;
       var gw = wsData.data.gateway;
       var nodes = [{
         color: rootColor,
         id: 'root',
+        getX: function(w) { return w * .05; },
+        getY: function(h) { return h * .5; },
+        fixed: true,
         info: {
           title: 'Infuse',
           description: $scope.description.replace('ws://', '').split(':')[0]
@@ -98,7 +101,9 @@ angular.module('infuseWebAppVisualization')
       if ($scope.connected) {
         $scope.doGetOverview().then(refresh);
       }
-    }, 1000);
+    }, 2500);
 
-    $scope.$on('$destroy', $interval.cancel.bind(null, autoRefresh));
+    $scope.$on('$destroy', function() {
+      $interval.cancel(autoRefresh);
+    });
   });

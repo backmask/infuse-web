@@ -137,6 +137,10 @@ angular.module('infuseWebAppDevice')
           .then(function(e) { notifier.verbose('Disconnected client with connection-id ' + connectionUuid); })
       }
 
+      scope.doGetFactoryOverview = function() {
+        return scope.doRequest("overview/factory");
+      }
+
       return scope;
     }
 

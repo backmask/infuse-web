@@ -28,13 +28,13 @@ angular.module('d3')
         var linksMap = {};
 
         var tick = function() {
+          node.attr("cx", function(d) { return d.x = Math.max(nodeRadius, Math.min(width - nodeRadius, d.x)); })
+              .attr("cy", function(d) { return d.y = Math.max(nodeRadius, Math.min(height - nodeRadius, d.y)); });
+
           link.attr("x1", function(d) { return d.source.x; })
               .attr("y1", function(d) { return d.source.y; })
               .attr("x2", function(d) { return d.target.x; })
               .attr("y2", function(d) { return d.target.y; });
-
-          node.attr("cx", function(d) { return d.x; })
-              .attr("cy", function(d) { return d.y; });
         }
 
         var refreshNodes = function(newValue, oldValue) {
@@ -47,8 +47,8 @@ angular.module('d3')
             }
 
             var newNode = angular.copy(node);
-            newNode.x = width / 2;
-            newNode.y = height / 2;
+            newNode.x = newNode.getX ? newNode.getX(width) : width * Math.random();
+            newNode.y = newNode.getY ? newNode.getY(height) : height * Math.random();
 
             newNodes.push(newNode);
             nodesMap[node.id] = newNode;
@@ -74,7 +74,8 @@ angular.module('d3')
 
           link.exit().remove();
           link.enter().insert("line", ".node")
-              .attr("class", "link");
+              .attr("class", "link")
+              .attr("marker-end", "url(#end)");
 
           node = node.data(force.nodes());
 
@@ -109,6 +110,14 @@ angular.module('d3')
         var onResize = function() {
           width = $(svg[0]).width();
           height = $(svg[0]).height();
+          force.nodes().forEach(function(node) {
+            if (node.getX) {
+              node.x = node.getX(width);
+            }
+            if (node.getY) {
+              node.y = node.getY(height);
+            }
+          })
           force = force.size([width, height]).resume();
         }
 
@@ -117,7 +126,7 @@ angular.module('d3')
           .size([width, height])
           .nodes([])
           .linkDistance(45)
-          .charge(-40)
+          .charge(-250)
           .on("tick", tick);
 
         var domTooltip = element.find('.tooltip')[0];
@@ -125,6 +134,18 @@ angular.module('d3')
 
         var node = svg.selectAll(".node"),
             link = svg.selectAll(".link");
+
+        // Arrow
+        svg.append("defs").append("marker")
+            .attr("id", "end")
+            .attr("viewBox", "0 -5 10 10")
+            .attr("refX", 13 + nodeRadius)
+            .attr("refY", 0)
+            .attr("markerWidth", 6)
+            .attr("markerHeight", 6)
+            .attr("orient", "auto")
+          .append("path")
+            .attr("d", "M0,-5L10,0L0,5");
 
         $scope.nodeSelected = false;
         $scope.nodeHovered = false;
