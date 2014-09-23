@@ -1,11 +1,12 @@
 angular.module('infuseWebAppVisualization')
   .controller('ProcessingPipelineCtrl', function ($scope, $interval) {
+    $scope.viewType = { selected: 'all' };
     $scope.overview = {
       nodes: [],
       links: []
     };
 
-    var previousData = {};
+    var previousData = false;
     var endPointColor = '#0085ff';
     var segmenterColor = '#24c980';
     var interpreterColor = '#FFB800';
@@ -13,7 +14,9 @@ angular.module('infuseWebAppVisualization')
 
     var curryAddLink = function(links, a, isBtoA) {
       return function(b) {
-        links.push({ from: (!isBtoA ? a : b), to: (isBtoA ? a : b)});
+        if (a !== b) {
+          links.push({ from: (!isBtoA ? a : b), to: (isBtoA ? a : b)});
+        }
       }
     }
 
@@ -43,13 +46,18 @@ angular.module('infuseWebAppVisualization')
       }
     }
 
-    var refresh = function(wsData) {
-      if (angular.equals(wsData.data, previousData)) {
-        return;
-      }
+    var getFinalStructures = function(links, structures) {
+      var linksStart = {};
+      links.forEach(function(l) {
+        linksStart[l.from] = true;
+      });
+      return structures.filter(function(n) {
+        return !linksStart[n];
+      });
+    }
 
-      previousData = wsData.data;
-      var nodes = [{
+    var viewAll = function(data, nodes, links) {
+      nodes.push({
         color: endPointColor,
         id: 'end-point',
         getX: function(w) { return w * .95; },
@@ -73,7 +81,57 @@ angular.module('infuseWebAppVisualization')
         info: {
           name: 'Text'
         }
-      }];
+      });
+
+      data.interpreters.forEach(curryPushActiveNode(nodes, links, interpreterColor, 'interpreter'));
+      data.segmenters.forEach(curryPushActiveNode(nodes, links, segmenterColor, 'segmenter'));
+      getFinalStructures(links, data.structures).forEach(curryAddLink(links, 'end-point', true));
+    }
+
+    var viewStructures = function(data, nodes, links) {
+      nodes.push({
+        color: endPointColor,
+        id: 'bytes',
+        key: 'view-structures',
+        getX: function(w) { return w * .5; },
+        getY: function(h) { return h * .5; },
+        fixed: true,
+        info: {
+          name: 'Bytes'
+        }
+      }, {
+        color: structureColor,
+        id: 'text',
+        info: {
+          name: 'Text'
+        }
+      });
+
+      data.interpreters.forEach(function(interpreter) {
+        interpreter.input.forEach(function(input) {
+          interpreter.output.forEach(curryAddLink(links, input));
+        });
+      });
+
+      data.segmenters.forEach(function(segmenter) {
+        segmenter.output.forEach(curryAddLink(links, 'bytes'));
+      });
+
+      var structuresMap = {};
+      nodes.forEach(function(n) { structuresMap[n.id] = n; });
+      getFinalStructures(links, data.structures).forEach(function(n) {
+        structuresMap[n].color = interpreterColor;
+        structuresMap[n].key = 'view-structures';
+      });
+    }
+
+    var refresh = function(wsData, forceRefresh) {
+      if (!forceRefresh && angular.equals(wsData.data, previousData.data)) {
+        return;
+      }
+
+      previousData = wsData;
+      var nodes = [];
       var links = [];
 
       wsData.data.structures.forEach(function(structure) {
@@ -86,17 +144,11 @@ angular.module('infuseWebAppVisualization')
         });
       });
 
-      wsData.data.interpreters.forEach(curryPushActiveNode(nodes, links, interpreterColor, 'interpreter'));
-      wsData.data.segmenters.forEach(curryPushActiveNode(nodes, links, segmenterColor, 'segmenter'));
-
-      // Link nodes never used as input to the end point
-      // No further processing can be done on these structures
-      var linksStart = links.map(function(l) { return l.from; });
-      wsData.data.structures.forEach(function(n) {
-        if (!linksStart[n]) {
-          links.push({from: n, to: 'end-point'});
-        }
-      });
+      if ($scope.viewType.selected === 'all') {
+        viewAll(wsData.data, nodes, links);
+      } else if ($scope.viewType.selected === 'structures') {
+        viewStructures(wsData.data, nodes, links);
+      }
 
       $scope.overview.nodes = nodes;
       $scope.overview.links = links;
@@ -108,6 +160,10 @@ angular.module('infuseWebAppVisualization')
         $scope.doGetFactoryOverview().then(refresh);
       }
     }, 1000 * 60);
+
+    $scope.$watch('viewType.selected', function() {
+      previousData && refresh(previousData, true);
+    })
 
     $scope.$on('$destroy', function() {
       $interval.cancel(autoRefresh);

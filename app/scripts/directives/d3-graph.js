@@ -40,8 +40,7 @@ angular.module('d3')
         var refreshNodes = function(newValue, oldValue) {
           var newNodes = [];
           newValue[0].forEach(function(node) {
-            if (nodesMap[node.id])
-            {
+            if (nodesMap[node.id] && nodesMap[node.id].key === node.key) {
               newNodes.push(nodesMap[node.id]);
               return;
             }
@@ -70,6 +69,7 @@ angular.module('d3')
         }
 
         var restart = function() {
+          var previousNodesCount = node.data().length;
           link = link.data(force.links());
 
           link.exit().remove();
@@ -77,7 +77,8 @@ angular.module('d3')
               .attr("class", "link")
               .attr("marker-end", "url(#end)");
 
-          node = node.data(force.nodes());
+          node = node.data(force.nodes())
+            .style("fill", function(d) { return d.color; });
 
           node.exit().remove();
           node.enter().insert("circle", ".cursor")
@@ -105,6 +106,11 @@ angular.module('d3')
               .call(force.drag);
 
           force.start();
+
+          // Prestabilize if many nodes were added/removed
+          if (Math.abs(previousNodesCount - force.nodes().length) > previousNodesCount / 3) {
+            stabilize();
+          }
         }
 
         var onResize = function() {
@@ -119,6 +125,14 @@ angular.module('d3')
             }
           })
           force = force.size([width, height]).resume();
+          stabilize();
+        }
+
+        var stabilize = function() {
+          var iterations = 100;
+          while ((force.alpha() > 1e-2) && --iterations) {
+            force.tick();
+          }
         }
 
         var fill = d3.scale.category20();
