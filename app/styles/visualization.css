@@ -43,6 +43,13 @@
   opacity: 0.8;
 }
 
+.visualization .actions-bottom {
+  right: initial;
+  top: initial;
+  left: 15px;
+  bottom: 0;
+}
+
 .visualization .title {
   color: #666;
   font-size: 0.8em;
