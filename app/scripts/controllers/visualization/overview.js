@@ -1,5 +1,5 @@
 angular.module('infuseWebAppVisualization')
-  .controller('OverviewCtrl', function ($scope, $interval) {
+  .controller('OverviewCtrl', function ($scope, $interval, visualizationManager) {
     $scope.overview = {
       nodes: [],
       links: []
@@ -48,6 +48,15 @@ angular.module('infuseWebAppVisualization')
             info: {
               title: 'Client',
               description: client.uuid,
+              hasActions: true,
+              isSessionClient: true,
+              showPipeline: function() {
+                visualizationManager.visualize(
+                  $scope.getView('Client processing pipeline'),
+                  $scope,
+                  { sessionClientUuid: client.uuid }
+                );
+              },
               details: client.description
             }});
           links.push({ from: gwNode.port, to: client.uuid });

@@ -141,6 +141,10 @@ angular.module('infuseWebAppDevice')
         return scope.doRequest("overview/factory");
       }
 
+      scope.doGetSessionClientPipeline = function(clientUuid) {
+        return scope.doRequest("session/client/pipeline", { uuid: clientUuid });
+      }
+
       return scope;
     }
 

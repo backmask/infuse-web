@@ -16,6 +16,9 @@
       <a ng-if="nodeSelected.info.isClientInstance" class="btn btn-danger btn-xs" ng-click="nodeSelected.info.disconnect()">
         Disconnect
       </a>
+      <a ng-if="nodeSelected.info.isSessionClient" class="btn btn-primary btn-xs" ng-click="nodeSelected.info.showPipeline()">
+        View pipeline
+      </a>
     </div>
   </d3-tooltip>
 </d3-graph>

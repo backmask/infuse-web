@@ -30,7 +30,7 @@ angular.module('infuseWebAppActiveConnections', [
 
       connection.$watch('initialized', function(newValue) {
         if (newValue) {
-          visualizationManager.visualize(connection.defaultView, connection.$new());
+          visualizationManager.visualize(connection.defaultView, connection);
         }
       });
 

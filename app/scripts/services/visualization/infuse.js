@@ -16,6 +16,13 @@ angular.module('infuseWebAppVisualization')
     r.build = function(scope) {
       scope.views = views;
       scope.defaultView = views[0];
+      scope.getView = function(name) {
+        for (var i = 0; i < views.length; ++i) {
+          if (views[i].name === name) {
+            return views[i];
+          }
+        }
+      }
       return scope;
     }
     r.setViews = function(v) {
