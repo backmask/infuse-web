@@ -10,6 +10,7 @@ angular.module('infuseWebAppVisualization')
     var endPointColor = '#0085ff';
     var segmenterColor = '#24c980';
     var interpreterColor = '#FFB800';
+    var packerColor = '#FF005C';
     var structureColor = '#999';
 
     var curryAddLink = function(links, a, isBtoA) {
@@ -85,6 +86,7 @@ angular.module('infuseWebAppVisualization')
 
       data.interpreters.forEach(curryPushActiveNode(nodes, links, interpreterColor, 'interpreter'));
       data.segmenters.forEach(curryPushActiveNode(nodes, links, segmenterColor, 'segmenter'));
+      data.packers.forEach(curryPushActiveNode(nodes, links, packerColor, 'packer'));
       getFinalStructures(links, data.structures).forEach(curryAddLink(links, 'end-point', true));
     }
 
@@ -110,6 +112,12 @@ angular.module('infuseWebAppVisualization')
       data.interpreters.forEach(function(interpreter) {
         interpreter.input.forEach(function(input) {
           interpreter.output.forEach(curryAddLink(links, input));
+        });
+      });
+
+      data.packers.forEach(function(packer) {
+        packer.input.forEach(function(input) {
+          packer.output.forEach(curryAddLink(links, input));
         });
       });
 

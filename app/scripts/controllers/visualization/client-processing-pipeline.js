@@ -71,11 +71,14 @@ angular.module('infuseWebAppVisualization')
       $scope.pipeline.links = links;
     }
 
-    var autoRefresh = $interval(function() {
+    var getData = function() {
       if ($scope.connected && $scope.sessionClientUuid) {
         $scope.doGetSessionClientPipeline($scope.sessionClientUuid).then(refresh);
       }
-    }, 2500);
+    }
+
+    getData();
+    var autoRefresh = $interval(getData, 2500);
 
     $scope.$on('$destroy', function() {
       $interval.cancel(autoRefresh);
