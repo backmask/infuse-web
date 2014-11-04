@@ -17,7 +17,12 @@ angular.module('infuseWebAppVisualization')
         color: color,
         id: node.uid,
         info: {
-          name: node.uid === node.type ? node.uid : (node.uid + '(' + node.type + ')')
+          name: node.uid === node.type ? node.uid : (node.uid + '(' + node.type + ')'),
+          hasActions: true,
+          canPipe: true,
+          pipe: function() {
+            $scope.doSetLocalProcessorPipe($scope.sessionClientUuid, node.uid);
+          }
         }
       });
 

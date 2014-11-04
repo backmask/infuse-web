@@ -8,5 +8,10 @@
       {{nodeSelected.info.name}}
       <span class="verbose">{{nodeSelected.info.description}}</span>
     </span>
+    <div ng-if="nodeSelected.info.hasActions" class="connect">
+      <a ng-if="nodeSelected.info.canPipe" class="btn btn-primary btn-xs" ng-click="nodeSelected.info.pipe()">
+        View
+      </a>
+    </div>
   </d3-tooltip>
 </d3-graph>

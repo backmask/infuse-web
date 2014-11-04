@@ -145,6 +145,20 @@ angular.module('infuseWebAppDevice')
         return scope.doRequest("session/client/pipeline", { uuid: clientUuid });
       }
 
+      scope.doSetLocalProcessorPipe = function(clientUuid, interpreterUri) {
+        return scope.doRequest("session/client/pipe/set", {
+          target: "processor",
+          from: {
+            target: clientUuid,
+            stream: "out",
+            uri: interpreterUri
+          },
+          to: {
+            uri: "__out"
+          }
+        });
+      }
+
       return scope;
     }
 
