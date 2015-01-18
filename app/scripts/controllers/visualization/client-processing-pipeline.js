@@ -9,6 +9,7 @@ angular.module('infuseWebAppVisualization')
 
     var rootColor = '#0085ff';
     var interpreterColor = '#24c980';
+    var packerColor = '#b8ff00';
     var unpackerColor = '#ffb800';
     var outputColor = '#999';
 
@@ -70,6 +71,10 @@ angular.module('infuseWebAppVisualization')
 
       pipeline.unpackers.forEach(function(node) {
         addNode(node, nodes, links, unpackerColor);
+      });
+
+      pipeline.packers.forEach(function(node) {
+        addNode(node, nodes, links, packerColor);
       });
 
       $scope.pipeline.nodes = nodes;
