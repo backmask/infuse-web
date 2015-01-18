@@ -146,16 +146,29 @@ angular.module('infuseWebAppDevice')
       }
 
       scope.doSetLocalProcessorPipe = function(clientUuid, interpreterUri) {
-        return scope.doRequest("session/client/pipe/set", {
-          target: "processor",
-          from: {
-            target: clientUuid,
-            stream: "out",
-            uri: interpreterUri
-          },
-          to: {
-            uri: "__out"
+        return scope.doRequest("session/client/pipeline/addnode", {
+          node: {
+            instanceType: "packer",
+            uid: "packer-local-pipe-" + interpreterUri,
+            type: "json.response.packer",
+            final: true,
+            configuration: {
+              context: "local-pipe-" + interpreterUri
+            }
           }
+        }).then(function() {
+          return scope.doRequest("session/client/pipe/set", {
+            target: "processor",
+            from: {
+              target: clientUuid,
+              stream: "out",
+              uri: interpreterUri
+            },
+            to: {
+              uri: "packer-local-pipe-" + interpreterUri,
+              stream: "in"
+            }
+          });
         });
       }
 
