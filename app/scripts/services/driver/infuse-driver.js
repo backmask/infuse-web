@@ -152,7 +152,7 @@ angular.module('infuseWebAppDevice')
             uid: "packer-local-pipe-" + interpreterUri,
             type: "json.response.packer",
             final: true,
-            configuration: {
+            config: {
               context: "local-pipe-" + interpreterUri
             }
           }
