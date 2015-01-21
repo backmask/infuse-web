@@ -169,7 +169,14 @@ angular.module('infuseWebAppDevice')
               stream: "in"
             }
           });
-        });
+        }).then(function(e) { notifier.verbose('Added local pipe ' + interpreterUri + ' from ' + clientUuid); });
+      }
+
+      scope.doRemoveNode = function(clientUuid, nodeUri) {
+        return scope.doRequest("session/client/pipeline/removenode", {
+          uuid: clientUuid,
+          'node-uid': nodeUri
+        }).then(function(e) { notifier.verbose('Removed ' + nodeUri + ' from ' + clientUuid); });;
       }
 
       return scope;

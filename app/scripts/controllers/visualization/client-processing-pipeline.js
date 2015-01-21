@@ -23,6 +23,9 @@ angular.module('infuseWebAppVisualization')
           canPipe: true,
           pipe: function() {
             $scope.doSetLocalProcessorPipe($scope.sessionClientUuid, node.uid);
+          },
+          remove: function() {
+            $scope.doRemoveNode($scope.sessionClientUuid, node.uid);
           }
         }
       });

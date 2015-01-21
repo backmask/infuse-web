@@ -12,6 +12,9 @@
       <a ng-if="nodeSelected.info.canPipe" class="btn btn-primary btn-xs" ng-click="nodeSelected.info.pipe()">
         View
       </a>
+      <a class="btn btn-danger btn-xs" ng-click="nodeSelected.info.remove()">
+        Remove
+      </a>
     </div>
   </d3-tooltip>
 </d3-graph>
