@@ -16,6 +16,7 @@ angular.module('d3')
           element.append(content);
         });
 
+        var uid = 'rnd-' + Math.random();
         var svg = d3.select(element[0]).append("svg")
           .attr("width", $scope.width)
           .attr("height", $scope.height);
@@ -75,7 +76,7 @@ angular.module('d3')
           link.exit().remove();
           link.enter().insert("line", ".node")
               .attr("class", "link")
-              .attr("marker-end", "url(#end)");
+              .attr("marker-end", "url(#end" + uid + ")");
 
           node = node.data(force.nodes())
             .style("fill", function(d) { return d.color; });
@@ -151,7 +152,7 @@ angular.module('d3')
 
         // Arrow
         svg.append("defs").append("marker")
-            .attr("id", "end")
+            .attr("id", "end" + uid)
             .attr("viewBox", "0 -5 10 10")
             .attr("refX", 13 + nodeRadius)
             .attr("refY", 0)
