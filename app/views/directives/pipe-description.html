@@ -1,0 +1,19 @@
+<tr class="pipe">
+  <td class="uuid">{{uuid | shortUuid }}</td>
+  <td class="target">{{description.target}}</td>
+  <td class="from">
+    <span class="uuid">{{description.from.target | shortUuid}}</span>
+    <span class="{{description.from.stream}}"> ({{description.from.stream}})</span>
+    <div class="uri">{{description.from.uri}}</div>
+  </td>
+  <td class="to">
+    <span class="uuid">{{description.to.target | shortUuid}}</span>
+    <span class="{{description.to.stream}}"> ({{description.to.stream}})</span>
+    <div class="uri">{{description.to.uri}}</div>
+  </td>
+  <td>
+    <a class="btn btn-xs btn-default" ng-click="remove()">
+      <span class="glyphicon glyphicon-remove"></span>
+    </a>
+  </td>
+</tr>

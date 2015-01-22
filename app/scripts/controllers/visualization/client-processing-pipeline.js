@@ -1,9 +1,11 @@
 angular.module('infuseWebAppVisualization')
   .controller('ClientProcessingPipelineCtrl', function ($scope, $interval) {
+    $scope.viewType = { selected: 'pipeline' };
     $scope.pipeline = {
       nodes: [],
       links: []
     };
+    $scope.pipes = {};
 
     var previousData = {};
 
@@ -82,12 +84,17 @@ angular.module('infuseWebAppVisualization')
 
       $scope.pipeline.nodes = nodes;
       $scope.pipeline.links = links;
+      $scope.pipes = wsData.data.pipesOwned;
     }
 
     var getData = function() {
       if ($scope.connected && $scope.sessionClientUuid) {
         $scope.doGetSessionClientPipeline($scope.sessionClientUuid).then(refresh);
       }
+    }
+
+    $scope.removePipe = function(pipeUuid) {
+      $scope.doRemovePipe($scope.sessionClientUuid, pipeUuid);
     }
 
     getData();

@@ -12,6 +12,7 @@
   padding: 5px;
   border: 1px solid #ccc;
   margin: 0;
+  height: 200px;
 }
 
 .visualization .color-tag {
@@ -36,7 +37,7 @@
   right: 0;
   top: 15px;
   padding:5px;
-  opacity: 0;
+  opacity: 0.3;
 }
 
 .visualization .actions:hover {

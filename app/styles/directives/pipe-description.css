@@ -1,0 +1,9 @@
+.pipes { font-size: 0.8em; }
+.pipe { font-size: 0.9em; }
+
+.pipe .uuid { color: #777; }
+.pipe .in { color: green; }
+.pipe .out { color: red; }
+.pipe .fallback { color: blue; }
+
+.pipe .uri { font-weight: bold; }

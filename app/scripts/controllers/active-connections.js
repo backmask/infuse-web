@@ -3,7 +3,8 @@
 angular.module('infuseWebAppActiveConnections', [
     'infuseWebAppNotification',
     'infuseWebAppInstrument',
-    'infuseWebAppVisualization'
+    'infuseWebAppVisualization',
+    'infuseWebAppCommon'
   ])
   .factory('connectionManager', function(notifier, instrumentConvert, visualizationManager) {
     var r = {};
@@ -59,18 +60,4 @@ angular.module('infuseWebAppActiveConnections', [
     $scope.visualize = function(connection, view) {
       visualizationManager.visualize(view, connection.$new());
     }
-  })
-  .filter('shortNumber', function(numberFilter) {
-    return function(input, unit) {
-      unit = unit || 'B';
-      if (input > 100000000) {
-        return numberFilter(input / 1000000000, 2) + 'G' + unit;
-      } else if (input > 100000) {
-        return numberFilter(input / 1000000, 2) + 'M' + unit;
-      } else if (input > 100) {
-        return numberFilter(input / 1000, 2) + 'K' + unit;
-      } else {
-        return numberFilter(input, 2) + unit;
-      }
-    };
   });

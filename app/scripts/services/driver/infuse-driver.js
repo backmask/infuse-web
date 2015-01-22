@@ -172,10 +172,17 @@ angular.module('infuseWebAppDevice')
         }).then(function(e) { notifier.verbose('Added local pipe ' + interpreterUri + ' from ' + clientUuid); });
       }
 
+      scope.doRemovePipe = function(clientUuid, pipeUuid) {
+        return scope.doRequest("session/client/pipe/remove", {
+          uuid: clientUuid,
+          pipeUuid: pipeUuid
+        }).then(function(e) { notifier.verbose('Removed pipe ' + pipeUuid + ' from ' + clientUuid); });;
+      }
+
       scope.doRemoveNode = function(clientUuid, nodeUri) {
         return scope.doRequest("session/client/pipeline/removenode", {
           uuid: clientUuid,
-          'node-uid': nodeUri
+          nodeUid: nodeUri
         }).then(function(e) { notifier.verbose('Removed ' + nodeUri + ' from ' + clientUuid); });;
       }
 
