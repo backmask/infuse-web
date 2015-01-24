@@ -22,7 +22,7 @@
             <span class="glyphicon glyphicon-eye-open"></span>
           </a>
           <ul class="dropdown-menu add-dropdown">
-            <li ng-repeat="view in device.views" ng-click="visualize(device, view)">
+            <li ng-repeat="view in device.views" ng-if="!view.hidden" ng-click="visualize(device, view)">
               <span class="name">{{view.name}}</span>
             </li>
           </ul>

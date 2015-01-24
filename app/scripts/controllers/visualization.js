@@ -8,6 +8,10 @@ angular.module('infuseWebAppVisualization')
     r.visualize = function(vis, scope, visParameters) {
       var visCopy = angular.copy(vis);
       visCopy.scope = scope.$new();
+      visCopy.scope.title = {
+        name: vis.name,
+        description: scope.name + ' ' + scope.description
+      };
       visCopy.stop = function() { r.stopVisualization(visCopy); }
       if (visParameters) {
         for (var key in visParameters) {

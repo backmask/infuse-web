@@ -1,10 +1,10 @@
 <div ng-controller="VisualizationCtrl">
   <div ng-repeat="vis in visualizations">
-    <div class="visualization-wrapper col-md-4">
+    <div class="visualization-wrapper col-lg-4">
       <div class="visualization">
         <div class="color-tag" style="background-color:{{vis.scope.color}}"></div>
         <span class="title">
-          {{vis.name}} <span class="verbose">{{vis.scope.name}} {{vis.scope.description}}</span>
+          {{vis.scope.title.name}} <span class="verbose">{{vis.scope.title.description}}</span>
         </span>
         <div ng-show="!vis.scope.connected" class="alert alert-danger dc-alert" role="alert">
           <span class="glyphicon glyphicon-flash"></span> Connection lost

@@ -7,6 +7,9 @@ angular.module('infuseWebAppNotification', [])
 
     r.notify = function(type, message, details) {
       notifications.unshift({ type: type, message: message, details: details });
+      if (notifications.length > 100) {
+        notifications.pop();
+      }
     };
 
     r.error = r.notify.bind(null, 'error');

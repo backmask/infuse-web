@@ -13,6 +13,12 @@ angular.module('infuseWebAppVisualization')
     }, {
       name: "Client processing pipeline",
       template: "views/infuse/client-processing-pipeline.html",
-      controller: "ClientProcessingPipelineCtrl"
+      controller: "ClientProcessingPipelineCtrl",
+      hidden: true
+    }, {
+      name: "Data view",
+      template: "views/infuse/data-view.html",
+      controller: "DataViewCtrl",
+      hidden: true
     }]);
   });

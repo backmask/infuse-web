@@ -1,5 +1,6 @@
 angular.module('infuseWebAppVisualization')
-  .controller('ClientProcessingPipelineCtrl', function ($scope, $interval) {
+  .controller('ClientProcessingPipelineCtrl', function ($scope, $interval, visualizationManager) {
+    $scope.title.name = 'Processing pipeline (client ' + $scope.sessionClientUuid.substr(0, 8) + ')';
     $scope.viewType = { selected: 'pipeline' };
     $scope.pipeline = {
       nodes: [],
@@ -20,11 +21,15 @@ angular.module('infuseWebAppVisualization')
         color: color,
         id: node.uid,
         info: {
-          name: node.uid === node.type ? node.uid : (node.uid + '(' + node.type + ')'),
+          name: node.uid === node.type ? node.uid : (node.uid + ' (' + node.type + ')'),
           hasActions: true,
           canPipe: true,
           pipe: function() {
-            $scope.doSetLocalProcessorPipe($scope.sessionClientUuid, node.uid);
+            visualizationManager.visualize(
+              $scope.getView('Data view'),
+              $scope,
+              { sessionClientUuid: $scope.sessionClientUuid, nodeUid: node.uid }
+            );
           },
           remove: function() {
             $scope.doRemoveNode($scope.sessionClientUuid, node.uid);

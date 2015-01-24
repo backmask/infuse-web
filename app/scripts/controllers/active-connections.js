@@ -37,7 +37,10 @@ angular.module('infuseWebAppActiveConnections', [
 
       connection.$watch('error', function(newValue) {
         if (newValue) {
-          notifier.notify('error', 'Connection error on ' + connection.name + ', reason: ' + connection.status);
+          notifier.notify('error', 'Connection error on ' + connection.name + (connection.status ? ', reason: ' + connection.status : ''));
+          if (!connection.pristine && !connection.connected) {
+            managedConnections.splice(managedConnections.indexOf(connection), 1);
+          }
         }
       });
     };

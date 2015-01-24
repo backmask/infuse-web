@@ -85,6 +85,14 @@ angular.module('infuseWebAppDevice')
         driver.send(data);
       }
 
+      scope.setCallback = function(context, cb) {
+        responseCallbacks[context] = cb;
+      }
+
+      scope.removeCallback = function(context) {
+        delete responseCallbacks[context];
+      }
+
       scope.doRequest = function(method, parameters) {
         var deferredResponse = $q.defer();
         var context = "infuse-webapp-" + Math.random();
@@ -145,31 +153,20 @@ angular.module('infuseWebAppDevice')
         return scope.doRequest("session/client/pipeline", { uuid: clientUuid });
       }
 
-      scope.doSetLocalProcessorPipe = function(clientUuid, interpreterUri) {
+      scope.doSetPipe = function(ownerUuid, target, from, to) {
+        return scope.doRequest("session/client/pipe/set", {
+          owner: ownerUuid,
+          target: target,
+          from: from,
+          to: to
+        });
+      }
+
+      scope.doAddNode = function(clientUuid, node) {
         return scope.doRequest("session/client/pipeline/addnode", {
-          node: {
-            instanceType: "packer",
-            uid: "packer-local-pipe-" + interpreterUri,
-            type: "json.response.packer",
-            final: true,
-            config: {
-              context: "local-pipe-" + interpreterUri
-            }
-          }
-        }).then(function() {
-          return scope.doRequest("session/client/pipe/set", {
-            target: "processor",
-            from: {
-              target: clientUuid,
-              stream: "out",
-              uri: interpreterUri
-            },
-            to: {
-              uri: "packer-local-pipe-" + interpreterUri,
-              stream: "in"
-            }
-          });
-        }).then(function(e) { notifier.verbose('Added local pipe ' + interpreterUri + ' from ' + clientUuid); });
+          uuid: clientUuid,
+          node: node
+        });
       }
 
       scope.doRemovePipe = function(clientUuid, pipeUuid) {

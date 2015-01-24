@@ -141,6 +141,7 @@ angular.module('d3')
           .size([width, height])
           .nodes([])
           .linkDistance(45)
+          .gravity(0.05)
           .charge(-250)
           .on("tick", tick);
 
