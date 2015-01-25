@@ -48,3 +48,7 @@ html, body {
 .sidebar .panel-heading:hover {
   background-color: #f5f5f5;
 }
+
+.smaller { font-size: 0.8em; }
+.small { font-size: 0.9em; }
+.lightblue { color: cornflowerblue; }

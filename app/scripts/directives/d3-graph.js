@@ -12,6 +12,8 @@ angular.module('d3')
         links: '='
       },
       link: function($scope, element, attrs, ctrl, transclude) {
+        element[0].style.width = $scope.width;
+        element[0].style.height = $scope.height;
         transclude($scope, function(content) {
           element.append(content);
         });

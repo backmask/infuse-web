@@ -29,3 +29,8 @@ rect {
 .axis line {
   stroke-opacity: .1;
 }
+
+d3-graph {
+  display: block;
+  overflow: hidden;
+}

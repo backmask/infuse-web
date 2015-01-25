@@ -1,7 +1,7 @@
 angular.module('infuseWebAppCommon')
   .filter('shortNumber', function(numberFilter) {
     return function(input, unit) {
-      unit = unit || 'B';
+      unit = unit || '';
       if (input > 100000000) {
         return numberFilter(input / 1000000000, 2) + 'G' + unit;
       } else if (input > 100000) {

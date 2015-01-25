@@ -12,7 +12,11 @@
   padding: 5px;
   border: 1px solid #ccc;
   margin: 0;
+}
+
+.visualization .dynamicIncluded {
   height: 200px;
+  overflow: auto;
 }
 
 .visualization .color-tag {
@@ -93,4 +97,35 @@
 .format-object ul {
   padding-left: 15px;
   text-align: left;
+}
+
+.actions-header {
+  background-color: #eee;
+  margin: 5px 0 5px 0;
+  display:block;
+  padding: 4px;
+}
+
+.actions-header li {
+  padding:5px;
+  display: inline-block;
+  padding: 0 5px 0 6px;
+  cursor: pointer;
+}
+
+.actions-header .static {
+  cursor: default;
+}
+
+.actions-header .glyphicon {
+  color: #777;
+  padding-right:2px;
+}
+
+.actions-header .glyphicon:hover {
+  color: #333;
+}
+
+.actions-header li:not(:last-child) {
+  border-right: 1px solid #ccc;
 }

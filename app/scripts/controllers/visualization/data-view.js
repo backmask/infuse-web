@@ -1,11 +1,24 @@
 angular.module('infuseWebAppVisualization')
-  .controller('DataViewCtrl', function ($scope) {
+  .controller('DataViewCtrl', function ($scope, instrumentConvert) {
     var contextKey = "data-view-" + $scope.nodeUid + "-" + Math.random();
     var pipeUuid = false;
+    var filter = false;
 
     $scope.title.name = 'Data view (' + $scope.nodeUid + ')';
     $scope.title.description = 'Client ' + $scope.sessionClientUuid.substr(0, 8);
     $scope.frames = [];
+    $scope.receivedFrames = 0;
+    $scope.framesSpeed = instrumentConvert.toSpeed($scope, 'receivedFrames');
+    $scope.paused = false;
+
+    $scope.clear = function() {
+      $scope.frames = [];
+      $scope.receivedFrames = 0;
+    };
+    $scope.toggle = function() {
+      $scope.paused = !$scope.paused;
+    };
+    $scope.filter = function() {};
 
     var addPacker = function() {
       return $scope.doAddNode("self", {
@@ -40,7 +53,18 @@ angular.module('infuseWebAppVisualization')
     }
 
     var receiveData = function(d) {
-      $scope.frames.push(d);
+      if ($scope.paused) return;
+      $scope.receivedFrames++;
+
+      $scope.frames.unshift({
+        index: $scope.receivedFrames,
+        time: new Date(),
+        type: d.dataUid,
+        payload: d.data
+      });
+
+      if ($scope.frames.length > 100)
+        $scope.frames.pop();
     }
 
     addPacker().then(addPipe).then(setup);
