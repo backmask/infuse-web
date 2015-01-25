@@ -5,8 +5,13 @@
     <span ng-if="!paused" class="glyphicon glyphicon-pause"></span>
     <span ng-if="paused" class="glyphicon glyphicon-play"></span>
   </li>
-  <li ng-click="filter()"><span class="glyphicon glyphicon-filter"></span></li>
+  <li>
+    <span class="glyphicon glyphicon-filter"></span>
+  </li>
 </ul>
+<div ui-codemirror="{lineNumbers: true, lineWrapping : true, mode: 'javascript', theme: 'default'}" ng-model="filterScript" class="smaller">var filter = function(type, payload, index) {
+  return true;
+}</div>
 <table class="table table-condensed data-view small">
   <thead>
     <tr>

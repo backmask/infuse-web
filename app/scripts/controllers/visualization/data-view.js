@@ -2,7 +2,7 @@ angular.module('infuseWebAppVisualization')
   .controller('DataViewCtrl', function ($scope, instrumentConvert) {
     var contextKey = "data-view-" + $scope.nodeUid + "-" + Math.random();
     var pipeUuid = false;
-    var filter = false;
+    var filter = function() { return true; };
 
     $scope.title.name = 'Data view (' + $scope.nodeUid + ')';
     $scope.title.description = 'Client ' + $scope.sessionClientUuid.substr(0, 8);
@@ -10,6 +10,7 @@ angular.module('infuseWebAppVisualization')
     $scope.receivedFrames = 0;
     $scope.framesSpeed = instrumentConvert.toSpeed($scope, 'receivedFrames');
     $scope.paused = false;
+    $scope.filterScript = 'return function(type, payload, index) {\n  return true;\n}';
 
     $scope.clear = function() {
       $scope.frames = [];
@@ -18,7 +19,9 @@ angular.module('infuseWebAppVisualization')
     $scope.toggle = function() {
       $scope.paused = !$scope.paused;
     };
-    $scope.filter = function() {};
+    $scope.updateFilter = function() {
+      filter = eval('(function() {' + $scope.filterScript + '})')();
+    }
 
     var addPacker = function() {
       return $scope.doAddNode("self", {
@@ -53,7 +56,7 @@ angular.module('infuseWebAppVisualization')
     }
 
     var receiveData = function(d) {
-      if ($scope.paused) return;
+      if ($scope.paused || !filter(d.dataUid, d.data, $scope.receivedFrames)) return;
       $scope.receivedFrames++;
 
       $scope.frames.unshift({
