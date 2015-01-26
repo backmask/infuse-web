@@ -2,6 +2,7 @@ angular.module('infuseWebAppVisualization')
   .controller('DataViewCtrl', function ($scope, instrumentConvert) {
     var contextKey = "data-view-" + $scope.nodeUid + "-" + Math.random();
     var pipeUuid = false;
+    var previousFilterValue = false;
     var filter = function() { return true; };
 
     $scope.title.name = 'Data view (' + $scope.nodeUid + ')';
@@ -11,6 +12,7 @@ angular.module('infuseWebAppVisualization')
     $scope.framesSpeed = instrumentConvert.toSpeed($scope, 'receivedFrames');
     $scope.paused = false;
     $scope.filterScript = 'return function(type, payload, index) {\n  return true;\n}';
+    $scope.showFilterEditor = false;
 
     $scope.clear = function() {
       $scope.frames = [];
@@ -19,9 +21,18 @@ angular.module('infuseWebAppVisualization')
     $scope.toggle = function() {
       $scope.paused = !$scope.paused;
     };
-    $scope.updateFilter = function() {
+    $scope.toggleFilterEditor = function() {
+      $scope.showFilterEditor = !$scope.showFilterEditor;
+    };
+    $scope.saveFilter = function() {
+      $scope.showFilterEditor = false;
+      previousFilterValue = $scope.filterScript;
       filter = eval('(function() {' + $scope.filterScript + '})')();
-    }
+    };
+    $scope.resetFilter = function() {
+      $scope.showFilterEditor = false;
+      $scope.filterScript = previousFilterValue;
+    };
 
     var addPacker = function() {
       return $scope.doAddNode("self", {

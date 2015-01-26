@@ -2,7 +2,7 @@
 
 angular.module('infuseWebAppCommon', []);
 angular.module('d3', []);
-angular.module('infuseWebAppVisualization', ['ui.codemirror']);
+angular.module('infuseWebAppVisualization', ['ui.codemirror', 'infuseWebAppCommon']);
 angular.module('infuseWebAppInstrument', []);
 angular.module('infuseWebAppDevice', ['infuseWebAppVisualization']);
 angular.module('infuseWebApp', [

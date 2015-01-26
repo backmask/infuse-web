@@ -27,8 +27,10 @@ angular.module('infuseWebAppInstrument')
         previousDistance = scope[field];
       }
 
-      var removeInterval = $interval(refreshValue, intervalDelta, 0, false);
-      scope.$on('$destroy', removeInterval);
+      var autoRefresh = $interval(refreshValue, intervalDelta, 0, false);
+      scope.$on('$destroy', function() {
+        $interval.cancel(autoRefresh);
+      });
 
       return function() {
         return speed;

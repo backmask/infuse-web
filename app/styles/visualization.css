@@ -129,3 +129,7 @@
 .actions-header li:not(:last-child) {
   border-right: 1px solid #ccc;
 }
+
+div[ui-codemirror] {
+  min-width: 350px;
+}
