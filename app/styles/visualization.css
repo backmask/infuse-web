@@ -133,3 +133,7 @@
 div[ui-codemirror] {
   min-width: 350px;
 }
+
+div[ui-codemirror] .CodeMirror {
+  height:auto;
+}

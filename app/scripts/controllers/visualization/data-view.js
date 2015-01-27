@@ -3,7 +3,7 @@ angular.module('infuseWebAppVisualization')
     var contextKey = "data-view-" + $scope.nodeUid + "-" + Math.random();
     var pipeUuid = false;
     var previousFilterValue = false;
-    var filter = function() { return true; };
+    var compiledFilter = function() { return true; };
 
     $scope.title.name = 'Data view (' + $scope.nodeUid + ')';
     $scope.title.description = 'Client ' + $scope.sessionClientUuid.substr(0, 8);
@@ -11,8 +11,11 @@ angular.module('infuseWebAppVisualization')
     $scope.receivedFrames = 0;
     $scope.framesSpeed = instrumentConvert.toSpeed($scope, 'receivedFrames');
     $scope.paused = false;
-    $scope.filterScript = 'return function(type, payload, index) {\n  return true;\n}';
-    $scope.showFilterEditor = false;
+    $scope.filter = {
+      script: 'return function(type, payload, index) {\n  return true;\n}',
+      previousValue: false,
+      showEditor: false
+    }
 
     $scope.clear = function() {
       $scope.frames = [];
@@ -22,16 +25,16 @@ angular.module('infuseWebAppVisualization')
       $scope.paused = !$scope.paused;
     };
     $scope.toggleFilterEditor = function() {
-      $scope.showFilterEditor = !$scope.showFilterEditor;
+      $scope.filter.showEditor = !$scope.filter.showEditor;
     };
     $scope.saveFilter = function() {
-      $scope.showFilterEditor = false;
-      previousFilterValue = $scope.filterScript;
-      filter = eval('(function() {' + $scope.filterScript + '})')();
+      $scope.filter.showEditor = false;
+      $scope.filter.previousValue = $scope.filter.script;
+      compiledFilter = eval('(function() {' + $scope.filter.script + '})')();
     };
     $scope.resetFilter = function() {
-      $scope.showFilterEditor = false;
-      $scope.filterScript = previousFilterValue;
+      $scope.filter.showEditor = false;
+      $scope.filter.script = $scope.filter.previousValue;
     };
 
     var addPacker = function() {
@@ -67,8 +70,7 @@ angular.module('infuseWebAppVisualization')
     }
 
     var receiveData = function(d) {
-      if ($scope.paused || !filter(d.dataUid, d.data, $scope.receivedFrames)) return;
-      $scope.receivedFrames++;
+      if ($scope.paused || !compiledFilter(d.dataUid, d.data, ++$scope.receivedFrames)) return;
 
       $scope.frames.unshift({
         index: $scope.receivedFrames,

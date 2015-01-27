@@ -7,8 +7,8 @@
   </li>
   <li ng-click="toggleFilterEditor()">
     <span class="glyphicon glyphicon-filter"></span>
-    <smart-tooltip class="no-padding" show="showFilterEditor">
-      <div style="max-height:100px" ui-codemirror="{lineNumbers: true, lineWrapping : true, mode: 'javascript', theme: 'default'}" ng-model="filterScript" class="smaller"></div>
+    <smart-tooltip class="no-padding" show="filter.showEditor">
+      <div style="max-height:100px;overflow:auto" ui-codemirror="{lineNumbers: true, lineWrapping : true, mode: 'javascript', theme: 'default'}" ng-model="filter.script" class="smaller"></div>
       <div class="tooltip-actions">
         <a class="btn btn-default btn-sm" ng-click="resetFilter()">Cancel</a>
         <a class="btn btn-success btn-sm" ng-click="saveFilter()">Save</a>
