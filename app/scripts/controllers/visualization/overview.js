@@ -13,6 +13,16 @@ angular.module('infuseWebAppVisualization')
     var nodeClientColor = '#999';
     var previousData = {};
 
+    var showPipelineCb = function(uuid) {
+      return function() {
+        visualizationManager.visualize(
+          $scope.getView('Client processing pipeline'),
+          $scope,
+          { sessionClientUuid: uuid }
+        );
+      };
+    };
+
     var refresh = function(wsData) {
       if (angular.equals(wsData.data, previousData)) {
         return;
@@ -50,13 +60,7 @@ angular.module('infuseWebAppVisualization')
               description: client.uuid,
               hasActions: true,
               isSessionClient: true,
-              showPipeline: function() {
-                visualizationManager.visualize(
-                  $scope.getView('Client processing pipeline'),
-                  $scope,
-                  { sessionClientUuid: client.uuid }
-                );
-              },
+              showPipeline: showPipelineCb(client.uuid),
               details: client.description
             }});
           links.push({ from: gwNode.port, to: client.uuid });
@@ -91,6 +95,7 @@ angular.module('infuseWebAppVisualization')
             description: clientInstance,
             hasActions: true,
             isClientInstance: true,
+            showPipeline: showPipelineCb(clientInstance),
             disconnect: function() {
               $scope.doClientDisconnect(clientInstance);
             }
