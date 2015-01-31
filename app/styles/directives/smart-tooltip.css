@@ -11,13 +11,36 @@ smart-tooltip.no-padding .tooltip-content {
   padding:0;
 }
 
+smart-tooltip.small .popover-title {
+  padding:5px;
+  font-size: 0.8em;
+}
+
+smart-tooltip.small .tooltip-content {
+  padding:2px;
+  font-size: 0.8em;
+}
+
 smart-tooltip .tooltip-container.in {
   visibility: visible;
 }
 
 smart-tooltip .tooltip-actions {
-  margin: 3px;
+  margin: 3px 0 0 0;
   padding-top: 3px;
   border-top: 1px solid #eee;
   text-align: right;
+}
+
+smart-tooltip .format-object {
+  display: inline-block;
+}
+
+smart-tooltip .connect {
+  text-align: right;
+  padding-bottom: 3px;
+}
+
+smart-tooltip .popover-title {
+  font-size: 0.8em;
 }

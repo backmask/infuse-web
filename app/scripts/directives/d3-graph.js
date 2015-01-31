@@ -9,7 +9,8 @@ angular.module('d3')
         width: '@',
         height: '@',
         nodes: '=',
-        links: '='
+        links: '=',
+        nodeSelected: '=?'
       },
       link: function($scope, element, attrs, ctrl, transclude) {
         element[0].style.width = $scope.width;
@@ -89,17 +90,11 @@ angular.module('d3')
               .style("fill", function(d) { return d.color; })
               .attr("r", nodeRadius)
               .on("mouseover", function(d) {
+                d.dom = $(this);
                 $scope.$apply(function() {
                     $scope.nodeSelected = d;
                     $scope.nodeHovered = true;
                 });
-
-                if (!tooltip) return;
-                var nPosition = $(this).position();
-                tooltip
-                  .style("position", "absolute")
-                  .style("left", (nPosition.left + nodeRadius - $(tooltip[0]).width() / 2) + "px")
-                  .style("top", (nPosition.top - nodeRadius - $(tooltip[0]).height()) + "px");
               })
               .on("mouseout", function(d) {
                 $scope.$apply(function() {
@@ -146,9 +141,6 @@ angular.module('d3')
           .gravity(0.05)
           .charge(-250)
           .on("tick", tick);
-
-        var domTooltip = element.find('.tooltip')[0];
-        var tooltip = domTooltip ? d3.select(domTooltip) : null;
 
         var node = svg.selectAll(".node"),
             link = svg.selectAll(".link");

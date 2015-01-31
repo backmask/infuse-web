@@ -33,35 +33,41 @@ angular.module('infuseWebAppCommon')
           if (angular.isArray(val) || angular.isObject(val)) {
             var container = document.createElement('ul');
             for (var k in val) {
-              if (!hasToBeDisplayed(val[k])) {
+              var prettyChild = pretty(val[k]);
+              if (!prettyChild) {
                 continue;
               }
 
               var eltContainer = document.createElement('li');
-              var child = pretty(val[k]);
               if (!angular.isArray(val)) {
                 eltContainer.appendChild(document.createTextNode(k + ": "));
               }
-              eltContainer.appendChild(pretty(val[k]));
+              eltContainer.appendChild(prettyChild);
               container.appendChild(eltContainer);
             }
 
             if (container.children.length === 0) {
-              return document.createComment('empty list');
+              return null;
             }
 
             return container;
           }
-
-          return document.createTextNode(val);
+          else if (hasToBeDisplayed(val)) {
+            return document.createTextNode(val);
+          }
+          return null;
         };
 
         var container = element.find('.format-object');
 
         scope.$watch('data', function(val) {
           container.empty();
-          if (val) {
+          var p = pretty(val);
+          if (p) {
             container.append(pretty(val));
+            container.css('display', 'block');
+          } else {
+            container.css('display', 'none');
           }
         }, true);
       },

@@ -64,8 +64,8 @@ angular.module('infuseWebAppVisualization')
     }
 
     var cleanup = function() {
-      $scope.doRemoveNode($scope.sessionClientUuid, contextKey);
-      $scope.doRemovePipe($scope.sessionClientUuid, pipeUuid);
+      $scope.doRemoveNode('self', contextKey);
+      $scope.doRemovePipe('self', pipeUuid);
       $scope.removeCallback(contextKey);
     }
 

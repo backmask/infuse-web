@@ -3,13 +3,16 @@
   width="100%"
   height="100%"
   nodes="pipeline.nodes"
-  links="pipeline.links">
-  <d3-tooltip show="nodeHovered">
-    <span class="title">
-      {{nodeSelected.info.name}}
-      <span class="verbose">{{nodeSelected.info.description}}</span>
-    </span>
-    <div ng-if="nodeSelected.info.hasActions" class="connect">
+  links="pipeline.links"
+>
+  <smart-tooltip
+    show-on-hover="true"
+    anchor="nodeSelected.dom"
+    title="nodeSelected.info.name"
+    subtitle="nodeSelected.info.description"
+    class="small"
+  >
+    <div ng-if="nodeSelected.info.hasActions" class="tooltip-actions">
       <a ng-if="nodeSelected.info.canPipe" class="btn btn-primary btn-xs" ng-click="nodeSelected.info.pipe()">
         View
       </a>
@@ -17,7 +20,7 @@
         Remove
       </a>
     </div>
-  </d3-tooltip>
+  </smart-tooltip>
 </d3-graph>
 
 <div style="height:100%" ng-show="viewType.selected == 'owned-pipes' && pipes.length === 0">
