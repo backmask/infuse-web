@@ -5,3 +5,21 @@
 #active-connections .add-dropdown {
   font-size: 0.8em;
 }
+
+#active-connections .subdevice {
+  margin-left:5px;
+  padding:5px;
+}
+
+#active-connections .subdevice .subdevice-id {
+  font-size: 0.8em;
+  vertical-align: middle;
+}
+
+#active-connections .dc-alert {
+  font-size: 0.8em;
+  padding: 0 2px 0 2px;
+  position: absolute;
+  top: 7px;
+  right: 5px;
+}

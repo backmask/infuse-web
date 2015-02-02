@@ -1,6 +1,6 @@
 <div ng-controller="ActiveConnectionsCtrl" id="active-connections">
   <ul class="list-group devices">
-    <li class="list-group-item device" style="border-left:3px solid {{device.color}}" ng-repeat="device in connectedDevices">
+    <li class="list-group-item device" style="border-left:3px solid {{device.color}}" ng-repeat-start="device in connectedDevices">
       <img ng-src="{{device.icon}}" class="pull-left img-circle" />
       <div class="pull-left text">
         <span>{{device.name}}</span><br/>
@@ -35,6 +35,17 @@
         </a>
       </div>
       <div style="clear:both"></div>
+    </li>
+    <li ng-repeat="(key, subdevice) in device.getClients()"
+      class="list-group-item subdevice"
+      ng-repeat-end
+      style="border-left:3px solid {{subdevice.subColor}}"
+    >
+      <i class="fa {{subdevice.smallIcon}} fa-fw fa-lg"></i>
+      <span class="subdevice-id">{{subdevice.sessionClientUuid | shortUuid}}</span>
+      <div ng-show="!subdevice.connected" class="alert alert-danger dc-alert" role="alert">
+        <span class="glyphicon glyphicon-flash"></span> Connection lost
+      </div>
     </li>
   </ul>
   <div ng-show="!connectedDevices.length">

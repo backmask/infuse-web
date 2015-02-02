@@ -17,8 +17,7 @@ angular.module('infuseWebAppVisualization')
       return function() {
         visualizationManager.visualize(
           $scope.getView('Client processing pipeline'),
-          $scope,
-          { sessionClientUuid: uuid }
+          $scope.getClient(uuid)
         );
       };
     };

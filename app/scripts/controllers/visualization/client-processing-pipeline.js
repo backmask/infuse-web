@@ -28,11 +28,11 @@ angular.module('infuseWebAppVisualization')
             visualizationManager.visualize(
               $scope.getView('Data view'),
               $scope,
-              { sessionClientUuid: $scope.sessionClientUuid, nodeUid: node.uid }
+              { nodeUid: node.uid }
             );
           },
           remove: function() {
-            $scope.doRemoveNode($scope.sessionClientUuid, node.uid);
+            $scope.doRemoveNode(node.uid);
           }
         }
       });
@@ -94,12 +94,12 @@ angular.module('infuseWebAppVisualization')
 
     var getData = function() {
       if ($scope.connected && $scope.sessionClientUuid) {
-        $scope.doGetSessionClientPipeline($scope.sessionClientUuid).then(refresh);
+        $scope.doGetSessionClientPipeline().then(refresh);
       }
     }
 
     $scope.removePipe = function(pipeUuid) {
-      $scope.doRemovePipe($scope.sessionClientUuid, pipeUuid);
+      $scope.doRemovePipe(pipeUuid);
     }
 
     getData();

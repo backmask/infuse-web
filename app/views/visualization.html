@@ -3,6 +3,7 @@
     <div class="visualization-wrapper col-lg-4">
       <div class="visualization">
         <div class="color-tag" style="background-color:{{vis.scope.color}}"></div>
+        <div class="color-tag" style="background-color:{{vis.scope.subColor}};margin-left:20px" ng-if="vis.scope.subColor"></div>
         <span class="title">
           {{vis.scope.title.name}} <span class="verbose">{{vis.scope.title.description}}</span>
         </span>

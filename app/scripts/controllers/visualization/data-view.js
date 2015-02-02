@@ -38,24 +38,24 @@ angular.module('infuseWebAppVisualization')
     };
 
     var addPacker = function() {
-      return $scope.doAddNode("self", {
+      return $scope.doAddNode({
         instanceType: "packer",
         uid: contextKey,
         type: "json.response.packer",
         final: true,
         config: { context: contextKey }
-      });
+      }, "self");
     };
 
     var addPipe = function() {
-      return $scope.doSetPipe("self", "processor", {
+      return $scope.doSetPipe("processor", {
         target: $scope.sessionClientUuid,
         stream: "out",
         uri: $scope.nodeUid
       }, {
         uri: contextKey,
         stream: "in"
-      });
+      }, "self");
     };
 
     var setup = function(d) {
@@ -64,8 +64,8 @@ angular.module('infuseWebAppVisualization')
     }
 
     var cleanup = function() {
-      $scope.doRemoveNode('self', contextKey);
-      $scope.doRemovePipe('self', pipeUuid);
+      $scope.doRemoveNode(contextKey, 'self');
+      $scope.doRemovePipe(pipeUuid, 'self');
       $scope.removeCallback(contextKey);
     }
 
