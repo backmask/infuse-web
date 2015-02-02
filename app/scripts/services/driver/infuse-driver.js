@@ -167,6 +167,7 @@ angular.module('infuseWebAppDevice')
         childScope.connected = true;
         childScope.subColor = randomColor({ luminosity: 'bright'});
         childScope.smallIcon = 'fa-circle-o-notch fa-spin';
+        childScope.activeVisualizations = 0;
 
         var pollInterval = $interval(function() {
           scope.doRequest("session/client/ping", { uuid: clientUuid })
@@ -222,6 +223,17 @@ angular.module('infuseWebAppDevice')
 
         childScope.$on('$destroy', function() {
           $interval.cancel(pollInterval);
+        });
+
+        childScope.$on('add-visualization', function() {
+          ++childScope.activeVisualizations;
+        });
+
+        childScope.$on('remove-visualization', function() {
+          --childScope.activeVisualizations;
+          if (childScope.activeVisualizations <= 0) {
+            scope.releaseClient(clientUuid);
+          }
         });
 
         subConnections[clientUuid] = childScope;

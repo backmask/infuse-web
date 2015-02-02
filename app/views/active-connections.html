@@ -43,6 +43,7 @@
     >
       <i class="fa {{subdevice.smallIcon}} fa-fw fa-lg"></i>
       <span class="subdevice-id">{{subdevice.sessionClientUuid | shortUuid}}</span>
+      <span class="active-vis">{{subdevice.activeVisualizations}}</span>
       <div ng-show="!subdevice.connected" class="alert alert-danger dc-alert" role="alert">
         <span class="glyphicon glyphicon-flash"></span> Connection lost
       </div>

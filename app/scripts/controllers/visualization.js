@@ -8,6 +8,7 @@ angular.module('infuseWebAppVisualization')
     r.visualize = function(vis, scope, visParameters) {
       var visCopy = angular.copy(vis);
       visCopy.scope = scope.$new();
+      visCopy.scope.$emit('add-visualization');
       visCopy.scope.title = {
         name: vis.name,
         description: scope.name + ' ' + scope.description
@@ -22,6 +23,7 @@ angular.module('infuseWebAppVisualization')
     }
 
     r.stopVisualization = function(vis) {
+      vis.scope.$emit('remove-visualization');
       vis.scope.$destroy();
       activeVisualizations.splice(activeVisualizations.indexOf(vis), 1);
     }
