@@ -64,13 +64,15 @@ angular.module('infuseWebAppDevice')
       driver.onmessage = function(message) {
         var data = JSON.parse(message.data);
         scope.download += message.data.length;
-        onDataCallbacks.forEach(function(cb) {
-          cb(data);
-        });
+        scope.$apply(function() {
+          onDataCallbacks.forEach(function(cb) {
+            cb(data);
+          });
 
-        if (data.context && responseCallbacks[data.context]) {
-          responseCallbacks[data.context](data);
-        }
+          if (data.context && responseCallbacks[data.context]) {
+            responseCallbacks[data.context](data);
+          }
+        });
       }
 
       scope.onData = function(callback) {
