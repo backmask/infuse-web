@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('infuseWebAppDevice')
-  .factory('infuseDriverFactory', function($q, notifier, $interval) {
+  .factory('infuseDriverFactory', function($q, notifier, $interval, $timeout) {
     var r = {};
 
     r.build = function(scope, configuration) {
@@ -103,13 +103,13 @@ angular.module('infuseWebAppDevice')
           params: parameters
         };
 
-        var responseTimeout = setTimeout(function() {
+        var responseTimeout = $timeout(function() {
           deferredResponse.reject(method + " timed out");
           delete responseCallbacks[context];
         }, 1000);
 
         responseCallbacks[context] = function(data) {
-          clearTimeout(responseTimeout);
+          $timeout.cancel(responseTimeout);
           delete responseCallbacks[context];
           if (data.error) {
             notifier.error(method + ' failed', data.error.message);

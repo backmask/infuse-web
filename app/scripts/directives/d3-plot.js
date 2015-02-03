@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('d3')
-  .directive('d3Plot', function(d3, $window) {
+  .directive('d3Plot', function(d3, $window, $timeout) {
     return {
       restrict: 'E',
       transclude: true,
@@ -62,7 +62,7 @@ angular.module('d3')
         });
 
         angular.element($window).bind('resize', onResize);
-        setTimeout(onResize, 1);
+        $timeout(onResize);
       }
     };
   })

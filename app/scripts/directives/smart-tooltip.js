@@ -1,5 +1,5 @@
 angular.module('infuseWebAppCommon')
-  .directive('smartTooltip', function($interval) {
+  .directive('smartTooltip', function($interval, $timeout) {
     return {
       restrict: 'E',
       scope: {
@@ -84,13 +84,13 @@ angular.module('infuseWebAppCommon')
           if (show) {
             $interval.cancel(autoRefresh);
             autoRefresh = $interval(refreshPosition, 25);
-            setTimeout(function() {
+            $timeout(function() {
               refreshPosition();
               container.toggleClass('in', true);
               if (enterMousePosition) {
                 enterMouseDistance = getDistance(enterMousePosition, container);
               }
-            }, 1);
+            });
           } else {
             $interval.cancel(autoRefresh);
             $(window).off('mousemove', trackMouse);
