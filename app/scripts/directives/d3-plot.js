@@ -16,6 +16,9 @@ angular.module('d3')
         $scope.bottom = 10;
       },
       link: function(scope, element, attrs, ctrl, transclude) {
+        element[0].style.width = scope.width;
+        element[0].style.height = scope.height;
+
         var onResize = function() {
           var width = $(svg[0]).width();
           var height = $(svg[0]).height();
@@ -59,7 +62,7 @@ angular.module('d3')
         });
 
         angular.element($window).bind('resize', onResize);
-        onResize();
+        setTimeout(onResize, 1);
       }
     };
   })
@@ -68,7 +71,7 @@ angular.module('d3')
       restrict: 'E',
       require: '^d3Plot',
       scope: {
-        color: '@',
+        color: '=',
         data: '='
       },
       link: function(scope, element, attrs, d3Plot) {

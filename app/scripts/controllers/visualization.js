@@ -19,12 +19,18 @@ angular.module('infuseWebAppVisualization')
           visCopy.scope[key] = visParameters[key];
         }
       }
+      if (visCopy.scope.onInit) {
+        visCopy.scope.onInit(visCopy.scope);
+      }
       activeVisualizations.push(visCopy);
     }
 
     r.stopVisualization = function(vis) {
       vis.scope.$emit('remove-visualization');
       vis.scope.$destroy();
+      if (vis.scope.onStop) {
+        vis.scope.onStop(vis.scope);
+      }
       activeVisualizations.splice(activeVisualizations.indexOf(vis), 1);
     }
 

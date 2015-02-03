@@ -20,5 +20,10 @@ angular.module('infuseWebAppVisualization')
       template: "views/infuse/data-view.html",
       controller: "DataViewCtrl",
       hidden: true
+    }, {
+      name: "Data graph",
+      template: "views/infuse/data-graph.html",
+      controller: "DataGraphCtrl",
+      hidden: true
     }]);
   });

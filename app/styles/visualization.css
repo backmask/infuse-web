@@ -93,12 +93,14 @@
   cursor: default;
 }
 
-.actions-header .glyphicon {
+.actions-header .glyphicon,
+.actions-header .fa {
   color: #777;
   padding-right:2px;
 }
 
-.actions-header .glyphicon:hover {
+.actions-header .glyphicon:hover,
+.actions-header .fa:hover {
   color: #333;
 }
 

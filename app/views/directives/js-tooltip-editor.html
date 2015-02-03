@@ -1,0 +1,8 @@
+<span ng-transclude></span>
+<smart-tooltip class="no-padding" show="editor.show">
+  <div style="max-height:100px;overflow:auto" ui-codemirror="{lineNumbers: true, lineWrapping : true, mode: 'javascript', theme: 'default'}" ng-model="editor.currentScript" class="smaller"></div>
+  <div class="tooltip-actions">
+    <a class="btn btn-default btn-sm" ng-click="reset()">{{labelCancel}}</a>
+    <a class="btn btn-success btn-sm" ng-click="save()">{{labelSave}}</a>
+  </div>
+</smart-tooltip>

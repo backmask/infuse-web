@@ -1,8 +1,7 @@
 angular.module('infuseWebAppVisualization')
-  .controller('DataViewCtrl', function ($scope, instrumentConvert) {
+  .controller('DataViewCtrl', function ($scope, instrumentConvert, visualizationManager) {
     var contextKey = "data-view-" + $scope.nodeUid + "-" + Math.random();
     var pipeUuid = false;
-    var previousFilterValue = false;
     var compiledFilter = function() { return true; };
 
     $scope.title.name = 'Data view (' + $scope.nodeUid + ')';
@@ -11,11 +10,10 @@ angular.module('infuseWebAppVisualization')
     $scope.receivedFrames = 0;
     $scope.framesSpeed = instrumentConvert.toSpeed($scope, 'receivedFrames');
     $scope.paused = false;
-    $scope.filter = {
-      script: 'return function(type, payload, index) {\n  return true;\n}',
-      previousValue: false,
-      showEditor: false
-    }
+    $scope.script = {
+      filter: 'return function(type, payload, index) {\n  return true;\n}',
+      graph: 'return function(type, payload, index) {\n  return 1 - (index % 200) / 100;\n}'
+    };
 
     $scope.clear = function() {
       $scope.frames = [];
@@ -23,18 +21,6 @@ angular.module('infuseWebAppVisualization')
     };
     $scope.toggle = function() {
       $scope.paused = !$scope.paused;
-    };
-    $scope.toggleFilterEditor = function() {
-      $scope.filter.showEditor = !$scope.filter.showEditor;
-    };
-    $scope.saveFilter = function() {
-      $scope.filter.showEditor = false;
-      $scope.filter.previousValue = $scope.filter.script;
-      compiledFilter = eval('(function() {' + $scope.filter.script + '})')();
-    };
-    $scope.resetFilter = function() {
-      $scope.filter.showEditor = false;
-      $scope.filter.script = $scope.filter.previousValue;
     };
 
     var addPacker = function() {
@@ -70,7 +56,8 @@ angular.module('infuseWebAppVisualization')
     }
 
     var receiveData = function(d) {
-      if ($scope.paused || !compiledFilter(d.dataUid, d.data, ++$scope.receivedFrames)) return;
+      $scope.$broadcast('data-received', d.dataUid, d.data, ++$scope.receivedFrames);
+      if ($scope.paused || !compiledFilter(d.dataUid, d.data, $scope.receivedFrames)) return;
 
       $scope.frames.unshift({
         index: $scope.receivedFrames,
@@ -82,6 +69,40 @@ angular.module('infuseWebAppVisualization')
       if ($scope.frames.length > 100)
         $scope.frames.pop();
     }
+
+    $scope.$watch('script.filter', function(f) {
+      compiledFilter = eval('(function() {' + f + '})')();
+    });
+
+    $scope.$on('js-editor-saved', function(e, g, oldg) {
+      if (e.targetScope.jsName != 'filter') {
+        return;
+      }
+      e.stopPropagation();
+
+      var compiledGraph = eval('(function() {' + g + '})')();
+      var listen = function(sc) {
+        sc.$on('data-received', function(e, uid, data, frameIdx) {
+          var res = compiledGraph(uid, data, frameIdx);
+          if (!isNaN(res)) {
+            sc.series[0].data.push(res);
+          }
+        });
+      }
+
+      visualizationManager.visualize(
+        $scope.getView('Data graph'),
+        $scope,
+        {
+          onInit: listen,
+          series: [{
+            label: g.substr(0, 10),
+            color: randomColor({ luminosity: 'bright'}),
+            data: []
+          }]
+        }
+      );
+    });
 
     addPacker().then(addPipe).then(setup);
     $scope.$on('$destroy', cleanup);

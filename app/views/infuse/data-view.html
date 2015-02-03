@@ -5,7 +5,7 @@
     <span ng-if="!paused" class="glyphicon glyphicon-pause"></span>
     <span ng-if="paused" class="glyphicon glyphicon-play"></span>
   </li>
-  <li ng-click="toggleFilterEditor()">
+  <li js-tooltip-editor script="script.filter">
     <span class="glyphicon glyphicon-filter"></span>
     <smart-tooltip class="no-padding" show="filter.showEditor">
       <div style="max-height:100px;overflow:auto" ui-codemirror="{lineNumbers: true, lineWrapping : true, mode: 'javascript', theme: 'default'}" ng-model="filter.script" class="smaller"></div>
@@ -14,6 +14,9 @@
         <a class="btn btn-success btn-sm" ng-click="saveFilter()">Save</a>
       </div>
     </smart-tooltip>
+  </li>
+  <li js-tooltip-editor script="script.graph" push-mode="true" js-name="filter">
+    <i class="fa fa-line-chart"></i>
   </li>
 </ul>
 <table class="table table-condensed data-view small">

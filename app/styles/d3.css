@@ -30,7 +30,11 @@ rect {
   stroke-opacity: .1;
 }
 
-d3-graph {
+d3-graph, d3-plot {
   display: block;
   overflow: hidden;
+}
+
+d3-plot path, d3-plot line {
+  fill: none;
 }
