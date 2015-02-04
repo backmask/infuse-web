@@ -25,5 +25,13 @@ angular.module('infuseWebAppVisualization')
       template: "views/infuse/data-graph.html",
       controller: "DataGraphCtrl",
       hidden: true
+    }, {
+      name: "Controller display",
+      template: "views/infuse/controller.html",
+      controller: "ControllerCtrl",
+      hidden: true
     }]);
+    infuseVisualizationFactory.setDeviceViews({
+      "controller": ["Controller display"]
+    });
   });

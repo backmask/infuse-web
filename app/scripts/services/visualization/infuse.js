@@ -13,6 +13,8 @@ angular.module('infuseWebAppVisualization')
   .factory('infuseVisualizationFactory', function() {
     var r = {};
     var views = [];
+    var indexedViews = {};
+    var deviceViews = {};
     r.build = function(scope) {
       scope.views = views;
       scope.defaultView = views[0];
@@ -23,11 +25,22 @@ angular.module('infuseWebAppVisualization')
           }
         }
       }
+      scope.getDeviceViews = function(name) {
+        var r = [];
+        var v = deviceViews[name];
+        if (!v) return r;
+        v.forEach(function(val) { r.push(indexedViews[val]); });
+        return r;
+      }
       return scope;
-    }
+    };
     r.setViews = function(v) {
       views = v;
-    }
+      views.forEach(function(val) { indexedViews[val.name] = val; });
+    };
+    r.setDeviceViews = function(v) {
+      deviceViews = v;
+    };
     return r;
   })
   .factory('leapVisualizationFactory', function() {
@@ -37,9 +50,9 @@ angular.module('infuseWebAppVisualization')
       scope.views = views;
       scope.defaultView = views[0];
       return scope;
-    }
+    };
     r.setViews = function(v) {
       views = v;
-    }
+    };
     return r;
   });;
