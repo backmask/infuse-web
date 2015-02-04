@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('infuseWebAppDevice')
-  .factory('infuseDriverFactory', function($q, notifier, $interval, $timeout) {
+  .factory('infuseDriverFactory', function($q, notifier, $interval, $timeout, throttle) {
     var r = {};
 
     r.build = function(scope, configuration) {
@@ -10,6 +10,7 @@ angular.module('infuseWebAppDevice')
       var onSendCallbacks = [];
       var responseCallbacks = {};
       var subConnections = {};
+      var throttledApply = throttle(function() { scope.$apply(); }, 40);
       scope.name = configuration.name;
       scope.description = configuration.description;
       scope.icon = configuration.icon;
@@ -64,15 +65,14 @@ angular.module('infuseWebAppDevice')
       driver.onmessage = function(message) {
         var data = JSON.parse(message.data);
         scope.download += message.data.length;
-        scope.$apply(function() {
-          onDataCallbacks.forEach(function(cb) {
-            cb(data);
-          });
-
-          if (data.context && responseCallbacks[data.context]) {
-            responseCallbacks[data.context](data);
-          }
+        onDataCallbacks.forEach(function(cb) {
+          cb(data);
         });
+
+        if (data.context && responseCallbacks[data.context]) {
+          responseCallbacks[data.context](data);
+        }
+        throttledApply();
       }
 
       scope.onData = function(callback) {
