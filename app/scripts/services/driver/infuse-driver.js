@@ -223,6 +223,16 @@ angular.module('infuseWebAppDevice')
           }).then(function(e) { notifier.verbose('Removed ' + nodeUri + ' from ' + clientUuid); });;
         }
 
+        childScope.addPipePacker = function(contextKey) {
+          return childScope.doAddNode({
+            instanceType: "packer",
+            uid: contextKey,
+            type: "json.response.packer",
+            final: true,
+            config: { context: contextKey }
+          }, "self");
+        }
+
         childScope.$on('$destroy', function() {
           $interval.cancel(pollInterval);
         });

@@ -115,3 +115,22 @@ div[ui-codemirror] {
 div[ui-codemirror] .CodeMirror {
   height:auto;
 }
+
+.controller-input {
+  display:inline-block;
+  font-size:0.8em;
+  width:25%;
+  height:50%;
+}
+
+.controller-input .symbol {
+  display:inline-block;
+  margin-left:4px;
+}
+
+.controller-input .coords {
+  display:inline-block;
+  float:right;
+  margin-right:4px;
+  color:#aaa;
+}

@@ -23,16 +23,6 @@ angular.module('infuseWebAppVisualization')
       $scope.paused = !$scope.paused;
     };
 
-    var addPacker = function() {
-      return $scope.doAddNode({
-        instanceType: "packer",
-        uid: contextKey,
-        type: "json.response.packer",
-        final: true,
-        config: { context: contextKey }
-      }, "self");
-    };
-
     var addPipe = function() {
       return $scope.doSetPipe("processor", {
         target: $scope.sessionClientUuid,
@@ -104,6 +94,6 @@ angular.module('infuseWebAppVisualization')
       );
     });
 
-    addPacker().then(addPipe).then(setup);
+    $scope.addPipePacker(contextKey).then(addPipe).then(setup);
     $scope.$on('$destroy', cleanup);
   });

@@ -7,6 +7,10 @@ path, line {
   stroke: #aaa;
 }
 
+.no-stroke {
+  stroke:inherit;
+}
+
 rect {
   fill: none;
   pointer-events: all;
@@ -38,3 +42,35 @@ d3-graph, d3-plot {
 d3-plot path, d3-plot line {
   fill: none;
 }
+
+d3-joystick .background {
+  fill:none;
+  stroke:#aaa;
+  shape-rendering:crispEdges;
+}
+
+d3-joystick line.axis {
+  stroke:#eee;
+}
+
+d3-joystick .x-axis line,
+d3-joystick .x-axis path {
+  stroke:rgb(255, 155, 155);
+  shape-rendering:crispEdges;
+  fill:none;
+}
+
+d3-joystick .y-axis line,
+d3-joystick .y-axis path {
+  stroke:rgb(110, 234, 110);
+  shape-rendering:crispEdges;
+  fill:none;
+}
+
+d3-joystick .x-axis text,
+d3-joystick .y-axis text {
+  display:none;
+}
+
+d3-joystick path.x-marker { fill:rgb(255, 155, 155);stroke:inherit; }
+d3-joystick path.y-marker { fill:rgb(110, 234, 110);stroke:inherit; }

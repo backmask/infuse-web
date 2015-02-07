@@ -1,0 +1,5 @@
+<div class="controller-input" ng-repeat="joystick in joysticks">
+  <d3-joystick width="100%" height="100%" nodes="[joystick]" style="display:block"></d3-joystick>
+  <span class="symbol">{{joystick.symbol}}</span>
+  <span class="coords">x:{{joystick.x | shortNumber}}<br/>y:{{joystick.y | shortNumber}}</span>
+</div>
