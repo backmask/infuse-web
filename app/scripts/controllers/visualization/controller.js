@@ -1,10 +1,10 @@
 angular.module('infuseWebAppVisualization')
   .controller('ControllerCtrl', function ($scope) {
-    var contextKey = "controller-" + $scope.nodeUid + "-" + Math.random();
+    var contextKey = "controller-" + Math.random();
     var pipeUuid = false;
-    var joysticksMap = {};
 
-    $scope.joysticks = [];
+    $scope.joysticks = {};
+    $scope.buttons = {};
 
     var addPipe = function() {
       return $scope.doSetPipe("processor", {
@@ -30,19 +30,21 @@ angular.module('infuseWebAppVisualization')
     var receiveData = function(d) {
       if (d.dataUid == 'joystick') {
         handleJoystick(d.data);
+      } else if (d.dataUid == 'button') {
+        handleButton(d.data);
       }
     };
 
     var handleJoystick = function(d) {
-      var jsp = joysticksMap[d.symbol];
-      if (!jsp) {
-        jsp = { x: 0, y: 0, color: 'black', symbol: d.symbol };
-        joysticksMap[d.symbol] = jsp;
-        $scope.joysticks.push(jsp);
-      }
+      $scope.joysticks[d.symbol] = {
+        x: d.x,
+        y: d.y,
+        color: 'black'
+      };
+    }
 
-      jsp.x = d.x;
-      jsp.y = d.y;
+    var handleButton = function(d) {
+      $scope.buttons[d.symbol] = d.pressed;
     }
 
     $scope.addPipePacker(contextKey).then(addPipe).then(setup);

@@ -120,7 +120,12 @@ div[ui-codemirror] .CodeMirror {
   display:inline-block;
   font-size:0.8em;
   width:25%;
-  height:50%;
+  height:130px;
+}
+
+.controller-buttons {
+  display:inline-block;
+  max-width:50%
 }
 
 .controller-input .symbol {

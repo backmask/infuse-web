@@ -52,3 +52,25 @@ html, body {
 .smaller { font-size: 0.8em; }
 .small { font-size: 0.9em; }
 .lightblue { color: cornflowerblue; }
+
+.letter-btn {
+  display:inline-block;
+  height:24px;
+  width:24px;
+  line-height:24px;
+  -moz-border-radius:24px;
+  border-radius:24px;
+  border:1px solid #555;
+  color: #333;
+  text-align: center;
+  font-size: 10px;
+  margin:0 2px 0 2px;
+  overflow:hidden;
+  text-transform:uppercase;
+}
+
+.letter-btn.on {
+  color:white;
+  background-color:#333;
+  border-color:#333;
+}
