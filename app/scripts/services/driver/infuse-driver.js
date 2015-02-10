@@ -161,7 +161,9 @@ angular.module('infuseWebAppDevice')
           unknown: 'fa-question',
           terminal: 'fa-terminal',
           controller: 'fa-gamepad',
-          camera: 'fa-video-camera'
+          camera: 'fa-video-camera',
+          // should use a tree instead
+          'flight.quadcopter': 'ico-quadcopter'
         };
 
         var childScope = scope.$new();
