@@ -183,8 +183,8 @@ angular.module('infuseWebAppDevice')
           .then(function(d) {
             if (d.data.self) {
               childScope.deviceType = 'terminal';
-            } else if (d.data.family == 'controller') {
-              childScope.deviceType = 'controller';
+            } else if (typeToIcon.hasOwnProperty(d.data.family)) {
+              childScope.deviceType = d.data.family;
             } else {
               childScope.deviceType = 'unknown';
             }

@@ -34,7 +34,7 @@ rect {
   stroke-opacity: .1;
 }
 
-d3-graph, d3-plot {
+d3-graph, d3-plot, d3-joystick, d3-horizon {
   display: block;
   overflow: hidden;
 }
@@ -74,3 +74,19 @@ d3-joystick .y-axis text {
 
 d3-joystick path.x-marker { fill:rgb(255, 155, 155);stroke:inherit; }
 d3-joystick path.y-marker { fill:rgb(110, 234, 110);stroke:inherit; }
+
+d3-horizon .plane {
+  stroke:rgb(255, 226, 38);
+  fill:none;
+  stroke-width:3px;
+}
+d3-horizon .sky { fill:rgb(1, 102, 216); }
+d3-horizon .ground { fill:rgb(170, 62, 23); }
+d3-horizon .axis { shape-rendering:auto; }
+d3-horizon .axis line {
+  stroke:white;
+  stroke-opacity:1;
+}
+d3-horizon .axis text {
+  fill:white;
+}

@@ -30,8 +30,14 @@ angular.module('infuseWebAppVisualization')
       template: "views/infuse/controller.html",
       controller: "ControllerCtrl",
       hidden: true
+    }, {
+      name: "Flight instruments",
+      template: "views/infuse/flight-instruments.html",
+      controller: "FlightInstrumentsCtrl",
+      hidden: true
     }]);
     infuseVisualizationFactory.setDeviceViews({
-      "controller": ["Controller display"]
+      "controller": ["Controller display"],
+      "flight.quadcopter": ["Flight instruments"]
     });
   });

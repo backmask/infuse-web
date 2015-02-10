@@ -6,7 +6,7 @@ angular.module('d3')
       scope: {
         width: '@',
         height: '@',
-        nodes: '=',
+        nodes: '='
       },
       link: function(scope, element, attrs) {
         var circleRadius = 0;
