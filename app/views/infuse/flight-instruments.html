@@ -1,1 +1,9 @@
-<d3-horizon width="150px" height="100%" pitch="gyroscope.pitch" roll="gyroscope.roll"></d3-horizon>
+<div style="overflow:hidden;height:100%">
+  <d3-horizon width="33%" height="100%" pitch="gyroscope.pitch" roll="gyroscope.roll" style="float:left"></d3-horizon>
+  <d3-plot width="33%" height="50%" style="float:right">
+    <d3-series label="avg" color="thrust.color" data="thrust.data"></d3-series>
+  </d3-plot>
+  <d3-plot width="33%" height="50%" style="float:right">
+    <d3-series ng-repeat="(symbol, m) in motors" label="symbol" color="m.color" data="m.data"></d3-series>
+  </d3-plot>
+</div>

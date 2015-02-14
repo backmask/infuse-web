@@ -44,8 +44,8 @@ angular.module('d3')
         }
 
         var svg = d3.select(element[0]).append("svg")
-          .attr("width", scope.width)
-          .attr("height", scope.height);
+          .attr("width", "100%")
+          .attr("height", "100%");
 
         var yAxis = d3.svg.axis().orient('right');
 

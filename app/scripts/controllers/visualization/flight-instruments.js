@@ -4,6 +4,11 @@ angular.module('infuseWebAppVisualization')
     var pipeUuid = false;
 
     $scope.gyroscope = {};
+    $scope.thrust = {
+      color: 'black',
+      data: []
+    };
+    $scope.motors = {};
 
     var addPipe = function() {
       return $scope.doSetPipe("processor", {
@@ -29,9 +34,25 @@ angular.module('infuseWebAppVisualization')
     var receiveData = function(d) {
       if (d.dataUid == "gyroscope") {
         $scope.gyroscope = d.data;
+      } else if (d.dataUid == "thrust") {
+        handleThrust(d.data);
       }
     };
 
+    var handleThrust = function(d) {
+      if (d.symbol == 'avg') {
+        $scope.thrust.data.push(d.value);
+        return;
+      }
+
+      if (!$scope.motors.hasOwnProperty(d.symbol)) {
+        $scope.motors[d.symbol] = {
+          color: randomColor(),
+          data: []
+        }
+      }
+      $scope.motors[d.symbol].data.push(d.value);
+    };
 
     $scope.addPipePacker(contextKey).then(addPipe).then(setup);
     $scope.$on('$destroy', cleanup);

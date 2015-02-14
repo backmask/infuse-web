@@ -23,7 +23,7 @@ rect {
 }
 
 .line {
-  stroke-width: 1.5px;
+  stroke-width: 1px;
 }
 
 .axis {
@@ -37,6 +37,7 @@ rect {
 d3-graph, d3-plot, d3-joystick, d3-horizon {
   display: block;
   overflow: hidden;
+  vertical-align: top;
 }
 
 d3-plot path, d3-plot line {
