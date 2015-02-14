@@ -14,6 +14,8 @@ angular.module('d3')
         $scope.left = 0;
         $scope.right = 30;
         $scope.bottom = 10;
+        this.graphWidth = 0;
+        this.graphHeight = 0;
       },
       link: function(scope, element, attrs, ctrl, transclude) {
         element[0].style.width = scope.width;
@@ -22,21 +24,25 @@ angular.module('d3')
         var onResize = function() {
           var width = $(svg[0]).width();
           var height = $(svg[0]).height();
-          var graphWidth = width - scope.left - scope.right;
-          var graphHeight = height - scope.top - scope.bottom;
-          scope.$parent.$broadcast('graphResized', graphWidth, graphHeight);
+          if (width == 0 || height == 0) {
+            return;
+          }
 
-          yAxis.scale(d3.scale.linear().domain([-1, 1]).range([graphHeight, 0]))
-            .ticks(graphHeight / 10)
-            .tickSize(-graphWidth);
+          ctrl.graphWidth = width - scope.left - scope.right;
+          ctrl.graphHeight = height - scope.top - scope.bottom;
+          scope.$parent.$broadcast('graphResized', ctrl.graphWidth, ctrl.graphHeight);
+
+          yAxis.scale(d3.scale.linear().domain([-1, 1]).range([ctrl.graphHeight, 0]))
+            .ticks(ctrl.graphHeight / 10)
+            .tickSize(-ctrl.graphWidth);
 
           yAxisContainer
-            .attr('transform', 'translate(' + graphWidth + ',' + scope.top + ')')
+            .attr('transform', 'translate(' + ctrl.graphWidth + ',' + scope.top + ')')
             .call(yAxis);
 
           graphBackground
-            .attr('width', graphWidth)
-            .attr('height', graphHeight)
+            .attr('width', ctrl.graphWidth)
+            .attr('height', ctrl.graphHeight)
             .attr('transform', 'translate(' + scope.left + ',' + scope.top + ')');
 
           seriesContainer
@@ -75,8 +81,8 @@ angular.module('d3')
         data: '='
       },
       link: function(scope, element, attrs, d3Plot) {
-        scope.width = 0;
-        scope.height = 0;
+        scope.width = d3Plot.graphWidth;
+        scope.height = d3Plot.graphHeight;
 
         var onResize = function(event, width, height) {
           scope.width = width;
@@ -112,7 +118,7 @@ angular.module('d3')
         });
 
         element[0].parentNode.removeChild(element[0]);
-        onResize(0 ,0);
+        onResize(null, d3Plot.graphWidth ,d3Plot.graphHeight);
         scope.$on('graphResized', onResize);
         repaint(scope.data);
       }
