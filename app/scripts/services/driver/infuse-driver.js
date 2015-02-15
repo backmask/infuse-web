@@ -231,6 +231,7 @@ angular.module('infuseWebAppDevice')
             uid: contextKey,
             type: "json.response.packer",
             final: true,
+            danglingInitial: true,
             config: { context: contextKey }
           }, "self");
         }

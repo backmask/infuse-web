@@ -116,10 +116,10 @@ angular.module('d3')
           height = $(svg[0]).height();
           force.nodes().forEach(function(node) {
             if (node.getX) {
-              node.x = node.getX(width);
+              node.x = node.px = node.getX(width);
             }
             if (node.getY) {
-              node.y = node.getY(height);
+              node.y = node.py = node.getY(height);
             }
           })
           force = force.size([width, height]).resume();

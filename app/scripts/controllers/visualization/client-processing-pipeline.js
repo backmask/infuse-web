@@ -10,11 +10,9 @@ angular.module('infuseWebAppVisualization')
 
     var previousData = {};
 
-    var rootColor = '#0085ff';
     var interpreterColor = '#24c980';
     var packerColor = '#b8ff00';
     var unpackerColor = '#ffb800';
-    var outputColor = '#999';
 
     var addNode = function(node, nodes, links, color) {
       nodes.push({
@@ -45,6 +43,14 @@ angular.module('infuseWebAppVisualization')
         links.push({ from: 'initial', to: node.uid });
       }
 
+      if (node.danglingInitial) {
+        links.push({ from: 'danglingInitial', to: node.uid });
+      }
+
+      if (node.danglingFinal) {
+        links.push({ from: node.uid, to: 'danglingFinal' });
+      }
+
       node.to.forEach(function(t) { links.push({ from: node.uid, to: t }) });
       node.fallback.forEach(function(t) { links.push({ from: node.uid, to: t }) });
     }
@@ -58,6 +64,7 @@ angular.module('infuseWebAppVisualization')
       var pipeline = wsData.data.pipeline;
       var nodes = [{
         id: 'initial',
+        color: '#0085ff',
         getX: function(w) { return w * .05; },
         getY: function(h) { return h * .5; },
         fixed: true,
@@ -66,11 +73,30 @@ angular.module('infuseWebAppVisualization')
         }
       }, {
         id: 'final',
+        color: '#999',
         getX: function(w) { return w * .95; },
         getY: function(h) { return h * .5; },
         fixed: true,
         info: {
           name: 'Responder'
+        }
+      }, {
+        id: 'danglingInitial',
+        color: '#1199ff',
+        getX: function(w) { return w * .5; },
+        getY: function(h) { return h * .05; },
+        fixed: true,
+        info: {
+          name: 'From pipe'
+        }
+      }, {
+        id: 'danglingFinal',
+        color: '#bbb',
+        getX: function(w) { return w * .5; },
+        getY: function(h) { return h * .95; },
+        fixed: true,
+        info: {
+          name: 'To pipe'
         }
       }];
       var links = [];
