@@ -1,21 +1,5 @@
 <div class="row fill">
-  <div class="col-md-8 content fill" ng-include src="'views/visualization.html'">
-  </div>
-
+  <div class="col-md-8 content fill" ng-include src="'views/visualization.html'"></div>
   <div class="col-md-2 notifications fill" ng-include src="'views/notifications.html'"></div>
-
-  <div class="col-md-2 sidebar fill">
-    <accordion close-others="false">
-      <accordion-group is-open="true">
-        <accordion-heading>
-          <span class="glyphicon glyphicon-book"></span>
-          New connection
-        </accordion-heading>
-        <div ng-include src="'views/connect.html'"></div>
-      </accordion-group>
-      <accordion-group heading="Active connections" is-open="true">
-        <div ng-include src="'views/active-connections.html'"></div>
-      </accordion-group>
-    </accordion>
-  </div>
+  <div class="col-md-2 sidebar fill" ng-include src="'views/sidebar/sidebar.html'"></div>
 </div>
