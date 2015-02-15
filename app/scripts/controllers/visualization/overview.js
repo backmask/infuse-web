@@ -1,5 +1,5 @@
 angular.module('infuseWebAppVisualization')
-  .controller('OverviewCtrl', function ($scope, $interval, visualizationManager) {
+  .controller('OverviewCtrl', function ($scope, $interval, visualizationManager, settingsManager) {
     $scope.overview = {
       nodes: [],
       links: []
@@ -25,6 +25,12 @@ angular.module('infuseWebAppVisualization')
     var watchCb = function(uuid) {
       return function() {
         $scope.getClient(uuid).manualWatch = true;
+      }
+    }
+
+    var autoWatch = function(uuid) {
+      if (settingsManager.get('autoWatch') === true) {
+        $scope.getClient(uuid);
       }
     }
 
@@ -70,6 +76,7 @@ angular.module('infuseWebAppVisualization')
               details: client.description
             }});
           links.push({ from: gwNode.port, to: client.uuid });
+          autoWatch(client.uuid);
         });
       });
 
@@ -108,6 +115,7 @@ angular.module('infuseWebAppVisualization')
             }
           }});
           links.push({ from: client.uuid, to: clientInstance });
+          autoWatch(clientInstance);
         });
 
         links.push({ from: 'root', to: client.uuid });

@@ -176,7 +176,11 @@ angular.module('infuseWebAppDevice')
         var pollInterval = $interval(function() {
           scope.doRequest("session/client/ping", { uuid: clientUuid })
             .then(function() { childScope.connected = true; },
-              function() { childScope.connected = false; $interval.cancel(pollInterval); });
+              function() {
+                childScope.connected = false;
+                $interval.cancel(pollInterval);
+                autoReleaseClient();
+              });
         }, 1000);
 
         scope.doRequest("session/client/describe", { uuid: clientUuid })
@@ -244,11 +248,15 @@ angular.module('infuseWebAppDevice')
           ++childScope.activeVisualizations;
         });
 
-        childScope.$on('remove-visualization', function() {
-          --childScope.activeVisualizations;
+        var autoReleaseClient = function() {
           if (childScope.activeVisualizations <= 0 && !childScope.manualWatch) {
             scope.releaseClient(clientUuid);
           }
+        };
+
+        childScope.$on('remove-visualization', function() {
+          --childScope.activeVisualizations;
+          autoReleaseClient();
         });
 
         subConnections[clientUuid] = childScope;
