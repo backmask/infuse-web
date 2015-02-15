@@ -132,7 +132,7 @@ module.exports = function (grunt) {
         files: [{
           expand: true,
           cwd: '.tmp/styles/',
-          src: '**.css',
+          src: '**/*.css',
           dest: '.tmp/styles/'
         }]
       }
@@ -145,10 +145,6 @@ module.exports = function (grunt) {
         ignorePath: '<%= yeoman.app %>/'
       }
     },
-
-
-
-
 
     // Renames files for browser caching purposes
     rev: {
@@ -268,7 +264,7 @@ module.exports = function (grunt) {
         expand: true,
         cwd: '<%= yeoman.app %>/styles',
         dest: '.tmp/styles/',
-        src: '**.css'
+        src: '**/*.css'
       }
     },
 
