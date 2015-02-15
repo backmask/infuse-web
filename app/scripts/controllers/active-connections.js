@@ -63,4 +63,15 @@ angular.module('infuseWebAppActiveConnections', [
     $scope.visualize = function(connection, view) {
       visualizationManager.visualize(view, connection.$new());
     }
+
+    $scope.getWatchedClients = function(connection) {
+      var clients = connection.getClients();
+      var r = {};
+      for (var key in clients) {
+        if (!clients[key].noWatch) {
+          r[key] = clients[key];
+        }
+      }
+      return r;
+    }
   });

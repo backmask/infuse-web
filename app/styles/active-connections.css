@@ -23,3 +23,7 @@
   top: 7px;
   right: 5px;
 }
+
+#active-connections .subdevice .btn {
+  border: 0;
+}

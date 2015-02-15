@@ -246,7 +246,7 @@ angular.module('infuseWebAppDevice')
 
         childScope.$on('remove-visualization', function() {
           --childScope.activeVisualizations;
-          if (childScope.activeVisualizations <= 0) {
+          if (childScope.activeVisualizations <= 0 && !childScope.manualWatch) {
             scope.releaseClient(clientUuid);
           }
         });

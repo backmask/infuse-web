@@ -22,6 +22,12 @@ angular.module('infuseWebAppVisualization')
       };
     };
 
+    var watchCb = function(uuid) {
+      return function() {
+        $scope.getClient(uuid).manualWatch = true;
+      }
+    }
+
     var refresh = function(wsData) {
       if (angular.equals(wsData.data, previousData)) {
         return;
@@ -60,6 +66,7 @@ angular.module('infuseWebAppVisualization')
               hasActions: true,
               isSessionClient: true,
               showPipeline: showPipelineCb(client.uuid),
+              watch: watchCb(client.uuid),
               details: client.description
             }});
           links.push({ from: gwNode.port, to: client.uuid });
@@ -95,6 +102,7 @@ angular.module('infuseWebAppVisualization')
             hasActions: true,
             isClientInstance: true,
             showPipeline: showPipelineCb(clientInstance),
+            watch: watchCb(clientInstance),
             disconnect: function() {
               $scope.doClientDisconnect(clientInstance);
             }
