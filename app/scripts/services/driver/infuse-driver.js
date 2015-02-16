@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('infuseWebAppDevice')
-  .factory('infuseDriverFactory', function($q, notifier, $interval, $timeout, throttle) {
+  .factory('infuseDriverFactory', function($q, notifier, $interval, $timeout, throttle, infuseClientDriverFactory) {
     var r = {};
 
     r.build = function(scope, configuration) {
@@ -9,7 +9,7 @@ angular.module('infuseWebAppDevice')
       var onDataCallbacks = [];
       var onSendCallbacks = [];
       var responseCallbacks = {};
-      var subConnections = {};
+      var clientDriver = infuseClientDriverFactory.manage(scope);
       var throttledApply = throttle(function() { scope.$apply(); }, 40);
       scope.name = configuration.name;
       scope.description = configuration.description;
@@ -152,124 +152,9 @@ angular.module('infuseWebAppDevice')
         return scope.doRequest("overview/factory");
       }
 
-      scope.getClient = function(clientUuid) {
-        if (subConnections[clientUuid]) {
-          return subConnections[clientUuid];
-        }
-
-        var typeToIcon = {
-          unknown: 'fa-question',
-          terminal: 'fa-terminal',
-          controller: 'fa-gamepad',
-          camera: 'fa-video-camera',
-          // should use a tree instead
-          'flight.quadcopter': 'ico-quadcopter'
-        };
-
-        var childScope = scope.$new();
-        childScope.sessionClientUuid = clientUuid;
-        childScope.connected = true;
-        childScope.subColor = randomColor({ luminosity: 'bright'});
-        childScope.smallIcon = 'fa-circle-o-notch fa-spin';
-        childScope.activeVisualizations = 0;
-
-        var pollInterval = $interval(function() {
-          scope.doRequest("session/client/ping", { uuid: clientUuid })
-            .then(function() { childScope.connected = true; },
-              function() {
-                childScope.connected = false;
-                $interval.cancel(pollInterval);
-                autoReleaseClient();
-              });
-        }, 1000);
-
-        scope.doRequest("session/client/describe", { uuid: clientUuid })
-          .then(function(d) {
-            if (d.data.self) {
-              childScope.deviceType = 'terminal';
-            } else if (typeToIcon.hasOwnProperty(d.data.family)) {
-              childScope.deviceType = d.data.family;
-            } else {
-              childScope.deviceType = 'unknown';
-            }
-            childScope.smallIcon = typeToIcon[childScope.deviceType];
-          });
-
-        childScope.doGetSessionClientPipeline = function() {
-          return scope.doRequest("session/client/pipeline", { uuid: clientUuid });
-        }
-
-        childScope.doSetPipe = function(target, from, to, uuid) {
-          return scope.doRequest("session/client/pipe/set", {
-            owner: uuid || clientUuid,
-            target: target,
-            from: from,
-            to: to
-          });
-        }
-
-        childScope.doAddNode = function(node, uuid) {
-          return scope.doRequest("session/client/pipeline/addnode", {
-            uuid: uuid || clientUuid,
-            node: node
-          });
-        }
-
-        childScope.doRemovePipe = function(pipeUuid, uuid) {
-          return scope.doRequest("session/client/pipe/remove", {
-            uuid: uuid || clientUuid,
-            pipeUuid: pipeUuid
-          }).then(function(e) { notifier.verbose('Removed pipe ' + pipeUuid + ' from ' + clientUuid); });;
-        }
-
-        childScope.doRemoveNode = function(nodeUri, uuid) {
-          return scope.doRequest("session/client/pipeline/removenode", {
-            uuid: uuid || clientUuid,
-            nodeUid: nodeUri
-          }).then(function(e) { notifier.verbose('Removed ' + nodeUri + ' from ' + clientUuid); });;
-        }
-
-        childScope.addPipePacker = function(contextKey) {
-          return childScope.doAddNode({
-            instanceType: "packer",
-            uid: contextKey,
-            type: "json.response.packer",
-            final: true,
-            danglingInitial: true,
-            config: { context: contextKey }
-          }, "self");
-        }
-
-        childScope.$on('$destroy', function() {
-          $interval.cancel(pollInterval);
-        });
-
-        childScope.$on('add-visualization', function() {
-          ++childScope.activeVisualizations;
-        });
-
-        var autoReleaseClient = function() {
-          if (childScope.activeVisualizations <= 0 && !childScope.manualWatch) {
-            scope.releaseClient(clientUuid);
-          }
-        };
-
-        childScope.$on('remove-visualization', function() {
-          --childScope.activeVisualizations;
-          autoReleaseClient();
-        });
-
-        subConnections[clientUuid] = childScope;
-        return childScope;
-      }
-
-      scope.releaseClient = function(clientUuid) {
-        delete subConnections[clientUuid];
-      }
-
-      scope.getClients = function() {
-        return subConnections;
-      }
+      scope.getClient = clientDriver.get;
+      scope.releaseClient = clientDriver.release;
+      scope.getClients = clientDriver.getAll;
 
       return scope;
     }
