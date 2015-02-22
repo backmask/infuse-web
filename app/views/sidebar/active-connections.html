@@ -44,12 +44,30 @@
       <i class="fa {{subdevice.smallIcon}} fa-fw fa-lg"></i>
       <span class="subdevice-id">{{subdevice.sessionClientUuid | shortUuid}}</span>
       <span class="active-vis">{{subdevice.activeVisualizations}}</span>
+
+      <!-- Actions -->
       <div style="display:inline-block" class="pull-right">
-        <div style="display:inline-block" dropdown-toggle dropdown>
+        <!-- Matches -->
+        <div style="display:inline-block" dropdown-toggle dropdown
+          ng-if="subdevice.matches.length > 0" class="matches">
           <a class="btn btn-default btn-xs">
             <span class="glyphicon glyphicon-link"></span>
           </a>
+          <ul class="dropdown-menu add-dropdown">
+            <li ng-repeat="match in subdevice.matches" ng-click="device.setupMatch(match)">
+              <span class="types">{{match.types.join(', ')}}</span>
+              <span class="pull-right target">
+                <span class="direction" ng-class="{outgoing: match.outgoing}">
+                  {{match.outgoing ? 'to' : 'from'}}
+                </span>
+                <i class="fa {{device.getClient(match.foreign.target).smallIcon}} fa-fw fa-lg"></i>
+                <span class="subdevice-id">{{match.foreign.target | shortUuid }}</span>
+              </span>
+            </li>
+          </ul>
         </div>
+
+        <!-- View creation -->
         <div style="display:inline-block" dropdown-toggle dropdown ng-if="device.getDeviceViews(subdevice.deviceType).length > 0">
           <a class="btn btn-default btn-xs">
             <span class="glyphicon glyphicon-eye-open"></span>
@@ -60,10 +78,14 @@
             </li>
           </ul>
         </div>
+
+        <!-- Remove watch -->
         <a class="btn btn-default btn-xs" ng-click="subdevice.noWatch = true">
           <span class="glyphicon glyphicon-remove"></span>
         </a>
       </div>
+
+      <!-- Connection lost notification -->
       <div ng-show="!subdevice.connected" class="alert alert-danger dc-alert" role="alert">
         <span class="glyphicon glyphicon-flash"></span> Connection lost
       </div>

@@ -11,7 +11,7 @@
     <span class="{{description.to.stream}}"> ({{description.to.stream}})</span>
     <div class="uri">{{description.to.uri}}</div>
   </td>
-  <td>
+  <td ng-if="remove">
     <a class="btn btn-xs btn-default" ng-click="remove()">
       <span class="glyphicon glyphicon-remove"></span>
     </a>

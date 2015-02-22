@@ -5,6 +5,57 @@ angular.module('infuseWebAppDevice')
     r.manage = function(scope) {
       var clients = {};
 
+      var setupMatch = function(match) {
+        match.disabled = true;
+        scope.doRequest("session/client/pipe/set", {
+          owner: 'self',
+          target: "processor",
+          from: match.description.from,
+          to: match.description.to
+        }).then(function (d) {
+          match.pipeUuid = d.data.uuid;
+          match.alive = true;
+        });
+      };
+
+      var refreshMatches = function(uuidRefreshed, newData) {
+        newData.forEach(function(d) {
+          var reversed = angular.copy(d);
+          var tmpFrom = reversed.description.from;
+          reversed.description.from = reversed.description.to;
+          reversed.description.to = tmpFrom;
+          reversed.outgoing = !reversed.outgoing;
+
+          var seek = d.outgoing
+            ? reversed.description.to.target
+            : reversed.description.from.target;
+
+          pushMatch(seek, reversed);
+        });
+      };
+
+      var pushMatch = function(uuid, match) {
+        var cl = clients[uuid];
+        if (!cl) {
+          return;
+        }
+
+        for (var i = 0; i < cl.matches.length; ++i) {
+          if (angular.equals(cl.matches[i].description, match.description)) {
+            return;
+          }
+        }
+
+        cl.matches.push(consolidateMatch(match));
+      }
+
+      var consolidateMatch = function(match) {
+        match.foreign = match.outgoing ? match.description.to : match.description.from;
+        match.self = match.outgoing ? match.description.from : match.description.to;
+        console.log(match);
+        return match;
+      };
+
       var build = function(clientUuid) {
         var childScope = scope.$new();
         childScope.sessionClientUuid = clientUuid;
@@ -12,6 +63,7 @@ angular.module('infuseWebAppDevice')
         childScope.subColor = randomColor({ luminosity: 'bright'});
         childScope.smallIcon = 'fa-circle-o-notch fa-spin';
         childScope.activeVisualizations = 0;
+        childScope.matches = [];
 
         var pollInterval = $interval(function() {
           scope.doRequest("session/client/ping", { uuid: clientUuid })
@@ -33,6 +85,12 @@ angular.module('infuseWebAppDevice')
             }
             childScope.smallIcon = infuseIconFactory.getIcon(childScope.deviceType);
             childScope.clientDescription = d.data;
+          });
+
+        scope.doRequest("session/client/match", { uuid: clientUuid })
+          .then(function(d) {
+            refreshMatches(clientUuid, d.data.matches);
+            childScope.matches = d.data.matches.map(consolidateMatch);
           });
 
         childScope.doGetSessionClientPipeline = function() {
@@ -118,6 +176,7 @@ angular.module('infuseWebAppDevice')
       }
 
       return {
+        setupMatch: setupMatch,
         get: get,
         release: release,
         getAll: getAll

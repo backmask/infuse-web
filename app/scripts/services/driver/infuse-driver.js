@@ -155,6 +155,7 @@ angular.module('infuseWebAppDevice')
       scope.getClient = clientDriver.get;
       scope.releaseClient = clientDriver.release;
       scope.getClients = clientDriver.getAll;
+      scope.setupMatch = clientDriver.setupMatch;
 
       return scope;
     }

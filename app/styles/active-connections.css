@@ -27,3 +27,19 @@
 #active-connections .subdevice .btn {
   border: 0;
 }
+
+#active-connections .matches .target {
+  opacity: 0.5;
+}
+
+#active-connections .matches .types {
+  margin-left:4px;
+}
+
+#active-connections .matches .direction {
+  color:green;
+}
+
+#active-connections .matches .direction.outgoing {
+  color:red;
+}

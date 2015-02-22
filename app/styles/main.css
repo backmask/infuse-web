@@ -75,6 +75,10 @@ html, body {
   border-color:#333;
 }
 
+i.fa-fw {
+  vertical-align: middle;
+}
+
 .ico-quadcopter {
   background:url(/images/quadcopter.png);
   background-size:contain;
