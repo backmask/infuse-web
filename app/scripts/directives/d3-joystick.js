@@ -44,7 +44,7 @@ angular.module('d3')
           circleRadius = Math.min(width, height)/2 - padding;
           background.attr('width', circleRadius * 2 + 'px')
                     .attr('height', circleRadius * 2 + 'px')
-                    .attr('transform', 'translate(-' + circleRadius + ',-' + circleRadius + ')');
+                    .attr('transform', 'translate(' + (-circleRadius) + ',' + (-circleRadius) + ')');
 
           values.attr('cx', function(d) { return d.x * circleRadius; })
             .attr('cy', function(d) { return d.y * circleRadius; });

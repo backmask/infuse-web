@@ -87,7 +87,7 @@ angular.module('infuseWebAppDevice')
             childScope.clientDescription = d.data;
           });
 
-        scope.doRequest("session/client/match", { uuid: clientUuid })
+        scope.doRequest("match/client", { uuid: clientUuid })
           .then(function(d) {
             refreshMatches(clientUuid, d.data.matches);
             childScope.interface = d.data.interface;
@@ -162,8 +162,8 @@ angular.module('infuseWebAppDevice')
         return childScope;
       }
 
-      var get = function(uuid) {
-        if (!clients[uuid]) {
+      var get = function(uuid, lazyBuild) {
+        if (!clients[uuid] && lazyBuild) {
           clients[uuid] = build(uuid);
         }
         return clients[uuid];

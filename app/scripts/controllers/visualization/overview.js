@@ -17,20 +17,20 @@ angular.module('infuseWebAppVisualization')
       return function() {
         visualizationManager.visualize(
           $scope.getView('Client processing pipeline'),
-          $scope.getClient(uuid)
+          $scope.getClient(uuid, true)
         );
       };
     };
 
     var watchCb = function(uuid) {
       return function() {
-        $scope.getClient(uuid).manualWatch = true;
+        $scope.getClient(uuid, true).manualWatch = true;
       }
     }
 
     var autoWatch = function(uuid) {
       if (settingsManager.get('autoWatch') === true) {
-        $scope.getClient(uuid);
+        $scope.getClient(uuid, true);
       }
     }
 
