@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('infuseWebAppVisualization')
-  .factory('visualizationManager', function() {
+  .factory('visualizationManager', function(settingsManager) {
     var r = {};
     var activeVisualizations = [];
 
@@ -22,6 +22,17 @@ angular.module('infuseWebAppVisualization')
       if (visCopy.scope.onInit) {
         visCopy.scope.onInit(visCopy.scope);
       }
+
+      if (settingsManager.get('autoClean') === true) {
+        visCopy.scope.$watch('connected', function(v) {
+          if (!v && !visCopy.scope.pristine) {
+            setTimeout(function() {
+              r.stopVisualization(visCopy);
+            }, 1);
+          }
+        });
+      }
+
       activeVisualizations.push(visCopy);
     }
 

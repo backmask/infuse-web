@@ -6,7 +6,7 @@ angular.module('infuseWebAppActiveConnections', [
     'infuseWebAppVisualization',
     'infuseWebAppCommon'
   ])
-  .factory('connectionManager', function(notifier, instrumentConvert, visualizationManager) {
+  .factory('connectionManager', function(notifier, instrumentConvert, visualizationManager, settingsManager) {
     var r = {};
     var managedConnections = [];
 

@@ -30,7 +30,7 @@ angular.module('infuseWebAppVisualization')
 
     var autoWatch = function(uuid) {
       if (settingsManager.get('autoWatch') === true) {
-        $scope.getClient(uuid).manualWatch = true;
+        $scope.getClient(uuid);
       }
     }
 

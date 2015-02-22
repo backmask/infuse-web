@@ -1,5 +1,5 @@
 angular.module('infuseWebAppDevice')
-  .factory('infuseClientDriverFactory', function($interval, infuseIconFactory) {
+  .factory('infuseClientDriverFactory', function($interval, notifier, infuseIconFactory) {
     var r = {};
 
     r.manage = function(scope) {
@@ -52,7 +52,6 @@ angular.module('infuseWebAppDevice')
       var consolidateMatch = function(match) {
         match.foreign = match.outgoing ? match.description.to : match.description.from;
         match.self = match.outgoing ? match.description.from : match.description.to;
-        console.log(match);
         return match;
       };
 
@@ -64,6 +63,7 @@ angular.module('infuseWebAppDevice')
         childScope.smallIcon = 'fa-circle-o-notch fa-spin';
         childScope.activeVisualizations = 0;
         childScope.matches = [];
+        childScope.interface = { final: [], initial: [] };
 
         var pollInterval = $interval(function() {
           scope.doRequest("session/client/ping", { uuid: clientUuid })
@@ -90,7 +90,9 @@ angular.module('infuseWebAppDevice')
         scope.doRequest("session/client/match", { uuid: clientUuid })
           .then(function(d) {
             refreshMatches(clientUuid, d.data.matches);
+            childScope.interface = d.data.interface;
             childScope.matches = d.data.matches.map(consolidateMatch);
+            console.log(d.data);
           });
 
         childScope.doGetSessionClientPipeline = function() {

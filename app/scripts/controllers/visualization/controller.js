@@ -9,7 +9,8 @@ angular.module('infuseWebAppVisualization')
     var addPipe = function() {
       return $scope.doSetPipe("processor", {
         target: $scope.sessionClientUuid,
-        uri: "__out"
+        uri: "filter",
+        stream: "out"
       }, {
         uri: contextKey,
         stream: "in"
