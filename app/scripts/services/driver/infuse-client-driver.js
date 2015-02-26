@@ -1,5 +1,5 @@
 angular.module('infuseWebAppDevice')
-  .factory('infuseClientDriverFactory', function($interval, notifier, infuseIconFactory) {
+  .factory('infuseClientDriverFactory', function($interval, notifier, infuseIconFactory, $q) {
     var r = {};
 
     r.manage = function(scope) {
@@ -57,6 +57,7 @@ angular.module('infuseWebAppDevice')
 
       var build = function(clientUuid) {
         var childScope = scope.$new();
+        var pipes = [];
         childScope.sessionClientUuid = clientUuid;
         childScope.connected = true;
         childScope.subColor = randomColor({ luminosity: 'bright'});
@@ -140,8 +141,53 @@ angular.module('infuseWebAppDevice')
           }, "self");
         }
 
+        childScope.pipeNode = function(pipeableNode, callback) {
+          var packerUri = 'packer:'
+            + pipeableNode.uri + ':'
+            + pipeableNode.stream + ':'
+            + pipeableNode.target.substr(0, 5) + ':'
+            + Math.floor(Math.random() * 1000);
+          return childScope.addPipePacker(packerUri)
+            .then(function() {
+              return childScope.doSetPipe(
+                'processor',
+                pipeableNode,
+                { uri: packerUri, stream: 'in' },
+                'self'
+              );
+            })
+            .then(function(p) {
+              childScope.setCallback(packerUri, callback);
+              var pipe = {
+                pipeUuid: p.data.uuid,
+                packerUri: packerUri,
+                destroy: function() {
+                  childScope.doRemoveNode(packerUri, 'self');
+                  childScope.doRemovePipe(p.data.uuid, 'self');
+                  childScope.removeCallback(packerUri);
+                  pipes.splice(pipes.indexOf(pipe), 1);
+                }
+              };
+              pipes.push(pipe);
+              return pipe;
+            });
+        };
+
+        childScope.pipeStructures = function(uids, callback) {
+          return scope.doRequest('match/client/node', { uid: uids, uuid: clientUuid })
+            .then(function(d) {
+              if (d.data.length == 0) {
+                var err = 'Failed to match ' + uids.join(", ");
+                notifier.error(err + ' on ' + clientUuid);
+                return $q.reject(err);
+              }
+              return childScope.pipeNode(d.data[0].endPoint, callback);
+            });
+        };
+
         childScope.$on('$destroy', function() {
           $interval.cancel(pollInterval);
+          pipes.forEach(function(p) { p.destroy(); });
         });
 
         childScope.$on('add-visualization', function() {

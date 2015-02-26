@@ -1,7 +1,5 @@
 angular.module('infuseWebAppVisualization')
   .controller('DataViewCtrl', function ($scope, instrumentConvert, visualizationManager) {
-    var contextKey = "data-view-" + $scope.nodeUid + "-" + Math.random();
-    var pipeUuid = false;
     var compiledFilter = function() { return true; };
 
     $scope.title.name = 'Data view (' + $scope.nodeUid + ')';
@@ -22,28 +20,6 @@ angular.module('infuseWebAppVisualization')
     $scope.toggle = function() {
       $scope.paused = !$scope.paused;
     };
-
-    var addPipe = function() {
-      return $scope.doSetPipe("processor", {
-        target: $scope.sessionClientUuid,
-        stream: "out",
-        uri: $scope.nodeUid
-      }, {
-        uri: contextKey,
-        stream: "in"
-      }, "self");
-    };
-
-    var setup = function(d) {
-      pipeUuid = d.data.uuid;
-      $scope.setCallback(contextKey, receiveData);
-    }
-
-    var cleanup = function() {
-      $scope.doRemoveNode(contextKey, 'self');
-      $scope.doRemovePipe(pipeUuid, 'self');
-      $scope.removeCallback(contextKey);
-    }
 
     var receiveData = function(d) {
       $scope.$broadcast('data-received', d.dataUid, d.data, ++$scope.receivedFrames);
@@ -94,6 +70,13 @@ angular.module('infuseWebAppVisualization')
       );
     });
 
-    $scope.addPipePacker(contextKey).then(addPipe).then(setup);
-    $scope.$on('$destroy', cleanup);
+    var pipe = $scope.pipeNode({
+      target: $scope.sessionClientUuid,
+      stream: "out",
+      uri: $scope.nodeUid
+    }, receiveData);
+
+    $scope.$on('$destroy', function() {
+      pipe.then(function(p) { p.destroy(); });
+    });
   });
