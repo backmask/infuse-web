@@ -43,7 +43,7 @@
     >
       <i class="fa {{subdevice.smallIcon}} fa-fw fa-lg"></i>
       <span class="subdevice-id">{{subdevice.sessionClientUuid | shortUuid}}</span>
-      <span class="active-vis">{{subdevice.activeVisualizations}}</span>
+      <span battery-indicator data="subdevice.battery" ng-if="subdevice.battery !== false"></span>
 
       <!-- Actions -->
       <div style="display:inline-block" class="pull-right">

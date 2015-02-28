@@ -65,6 +65,7 @@ angular.module('infuseWebAppDevice')
         childScope.activeVisualizations = 0;
         childScope.matches = [];
         childScope.interface = { final: [], initial: [] };
+        childScope.battery = false;
 
         var pollInterval = $interval(function() {
           scope.doRequest("session/client/ping", { uuid: clientUuid })
@@ -76,25 +77,35 @@ angular.module('infuseWebAppDevice')
               });
         }, 1000);
 
-        scope.doRequest("session/client/describe", { uuid: clientUuid })
-          .then(function(d) {
-            var desc = d.data.description;
-            if (d.data.self) {
-              childScope.deviceType = 'terminal';
-            } else {
-              childScope.deviceType = desc.family;
-            }
-            childScope.smallIcon = infuseIconFactory.getIcon(childScope.deviceType);
-            childScope.clientDescription = d.data;
-          });
+        var refreshClient = function() {
+          scope.doRequest("session/client/describe", { uuid: clientUuid })
+            .then(function(d) {
+              var desc = d.data.description;
+              if (d.data.self) {
+                childScope.deviceType = 'terminal';
+              } else {
+                childScope.deviceType = desc.family;
+              }
+              childScope.smallIcon = infuseIconFactory.getIcon(childScope.deviceType);
+              childScope.clientDescription = d.data;
+            });
 
-        scope.doRequest("match/client", { uuid: clientUuid })
-          .then(function(d) {
-            refreshMatches(clientUuid, d.data.matches);
-            childScope.interface = d.data.interface;
-            childScope.matches = d.data.matches.map(consolidateMatch);
-            console.log(d.data);
-          });
+          scope.doRequest("match/client", { uuid: clientUuid })
+            .then(function(d) {
+              refreshMatches(clientUuid, d.data.matches);
+              childScope.interface = d.data.interface;
+              childScope.matches = d.data.matches.map(consolidateMatch);
+            });
+
+          childScope.matchStructures(['battery'])
+            .then(function(d) {
+              if (d.data.length > 0) {
+                childScope.pipeNode(d.data[0].endPoint, function(d) {
+                  childScope.battery = d.data.value;
+                });
+              }
+            });
+        }
 
         childScope.doGetSessionClientPipeline = function() {
           return scope.doRequest("session/client/pipeline", { uuid: clientUuid });
@@ -141,6 +152,10 @@ angular.module('infuseWebAppDevice')
           }, "self");
         }
 
+        childScope.matchStructures = function(uids) {
+          return scope.doRequest('match/client/node', { uid: uids, uuid: clientUuid });
+        }
+
         childScope.pipeNode = function(pipeableNode, callback) {
           var packerUri = 'packer:'
             + pipeableNode.uri + ':'
@@ -174,7 +189,7 @@ angular.module('infuseWebAppDevice')
         };
 
         childScope.pipeStructures = function(uids, callback) {
-          return scope.doRequest('match/client/node', { uid: uids, uuid: clientUuid })
+          return childScope.matchStructures(uids)
             .then(function(d) {
               if (d.data.length == 0) {
                 var err = 'Failed to match ' + uids.join(", ");
@@ -205,6 +220,8 @@ angular.module('infuseWebAppDevice')
           autoReleaseClient();
         });
 
+        refreshClient();
+
         return childScope;
       }
 
@@ -216,6 +233,8 @@ angular.module('infuseWebAppDevice')
       }
 
       var release = function(uuid) {
+        if (!clients[uuid]) return;
+        clients[uuid].$destroy();
         delete clients[uuid];
       }
 

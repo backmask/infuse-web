@@ -9,10 +9,10 @@
 #active-connections .subdevice {
   margin-left:5px;
   padding:5px;
+  font-size: 0.8em;
 }
 
-#active-connections .subdevice .subdevice-id {
-  font-size: 0.8em;
+#active-connections .subdevice > * {
   vertical-align: middle;
 }
 

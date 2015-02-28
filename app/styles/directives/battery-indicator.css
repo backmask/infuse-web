@@ -1,0 +1,9 @@
+.battery.battery-high {
+  color:green;
+}
+.battery.battery-low {
+  color:orange;
+}
+.battery.battery-critical {
+  color:red;
+}
