@@ -30,8 +30,10 @@ angular.module('infuseWebAppVisualization')
       $scope.motors[d.symbol].data.push(d.value);
     };
 
-    var pipe = $scope.pipeStructures(['gyroscope', 'thrust'], receiveData);
+    var thrustPipe = $scope.pipeStructures(['thrust'], receiveData);
+    var gyroscopePipe = $scope.pipeStructures(['gyroscope'], receiveData);
     $scope.$on('$destroy', function() {
-      pipe.then(function(p) { p.destroy(); });
+      thrustPipe.then(function(p) { p.destroy(); });
+      gyroscopePipe.then(function(p) { p.destroy(); });
     });
   });

@@ -19,8 +19,11 @@ angular.module('d3')
         this.graphHeight = 0;
         this.xScale = d3.scale.linear();
         this.yScale = d3.scale.linear();
+
         if (angular.isArray($scope.scale)) {
           this.yScale.domain($scope.scale);
+        } else if ($scope.scale === 'auto') {
+          this.yScale.domain([0, 0]);
         } else {
           this.yScale.domain([-1, 1]);
         }
@@ -29,18 +32,34 @@ angular.module('d3')
         element[0].style.width = scope.width;
         element[0].style.height = scope.height;
 
+        if (scope.scale === 'auto') {
+          ctrl.refreshScale = function(data) {
+            var min = ctrl.yScale.domain()[0];
+            var max = ctrl.yScale.domain()[1];
+            data.forEach(function(d) {
+              if (min > d) { min = d; }
+              if (max < d) { max = d; }
+            });
+            if (ctrl.yScale.domain()[0] !== min || ctrl.yScale.domain()[1] !== max) {
+              ctrl.yScale.domain([min, max]);
+              updateScale(ctrl.graphWidth, ctrl.graphHeight);
+            }
+          };
+        }
+
         var updateScale = function(w, h) {
           ctrl.xScale.domain([0, w/3]).range([0, w]);
           ctrl.yScale.range([h, 0]);
           yAxis.scale(ctrl.yScale)
             .ticks(h / 10)
             .tickSize(-w);
-        }
+          yAxisContainer.call(yAxis);
+        };
 
         var onResize = function() {
           var width = $(svg[0]).width();
           var height = $(svg[0]).height();
-          if (width == 0 || height == 0) {
+          if (width === 0 || height === 0) {
             return;
           }
 
@@ -49,8 +68,7 @@ angular.module('d3')
           updateScale(ctrl.graphWidth, ctrl.graphHeight);
 
           yAxisContainer
-            .attr('transform', 'translate(' + ctrl.graphWidth + ',' + scope.top + ')')
-            .call(yAxis);
+            .attr('transform', 'translate(' + ctrl.graphWidth + ',' + scope.top + ')');
 
           graphBackground
             .attr('width', ctrl.graphWidth)
@@ -59,11 +77,11 @@ angular.module('d3')
 
           seriesContainer
             .attr('transform', 'translate(' + scope.left + ',' + (scope.top+1) + ')');
-        }
+        };
 
-        var svg = d3.select(element[0]).append("svg")
-          .attr("width", "100%")
-          .attr("height", "100%");
+        var svg = d3.select(element[0]).append('svg')
+          .attr('width', '100%')
+          .attr('height', '100%');
 
         var yAxis = d3.svg.axis().orient('right');
 
@@ -84,7 +102,7 @@ angular.module('d3')
       }
     };
   })
-  .directive('d3Series', function(d3, $window) {
+  .directive('d3Series', function(d3) {
     return {
       restrict: 'E',
       require: '^d3Plot',
@@ -94,21 +112,25 @@ angular.module('d3')
       },
       link: function(scope, element, attrs, d3Plot) {
         var repaint = function(data) {
-          path.attr("d", line(data));
-        }
+          path.attr('d', line(data));
+        };
 
         var x = d3Plot.xScale;
         var y = d3Plot.yScale;
 
         var line = d3.svg.line()
           .x(function(d, i) { return x(i); })
-          .y(function(d, i) { return y(d); });
+          .y(function(d)    { return y(d); });
 
         var path = d3.select(element[0].parentNode).append('path')
           .style('stroke', scope.color)
           .attr('class', 'line');
 
         scope.$watchCollection('data', function(val) {
+          if (d3Plot.refreshScale) {
+            d3Plot.refreshScale(scope.data);
+          }
+
           var xMax = d3Plot.xScale.domain()[d3Plot.xScale.domain().length - 1] + 1;
           if (val.length > xMax) {
             scope.data = val.slice(val.length - xMax);
