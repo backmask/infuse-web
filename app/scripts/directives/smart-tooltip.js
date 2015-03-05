@@ -1,3 +1,5 @@
+'use strict';
+
 angular.module('infuseWebAppCommon')
   .directive('smartTooltip', function($interval, $timeout) {
     return {
@@ -10,7 +12,7 @@ angular.module('infuseWebAppCommon')
         showOnHover: '@'
       },
       transclude: true,
-      link: function(scope, element, attrs) {
+      link: function(scope, element) {
         var container = element.find('.tooltip-container');
         var arrow = element.find('.arrow');
         var anchor = scope.hasOwnProperty('anchor') ? false : element.parent();
@@ -44,7 +46,7 @@ angular.module('infuseWebAppCommon')
             }
           }
           return true;
-        }
+        };
 
         var refreshPosition = function() {
           var p = snapshotPosition();
@@ -78,7 +80,7 @@ angular.module('infuseWebAppCommon')
           }
 
           container.css('left', (left + p.xOffset) + 'px');
-        }
+        };
 
         var setDisplay = function(show) {
           if (show) {
@@ -104,10 +106,9 @@ angular.module('infuseWebAppCommon')
           enterMousePosition = {x: e.clientX, y: e.clientY};
           $(window).off('mousemove', trackMouse);
           $(window).on('mousemove', trackMouse);
-        }
+        };
 
         var getDistance = function(point, container) {
-          var position = container.position();
           var offset = container.offset();
 
           var c = {
@@ -120,7 +121,7 @@ angular.module('infuseWebAppCommon')
           var dx = Math.max(Math.abs(point.x - c.x) - c.w / 2, 0);
           var dy = Math.max(Math.abs(point.y - c.y) - c.h / 2, 0);
           return dx * dx + dy * dy;
-        }
+        };
 
         var trackMouse = function(e) {
           var mousePosition = {x: e.pageX, y: e.pageY};
@@ -129,18 +130,20 @@ angular.module('infuseWebAppCommon')
             setDisplay(false);
           }
           enterMouseDistance = Math.min(enterMouseDistance, d1);
-        }
+        };
 
         var refreshAnchor = function(newAnchor) {
-          if (newAnchor && newAnchor != anchor) {
+          if (newAnchor && newAnchor !== anchor) {
             if (scope.showOnHover) {
-              if (anchor) anchor.off('mousemove', onHoverAnchor);
+              if (anchor) {
+                anchor.off('mousemove', onHoverAnchor);
+              }
               newAnchor.on('mousemove', onHoverAnchor);
             }
             anchor = newAnchor;
             refreshPosition();
           }
-        }
+        };
 
         element.click(function(e) {
           e.cancelBubble = true;
@@ -150,15 +153,16 @@ angular.module('infuseWebAppCommon')
         scope.$watch('show', setDisplay);
         scope.$watch('anchor', refreshAnchor);
         scope.$on('$destroy', function() {
-          if (autoRefresh)
+          if (autoRefresh) {
             $interval.cancel(autoRefresh);
+          }
         });
       },
-      template: ''
-        + '<div class="tooltip-container popover top">'
-        + '  <h3 ng-if="title" class="popover-title">{{title}} <span class="verbose">{{subtitle}}</span></h3>'
-        + '  <div class="arrow"></div>'
-        + '  <div class="popover-content tooltip-content" ng-transclude></div>'
-        + '</div>'
-    }
+      template: '' +
+        '<div class="tooltip-container popover top">' +
+        '  <h3 ng-if="title" class="popover-title">{{title}} <span class="verbose">{{subtitle}}</span></h3>' +
+        '  <div class="arrow"></div>' +
+        '  <div class="popover-content tooltip-content" ng-transclude></div>' +
+        '</div>'
+    };
   });

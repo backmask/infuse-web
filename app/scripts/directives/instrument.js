@@ -1,3 +1,5 @@
+'use strict';
+
 angular.module('infuseWebAppInstrument')
   .factory('instrumentConvert', function($interval) {
     var r = {};
@@ -13,7 +15,7 @@ angular.module('infuseWebAppInstrument')
           avg += arr[i] / arr.length;
         }
         return avg;
-      }
+      };
 
       var refreshValue = function() {
         var distance = scope[field] - previousDistance;
@@ -25,7 +27,7 @@ angular.module('infuseWebAppInstrument')
 
         speed = average(previousSpeed);
         previousDistance = scope[field];
-      }
+      };
 
       var autoRefresh = $interval(refreshValue, intervalDelta, 0, false);
       scope.$on('$destroy', function() {
@@ -34,7 +36,7 @@ angular.module('infuseWebAppInstrument')
 
       return function() {
         return speed;
-      }
+      };
     };
 
     return r;

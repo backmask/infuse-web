@@ -1,3 +1,4 @@
+'use strict';
+
 angular.module('infuseWebAppVisualization')
-  .controller('DataGraphCtrl', function ($scope) {
-  });
+  .controller('DataGraphCtrl', function () {});

@@ -1,3 +1,5 @@
+'use strict';
+
 angular.module('infuseWebAppVisualization')
   .controller('ClientProcessingPipelineCtrl', function ($scope, $interval, visualizationManager) {
     $scope.title.name = 'Processing pipeline (client ' + $scope.sessionClientUuid.substr(0, 8) + ')';
@@ -51,9 +53,9 @@ angular.module('infuseWebAppVisualization')
         links.push({ from: node.uid, to: 'danglingFinal' });
       }
 
-      node.to.forEach(function(t) { links.push({ from: node.uid, to: t }) });
-      node.fallback.forEach(function(t) { links.push({ from: node.uid, to: t }) });
-    }
+      node.to.forEach(function(t) { links.push({ from: node.uid, to: t }); });
+      node.fallback.forEach(function(t) { links.push({ from: node.uid, to: t }); });
+    };
 
     var refresh = function(wsData) {
       if (angular.equals(wsData.data, previousData)) {
@@ -65,8 +67,8 @@ angular.module('infuseWebAppVisualization')
       var nodes = [{
         id: 'initial',
         color: '#0085ff',
-        getX: function(w) { return w * .05; },
-        getY: function(h) { return h * .5; },
+        getX: function(w) { return w * 0.05; },
+        getY: function(h) { return h * 0.5; },
         fixed: true,
         info: {
           name: 'Segmenter'
@@ -74,8 +76,8 @@ angular.module('infuseWebAppVisualization')
       }, {
         id: 'final',
         color: '#999',
-        getX: function(w) { return w * .95; },
-        getY: function(h) { return h * .5; },
+        getX: function(w) { return w * 0.95; },
+        getY: function(h) { return h * 0.5; },
         fixed: true,
         info: {
           name: 'Responder'
@@ -83,8 +85,8 @@ angular.module('infuseWebAppVisualization')
       }, {
         id: 'danglingInitial',
         color: '#1199ff',
-        getX: function(w) { return w * .5; },
-        getY: function(h) { return h * .05; },
+        getX: function(w) { return w * 0.5; },
+        getY: function(h) { return h * 0.05; },
         fixed: true,
         info: {
           name: 'From pipe'
@@ -92,8 +94,8 @@ angular.module('infuseWebAppVisualization')
       }, {
         id: 'danglingFinal',
         color: '#bbb',
-        getX: function(w) { return w * .5; },
-        getY: function(h) { return h * .95; },
+        getX: function(w) { return w * 0.5; },
+        getY: function(h) { return h * 0.95; },
         fixed: true,
         info: {
           name: 'To pipe'
@@ -116,17 +118,17 @@ angular.module('infuseWebAppVisualization')
       $scope.pipeline.nodes = nodes;
       $scope.pipeline.links = links;
       $scope.pipes = wsData.data.pipesOwned;
-    }
+    };
 
     var getData = function() {
       if ($scope.connected && $scope.sessionClientUuid) {
         $scope.doGetSessionClientPipeline().then(refresh);
       }
-    }
+    };
 
     $scope.removePipe = function(pipeUuid) {
       $scope.doRemovePipe(pipeUuid);
-    }
+    };
 
     getData();
     var autoRefresh = $interval(getData, 2500);

@@ -13,7 +13,7 @@ angular.module('infuseWebAppVisualization')
         name: vis.name,
         description: scope.name + ' ' + scope.description
       };
-      visCopy.stop = function() { r.stopVisualization(visCopy); }
+      visCopy.stop = function() { r.stopVisualization(visCopy); };
       if (visParameters) {
         for (var key in visParameters) {
           visCopy.scope[key] = visParameters[key];
@@ -34,7 +34,7 @@ angular.module('infuseWebAppVisualization')
       }
 
       activeVisualizations.push(visCopy);
-    }
+    };
 
     r.stopVisualization = function(vis) {
       vis.scope.$emit('remove-visualization');
@@ -43,11 +43,11 @@ angular.module('infuseWebAppVisualization')
         vis.scope.onStop(vis.scope);
       }
       activeVisualizations.splice(activeVisualizations.indexOf(vis), 1);
-    }
+    };
 
     r.getVisualizations = function() {
       return activeVisualizations;
-    }
+    };
 
     return r;
   })

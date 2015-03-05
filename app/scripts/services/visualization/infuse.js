@@ -24,14 +24,14 @@ angular.module('infuseWebAppVisualization')
             return views[i];
           }
         }
-      }
+      };
       scope.getDeviceViews = function(name) {
         var r = [];
         var v = deviceViews[name];
-        if (!v) return r;
+        if (!v) { return r; }
         v.forEach(function(val) { r.push(indexedViews[val]); });
         return r;
-      }
+      };
       return scope;
     };
     r.setViews = function(v) {
@@ -55,4 +55,4 @@ angular.module('infuseWebAppVisualization')
       views = v;
     };
     return r;
-  });;
+  });

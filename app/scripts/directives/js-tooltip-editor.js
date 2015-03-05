@@ -1,5 +1,7 @@
+'use strict';
+
 angular.module('infuseWebAppCommon')
-  .directive('jsTooltipEditor', function($interval) {
+  .directive('jsTooltipEditor', function() {
     return {
       restrict: 'A',
       scope: {
@@ -29,9 +31,9 @@ angular.module('infuseWebAppCommon')
         scope.reset = function() {
           scope.editor.show = false;
           scope.editor.currentScript = scope.script;
-        }
+        };
 
         element.click(scope.toggleEditor);
       }
-    }
+    };
   });

@@ -1,3 +1,5 @@
+'use strict';
+
 angular.module('infuseWebAppVisualization')
   .controller('OverviewCtrl', function ($scope, $interval, visualizationManager, settingsManager) {
     $scope.overview = {
@@ -25,14 +27,14 @@ angular.module('infuseWebAppVisualization')
     var watchCb = function(uuid) {
       return function() {
         $scope.getClient(uuid, true).manualWatch = true;
-      }
-    }
+      };
+    };
 
     var autoWatch = function(uuid) {
       if (settingsManager.get('autoWatch') === true) {
         $scope.getClient(uuid, true);
       }
-    }
+    };
 
     var refresh = function(wsData) {
       if (angular.equals(wsData.data, previousData)) {
@@ -44,8 +46,8 @@ angular.module('infuseWebAppVisualization')
       var nodes = [{
         color: rootColor,
         id: 'root',
-        getX: function(w) { return w * .05; },
-        getY: function(h) { return h * .5; },
+        getX: function(w) { return w * 0.05; },
+        getY: function(h) { return h * 0.5; },
         fixed: true,
         info: {
           title: 'Infuse',
@@ -59,7 +61,7 @@ angular.module('infuseWebAppVisualization')
           id: gwNode.port,
           info: {
             title: 'Gateway',
-            description: gwNode.protocol + " @" + gwNode.port
+            description: gwNode.protocol + ' @' + gwNode.port
           }});
         links.push({ from: 'root', to: gwNode.port });
         gwNode.clients.forEach(function(client) {

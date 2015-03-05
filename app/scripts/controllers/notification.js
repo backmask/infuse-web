@@ -53,5 +53,5 @@ angular.module('infuseWebAppNotification', [])
         css.push('alert-emphasize');
       }
       return css.join(' ');
-    }
+    };
   });

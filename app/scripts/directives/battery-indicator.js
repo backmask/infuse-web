@@ -1,10 +1,12 @@
+'use strict';
+
 angular.module('infuseWebAppCommon')
   .directive('batteryIndicator', function() {
     return {
       scope: {
         data: '='
       },
-      link: function(scope, element, attrs) {
+      link: function(scope, element) {
         element.addClass('battery');
 
         var updateValue = function(newValue) {
@@ -16,7 +18,7 @@ angular.module('infuseWebAppCommon')
           element.toggleClass('battery-high', val > 80);
           element.toggleClass('battery-low', val < 35 && val > 15);
           element.toggleClass('battery-critical', val <= 15);
-        }
+        };
 
         scope.$watch('data', updateValue);
      }

@@ -1,5 +1,7 @@
+'use strict';
+
 angular.module('infuseWebAppVisualization')
-  .controller('XyzPlotCtrl', function ($scope, $interval) {
+  .controller('XyzPlotCtrl', function ($scope) {
     $scope.position = {
       x: [],
       y: [],
@@ -12,7 +14,7 @@ angular.module('infuseWebAppVisualization')
         $scope.position.y.push(data.y);
         $scope.position.z.push(data.z);
       });
-    }
+    };
 
     var stream = $scope.stream.xyz.subscribe(refresh);
     $scope.$on('$destroy', stream.close);

@@ -1,3 +1,5 @@
+'use strict';
+
 angular.module('infuseWebAppCommon')
   .filter('shortNumber', function(numberFilter) {
     return function(input, unit) {

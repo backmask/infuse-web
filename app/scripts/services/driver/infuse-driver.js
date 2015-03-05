@@ -32,7 +32,7 @@ angular.module('infuseWebAppDevice')
 
           if (configuration.init) {
             configuration.init(scope).then(
-              function(d) {
+              function() {
                 scope.initialized = true;
               },
               function(e) {
@@ -44,7 +44,7 @@ angular.module('infuseWebAppDevice')
             scope.initialized = true;
           }
         });
-      }
+      };
 
       driver.onerror = function() {
         scope.$apply(function() {
@@ -52,7 +52,7 @@ angular.module('infuseWebAppDevice')
           scope.connected = false;
           scope.error = true;
         });
-      }
+      };
 
       driver.onclose = function() {
         scope.$apply(function() {
@@ -60,7 +60,7 @@ angular.module('infuseWebAppDevice')
           scope.connected = false;
           scope.error = false;
         });
-      }
+      };
 
       driver.onmessage = function(message) {
         var data = JSON.parse(message.data);
@@ -73,32 +73,32 @@ angular.module('infuseWebAppDevice')
           responseCallbacks[data.context](data);
         }
         throttledApply();
-      }
+      };
 
       scope.onData = function(callback) {
         onDataCallbacks.push(callback);
-      }
+      };
 
       scope.onSend = function(callback) {
         onSendCallbacks.push(callback);
-      }
+      };
 
       scope.send = function(data) {
         scope.upload += data.length;
         driver.send(data);
-      }
+      };
 
       scope.setCallback = function(context, cb) {
         responseCallbacks[context] = cb;
-      }
+      };
 
       scope.removeCallback = function(context) {
         delete responseCallbacks[context];
-      }
+      };
 
       scope.doRequest = function(method, parameters) {
         var deferredResponse = $q.defer();
-        var context = "infuse-webapp-" + Math.random();
+        var context = 'infuse-webapp-' + Math.random();
         var json = {
           method: method,
           context: context,
@@ -106,7 +106,7 @@ angular.module('infuseWebAppDevice')
         };
 
         var responseTimeout = $timeout(function() {
-          deferredResponse.reject(method + " timed out");
+          deferredResponse.reject(method + ' timed out');
           delete responseCallbacks[context];
         }, 1000);
 
@@ -123,34 +123,34 @@ angular.module('infuseWebAppDevice')
 
         scope.send(JSON.stringify(json));
         return deferredResponse.promise;
-      }
+      };
 
       scope.close = function() {
         driver.close();
-      }
+      };
 
       scope.doLogin = function(user, password) {
-        return scope.doRequest("login", { login: user, password: password })
-          .then(function(e) { notifier.verbose('Logged as ' + e.data.logged_as); });
-      }
+        return scope.doRequest('login', { login: user, password: password })
+          .then(function(e) { notifier.verbose('Logged as ' + e.data.loggedAs); });
+      };
 
       scope.doGetOverview = function() {
-        return scope.doRequest("overview");
-      }
+        return scope.doRequest('overview');
+      };
 
       scope.doClientConnect = function(clientUuid) {
-        return scope.doRequest("client/connect", { uuid: clientUuid })
-          .then(function(e) { notifier.verbose('Client connected with id ' + e.data.connection_uuid); })
-      }
+        return scope.doRequest('client/connect', { uuid: clientUuid })
+          .then(function(e) { notifier.verbose('Client connected with id ' + e.data.connectionUuid); });
+      };
 
       scope.doClientDisconnect = function(connectionUuid) {
-        return scope.doRequest("client/disconnect", { uuid: connectionUuid })
-          .then(function(e) { notifier.verbose('Disconnected client with connection-id ' + connectionUuid); })
-      }
+        return scope.doRequest('client/disconnect', { uuid: connectionUuid })
+          .then(function() { notifier.verbose('Disconnected client with connection-id ' + connectionUuid); });
+      };
 
       scope.doGetFactoryOverview = function() {
-        return scope.doRequest("overview/factory");
-      }
+        return scope.doRequest('overview/factory');
+      };
 
       scope.getClient = clientDriver.get;
       scope.releaseClient = clientDriver.release;
@@ -158,7 +158,7 @@ angular.module('infuseWebAppDevice')
       scope.setupMatch = clientDriver.setupMatch;
 
       return scope;
-    }
+    };
 
     return r;
-  })
+  });

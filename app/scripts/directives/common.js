@@ -1,7 +1,9 @@
+'use strict';
+
 angular.module('infuseWebAppCommon')
   .directive('showOnHoverParent', function() {
     return {
-     link: function(scope, element, attrs) {
+     link: function(scope, element) {
         element.hide();
         element.parent().bind('mouseenter', function() {
           element.show();
@@ -22,10 +24,12 @@ angular.module('infuseWebAppCommon')
         var ignoreNull = angular.isDefined(attrs.ignoreNull);
 
         var hasToBeDisplayed = function(val) {
-          if (!ignoreNull || val === false)
+          if (!ignoreNull || val === false) {
             return true;
-          if (angular.isArray(val) || angular.isObject(val))
+          }
+          if (angular.isArray(val) || angular.isObject(val)) {
             return val.length > 0;
+          }
           return val;
         };
 
@@ -40,7 +44,7 @@ angular.module('infuseWebAppCommon')
 
               var eltContainer = document.createElement('li');
               if (!angular.isArray(val)) {
-                eltContainer.appendChild(document.createTextNode(k + ": "));
+                eltContainer.appendChild(document.createTextNode(k + ': '));
               }
               eltContainer.appendChild(prettyChild);
               container.appendChild(eltContainer);
@@ -72,5 +76,5 @@ angular.module('infuseWebAppCommon')
         }, true);
       },
       template: '<div class="format-object"></div>'
-    }
+    };
   });

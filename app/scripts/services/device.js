@@ -28,7 +28,7 @@ angular.module('infuseWebAppDevice')
     r.unregister = function(device) {
       registeredDevices.splice(registeredDevices.indexOf(device), 1);
       localStorageService.set('devices', registeredDevices);
-    }
+    };
 
     r.configure = function(configurator, settings) {
       var conf = r.getConfigurator(configurator);
@@ -37,12 +37,12 @@ angular.module('infuseWebAppDevice')
       dev.configurator = configurator;
       dev.settings = fullSettings;
       return dev;
-    }
+    };
 
     r.reconfigure = function(device, settings) {
       angular.copy(r.configure(device.configurator, settings), device);
       localStorageService.set('devices', registeredDevices);
-    }
+    };
 
     r.registerConfigurator = function(name, configurator) {
       registeredDeviceConfigurators[name] = configurator;
@@ -58,7 +58,7 @@ angular.module('infuseWebAppDevice')
 
     r.getConfigurator = function(name) {
       return registeredDeviceConfigurators[name];
-    }
+    };
 
     return r;
   });

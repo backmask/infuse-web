@@ -38,7 +38,7 @@ angular.module('infuseWebAppDevice')
         angular.forEach(onDataCallbacks, function(cb) {
           cb(data);
         });
-      })
+      });
 
       scope.onData = function(callback) {
         onDataCallbacks.push(callback);
@@ -48,9 +48,9 @@ angular.module('infuseWebAppDevice')
             onDataCallbacks.splice(onDataCallbacks.indexOf(cb), 1);
           }
         };
-      }
+      };
 
-      scope.onSend = function(callback) {}
+      scope.onSend = function() {};
 
       scope.close = driver.disconnect.bind(driver);
 
@@ -79,7 +79,7 @@ angular.module('infuseWebAppDevice')
       driver.connect();
 
       return scope;
-    }
+    };
 
     return r;
   });

@@ -1,3 +1,5 @@
+'use strict';
+
 angular.module('infuseWebAppCommon')
   .directive('pipesDescription', function() {
     return {
@@ -6,10 +8,10 @@ angular.module('infuseWebAppCommon')
         data: '=',
         remove: '='
       },
-      template: '<table class="table table-condensed pipes">'
-        + '<thead><tr><th>uuid</th><th>target</th><th>from</th><th>to</th><th></th></tr></thead>'
-        + '<tr pipe-description ng-repeat="pipe in data" data="pipe" remove="remove(pipe.uuid)"></tr>'
-        + '</table>'
+      template: '<table class="table table-condensed pipes">' +
+        '<thead><tr><th>uuid</th><th>target</th><th>from</th><th>to</th><th></th></tr></thead>' +
+        '<tr pipe-description ng-repeat="pipe in data" data="pipe" remove="remove(pipe.uuid)"></tr>' +
+        '</table>'
     };
   })
   .directive('pipeDescription', function() {
@@ -21,7 +23,7 @@ angular.module('infuseWebAppCommon')
         data: '=',
         remove: '&'
       },
-      link: function(scope, element, attrs) {
+      link: function(scope) {
         scope.uuid = scope.data.uuid;
         scope.description = scope.data.description;
       }

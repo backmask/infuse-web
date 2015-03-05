@@ -1,3 +1,5 @@
+'use strict';
+
 angular.module('d3')
   .directive('d3Horizon', function(d3, $timeout, $window) {
     return {
@@ -8,7 +10,7 @@ angular.module('d3')
         pitch: '=',
         roll: '='
       },
-      link: function(scope, element, attrs) {
+      link: function(scope, element) {
         var side = 0;
         var scale = 2;
         var width = 0, height = 0;
@@ -18,9 +20,9 @@ angular.module('d3')
         scope.pitch = 0;
 
         var onUpdate = function() {
-          container.attr('transform', 'rotate(' + scope.roll + ' ' + width/2 + ' ' + height/2 + ') '
-            + 'translate(-' + 0 + ',' + (-scope.pitch/180*side) + ')');
-        }
+          container.attr('transform', 'rotate(' + scope.roll + ' ' + width/2 + ' ' + height/2 + ') ' +
+            'translate(-' + 0 + ',' + (-scope.pitch/180*side) + ')');
+        };
 
         var onResize = function() {
           width = $(svg[0]).width();
@@ -36,8 +38,8 @@ angular.module('d3')
              .attr('height', side)
              .attr('transform', 'translate(-' + backgroundPaddingX + ',-' + (side-backgroundPaddingY) + ')');
 
-          plane.attr('transform', 'translate(' + width/2 + ',' + height/2
-            + ') scale(' + width/200 + ')');
+          plane.attr('transform', 'translate(' + width/2 + ',' + height/2 +
+            ') scale(' + width/200 + ')');
 
           yAxis.scale(d3.scale.linear().domain([-180, 180]).range([-height*scale, height*scale]))
             .ticks(72);
@@ -48,23 +50,24 @@ angular.module('d3')
             .call(function(s) {
               s.select('path').remove();
               s.selectAll('line')
-                .attr('x1', function(d) { return d%2 == 0 ? -width/5 : -width/16 })
-                .attr('x2', function(d) { return d%2 == 0 ? width/5 : width/16 });
+                .attr('x1', function(d) { return d%2 === 0 ? -width/5 : -width/16; })
+                .attr('x2', function(d) { return d%2 === 0 ? width/5 : width/16; });
               s.selectAll('text').each(function(d) {
                 var self = d3.select(this);
-                if (d%2 != 0) self.remove();
-                else {
+                if (d%2 !== 0)  {
+                  self.remove();
+                } else {
                   self.attr('transform', 'translate(' + width/5 + ',0)');
                 }
               });
             });
 
           onUpdate();
-        }
+        };
 
-        var svg = d3.select(element[0]).append("svg")
-          .attr("width", "100%")
-          .attr("height", "100%");
+        var svg = d3.select(element[0]).append('svg')
+          .attr('width', '100%')
+          .attr('height', '100%');
 
         var container = svg.append('g');
         var ground = container.append('rect').classed('ground', true);
@@ -80,5 +83,5 @@ angular.module('d3')
         $timeout(onResize);
         scope.$watch('[pitch, roll]', onUpdate);
       }
-    }
+    };
   });

@@ -24,7 +24,7 @@ angular.module('infuseWebAppDevice')
             return driver.doLogin(settings.login, settings.password);
           },
           url: settings.url
-        }
+        };
       }
     });
   })
@@ -44,13 +44,13 @@ angular.module('infuseWebAppDevice')
           icon: settings.icon,
           driverFactory: leapDriverFactory.build,
           visualizationFactory: leapVisualizationFactory.build
-        }
+        };
       }
-    })
+    });
   })
   .run(function(device, localStorageService) {
     var devices = localStorageService.get('devices');
     angular.forEach(devices, function(dev) {
       device.register(dev.configurator, dev.settings);
     });
-  })
+  });

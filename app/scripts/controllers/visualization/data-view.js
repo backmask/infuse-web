@@ -1,3 +1,5 @@
+'use strict';
+
 angular.module('infuseWebAppVisualization')
   .controller('DataViewCtrl', function ($scope, instrumentConvert, visualizationManager) {
     var compiledFilter = function() { return true; };
@@ -23,7 +25,9 @@ angular.module('infuseWebAppVisualization')
 
     var receiveData = function(d) {
       $scope.$broadcast('data-received', d.dataUid, d.data, ++$scope.receivedFrames);
-      if ($scope.paused || !compiledFilter(d.dataUid, d.data, $scope.receivedFrames)) return;
+      if ($scope.paused || !compiledFilter(d.dataUid, d.data, $scope.receivedFrames)) {
+        return;
+      }
 
       $scope.frames.unshift({
         index: $scope.receivedFrames,
@@ -32,21 +36,22 @@ angular.module('infuseWebAppVisualization')
         payload: d.data
       });
 
-      if ($scope.frames.length > 100)
+      if ($scope.frames.length > 100) {
         $scope.frames.pop();
-    }
+      }
+    };
 
     $scope.$watch('script.filter', function(f) {
-      compiledFilter = eval('(function() {' + f + '})')();
+      compiledFilter = eval('(function() {' + f + '})')(); // jshint ignore:line
     });
 
-    $scope.$on('js-editor-saved', function(e, g, oldg) {
-      if (e.targetScope.jsName != 'filter') {
+    $scope.$on('js-editor-saved', function(e, g) {
+      if (e.targetScope.jsName !== 'filter') {
         return;
       }
       e.stopPropagation();
 
-      var compiledGraph = eval('(function() {' + g + '})')();
+      var compiledGraph = eval('(function() {' + g + '})')(); // jshint ignore:line
       var listen = function(sc) {
         sc.$on('data-received', function(e, uid, data, frameIdx) {
           var res = compiledGraph(uid, data, frameIdx);
@@ -54,7 +59,7 @@ angular.module('infuseWebAppVisualization')
             sc.series[0].data.push(res);
           }
         });
-      }
+      };
 
       visualizationManager.visualize(
         $scope.getView('Data graph'),
@@ -63,7 +68,7 @@ angular.module('infuseWebAppVisualization')
           onInit: listen,
           series: [{
             label: g.substr(0, 10),
-            color: randomColor({ luminosity: 'bright'}),
+            color: window.randomColor({ luminosity: 'bright'}),
             data: []
           }]
         }
@@ -72,7 +77,7 @@ angular.module('infuseWebAppVisualization')
 
     var pipe = $scope.pipeNode({
       target: $scope.sessionClientUuid,
-      stream: "out",
+      stream: 'out',
       uri: $scope.nodeUid
     }, receiveData);
 

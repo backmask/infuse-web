@@ -6,7 +6,7 @@ angular.module('infuseWebAppActiveConnections', [
     'infuseWebAppVisualization',
     'infuseWebAppCommon'
   ])
-  .factory('connectionManager', function(notifier, instrumentConvert, visualizationManager, settingsManager) {
+  .factory('connectionManager', function(notifier, instrumentConvert, visualizationManager) {
     var r = {};
     var managedConnections = [];
 
@@ -14,7 +14,7 @@ angular.module('infuseWebAppActiveConnections', [
       managedConnections.push(connection);
       connection.downloadSpeed = instrumentConvert.toSpeed(connection, 'download');
       connection.uploadSpeed = instrumentConvert.toSpeed(connection, 'upload');
-      connection.color = randomColor({ luminosity: 'bright'});
+      connection.color = window.randomColor({ luminosity: 'bright'});
 
       if (connection.pristine) {
         notifier.notify('verbose', 'Connecting to ' + connection.name);
@@ -48,11 +48,11 @@ angular.module('infuseWebAppActiveConnections', [
     r.closeConnection = function(connection) {
       notifier.notify('verbose', 'Disconnecting from ' + connection.name);
       connection.close();
-    }
+    };
 
     r.getManagedConnections = function() {
       return managedConnections;
-    }
+    };
 
     return r;
   })
@@ -62,7 +62,7 @@ angular.module('infuseWebAppActiveConnections', [
 
     $scope.visualize = function(connection, view) {
       visualizationManager.visualize(view, connection.$new());
-    }
+    };
 
     $scope.getWatchedClients = function(connection) {
       var clients = connection.getClients();
@@ -73,5 +73,5 @@ angular.module('infuseWebAppActiveConnections', [
         }
       }
       return r;
-    }
+    };
   });

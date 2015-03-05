@@ -1,3 +1,5 @@
+'use strict';
+
 angular.module('infuseWebApp')
   .factory('throttle', function() {
     return function (func, wait) {

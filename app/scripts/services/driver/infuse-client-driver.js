@@ -1,3 +1,5 @@
+'use strict';
+
 angular.module('infuseWebAppDevice')
   .factory('infuseClientDriverFactory', function($interval, notifier, infuseIconFactory, $q) {
     var r = {};
@@ -7,9 +9,9 @@ angular.module('infuseWebAppDevice')
 
       var setupMatch = function(match) {
         match.disabled = true;
-        scope.doRequest("session/client/pipe/set", {
+        scope.doRequest('session/client/pipe/set', {
           owner: 'self',
-          target: "processor",
+          target: 'processor',
           from: match.description.from,
           to: match.description.to
         }).then(function (d) {
@@ -26,10 +28,7 @@ angular.module('infuseWebAppDevice')
           reversed.description.to = tmpFrom;
           reversed.outgoing = !reversed.outgoing;
 
-          var seek = d.outgoing
-            ? reversed.description.to.target
-            : reversed.description.from.target;
-
+          var seek = d.outgoing ? reversed.description.to.target : reversed.description.from.target;
           pushMatch(seek, reversed);
         });
       };
@@ -47,7 +46,7 @@ angular.module('infuseWebAppDevice')
         }
 
         cl.matches.push(consolidateMatch(match));
-      }
+      };
 
       var consolidateMatch = function(match) {
         match.foreign = match.outgoing ? match.description.to : match.description.from;
@@ -60,7 +59,7 @@ angular.module('infuseWebAppDevice')
         var pipes = [];
         childScope.sessionClientUuid = clientUuid;
         childScope.connected = true;
-        childScope.subColor = randomColor({ luminosity: 'bright'});
+        childScope.subColor = window.randomColor({ luminosity: 'bright'});
         childScope.smallIcon = 'fa-circle-o-notch fa-spin';
         childScope.activeVisualizations = 0;
         childScope.matches = [];
@@ -68,7 +67,7 @@ angular.module('infuseWebAppDevice')
         childScope.battery = false;
 
         var pollInterval = $interval(function() {
-          scope.doRequest("session/client/ping", { uuid: clientUuid })
+          scope.doRequest('session/client/ping', { uuid: clientUuid })
             .then(function() { childScope.connected = true; },
               function() {
                 childScope.connected = false;
@@ -78,7 +77,7 @@ angular.module('infuseWebAppDevice')
         }, 1000);
 
         var refreshClient = function() {
-          scope.doRequest("session/client/describe", { uuid: clientUuid })
+          scope.doRequest('session/client/describe', { uuid: clientUuid })
             .then(function(d) {
               var desc = d.data.description;
               if (d.data.self) {
@@ -90,7 +89,7 @@ angular.module('infuseWebAppDevice')
               childScope.clientDescription = d.data;
             });
 
-          scope.doRequest("match/client", { uuid: clientUuid })
+          scope.doRequest('match/client', { uuid: clientUuid })
             .then(function(d) {
               refreshMatches(clientUuid, d.data.matches);
               childScope.interface = d.data.interface;
@@ -105,63 +104,63 @@ angular.module('infuseWebAppDevice')
                 });
               }
             });
-        }
+        };
 
         childScope.doGetSessionClientPipeline = function() {
-          return scope.doRequest("session/client/pipeline", { uuid: clientUuid });
-        }
+          return scope.doRequest('session/client/pipeline', { uuid: clientUuid });
+        };
 
         childScope.doSetPipe = function(target, from, to, uuid) {
-          return scope.doRequest("session/client/pipe/set", {
+          return scope.doRequest('session/client/pipe/set', {
             owner: uuid || clientUuid,
             target: target,
             from: from,
             to: to
           });
-        }
+        };
 
         childScope.doAddNode = function(node, uuid) {
-          return scope.doRequest("session/client/pipeline/addnode", {
+          return scope.doRequest('session/client/pipeline/addnode', {
             uuid: uuid || clientUuid,
             node: node
           });
-        }
+        };
 
         childScope.doRemovePipe = function(pipeUuid, uuid) {
-          return scope.doRequest("session/client/pipe/remove", {
+          return scope.doRequest('session/client/pipe/remove', {
             uuid: uuid || clientUuid,
             pipeUuid: pipeUuid
-          }).then(function(e) { notifier.verbose('Removed pipe ' + pipeUuid + ' from ' + clientUuid); });;
-        }
+          }).then(function() { notifier.verbose('Removed pipe ' + pipeUuid + ' from ' + clientUuid); });
+        };
 
         childScope.doRemoveNode = function(nodeUri, uuid) {
-          return scope.doRequest("session/client/pipeline/removenode", {
+          return scope.doRequest('session/client/pipeline/removenode', {
             uuid: uuid || clientUuid,
             nodeUid: nodeUri
-          }).then(function(e) { notifier.verbose('Removed ' + nodeUri + ' from ' + clientUuid); });;
-        }
+          }).then(function() { notifier.verbose('Removed ' + nodeUri + ' from ' + clientUuid); });
+        };
 
         childScope.addPipePacker = function(contextKey) {
           return childScope.doAddNode({
-            instanceType: "packer",
+            instanceType: 'packer',
             uid: contextKey,
-            type: "json.response.packer",
+            type: 'json.response.packer',
             final: true,
             danglingInitial: true,
             config: { context: contextKey }
-          }, "self");
-        }
+          }, 'self');
+        };
 
         childScope.matchStructures = function(uids) {
           return scope.doRequest('match/client/node', { uid: uids, uuid: clientUuid });
-        }
+        };
 
         childScope.pipeNode = function(pipeableNode, callback) {
-          var packerUri = 'packer:'
-            + pipeableNode.uri + ':'
-            + pipeableNode.stream + ':'
-            + pipeableNode.target.substr(0, 5) + ':'
-            + Math.floor(Math.random() * 1000);
+          var packerUri = 'packer:' +
+            pipeableNode.uri + ':' +
+            pipeableNode.stream + ':' +
+            pipeableNode.target.substr(0, 5) + ':' +
+            Math.floor(Math.random() * 1000);
           return childScope.addPipePacker(packerUri)
             .then(function() {
               return childScope.doSetPipe(
@@ -191,8 +190,8 @@ angular.module('infuseWebAppDevice')
         childScope.pipeStructures = function(uids, callback) {
           return childScope.matchStructures(uids)
             .then(function(d) {
-              if (d.data.length == 0) {
-                var err = 'Failed to match ' + uids.join(", ");
+              if (d.data.length === 0) {
+                var err = 'Failed to match ' + uids.join(', ');
                 notifier.error(err + ' on ' + clientUuid);
                 return $q.reject(err);
               }
@@ -223,24 +222,24 @@ angular.module('infuseWebAppDevice')
         refreshClient();
 
         return childScope;
-      }
+      };
 
       var get = function(uuid, lazyBuild) {
         if (!clients[uuid] && lazyBuild) {
           clients[uuid] = build(uuid);
         }
         return clients[uuid];
-      }
+      };
 
       var release = function(uuid) {
-        if (!clients[uuid]) return;
+        if (!clients[uuid]) { return; }
         clients[uuid].$destroy();
         delete clients[uuid];
-      }
+      };
 
       var getAll = function() {
         return clients;
-      }
+      };
 
       return {
         setupMatch: setupMatch,
