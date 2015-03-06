@@ -256,7 +256,10 @@ angular.module('infuseWebAppDevice')
         release: release,
         getAll: getAll,
         onRelease: function(cb) { releaseCallbacks.push(cb); },
-        onBuild: function(cb) { buildCallbacks.push(cb); }
+        onBuild: function(cb) {
+          buildCallbacks.push(cb);
+          angular.forEach(clients, function(d) { cb(d); });
+        }
       };
     };
 

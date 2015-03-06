@@ -7,6 +7,7 @@ angular.module('infuseWebApp')
 
       r.openConnection = function(device) {
         var deviceScope = $rootScope.$new();
+        deviceScope.device = device;
         device.driverFactory(deviceScope, device);
         device.visualizationFactory(deviceScope);
         return r.handleConnection(deviceScope);

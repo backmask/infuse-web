@@ -15,6 +15,16 @@ angular.module('infuseWebApp')
     r.views = visualizationManager.getVisualizations;
     r.notify = notifier;
 
+    r.connectOpt = function(device) {
+      var managed = connectionManager.getManagedConnections();
+      for (var i = 0; i < managed.length; ++i) {
+        if (managed[i].device === device) {
+          return $q.when(managed[i]);
+        }
+      }
+      return connectionManager.openConnection(device);
+    };
+
     r.plotStructures = function(subclient, structUids, filter) {
       var pipe;
 
