@@ -1,10 +1,11 @@
 <div ng-controller="SnippetsCtrl" id="snippets">
   <li class="list-group-item snippet" ng-repeat="snippet in snippets">
     <div class="text">
-      <span>{{snippet.name}}</span><br/>
+      <input ng-model="snippet.name" ng-disabled="!isEditModeOn(snippet)" />
     </div>
-    <div class="actions" ng-if="!snippet.configMode">
-      <div class="btn btn-xs btn-default" js-tooltip-editor script="snippet.script">
+    <div class="actions">
+      <a ng-show="isEditModeOn(snippet)" class="btn btn-xs btn-danger" ng-click="remove(snippet)"><span class="glyphicon glyphicon-trash"></span></a>
+      <div class="btn btn-xs btn-default" js-tooltip-editor script="snippet.script" on-toggle="toggle(snippet, toggled)">
         <span class="glyphicon glyphicon-edit"></span>
       </div>
       <a class="btn btn-xs btn-primary" ng-click="execute(snippet)">Execute</a>

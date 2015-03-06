@@ -109,7 +109,7 @@
 }
 
 div[ui-codemirror] {
-  min-width: 350px;
+  width: 490px;
 }
 
 div[ui-codemirror] .CodeMirror {

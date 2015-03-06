@@ -30,8 +30,9 @@ angular.module('infuseWebApp')
     r.refreshSnippets();
     return r;
   })
-  .controller('SnippetsCtrl', function($scope, snippetsManager) {
+  .controller('SnippetsCtrl', function($scope, snippetsManager, notifier) {
     $scope.snippets = snippetsManager.getAll();
+    $scope.toggledSnippets = $scope.snippets.map(function() { return false; });
 
     $scope.add = function() {
       $scope.snippets.push({
@@ -43,6 +44,26 @@ angular.module('infuseWebApp')
 '  });\n' +
 '});\n'
       });
+      $scope.toggledSnippets.push(false);
+    };
+
+    $scope.toggle = function(snippet, toggled) {
+      $scope.toggledSnippets[$scope.snippets.indexOf(snippet)] = toggled;
+    };
+
+    $scope.isEditModeOn = function(snippet) {
+      return $scope.toggledSnippets[$scope.snippets.indexOf(snippet)];
+    };
+
+    $scope.execute = function(snippet) {
+      notifier.info('Executing snippet ' + snippet.name);
+      eval(snippet.script); // jshint ignore:line
+    };
+
+    $scope.remove = function(snippet) {
+      var idx = $scope.snippets.indexOf(snippet);
+      $scope.snippets.splice(idx, 1);
+      $scope.toggledSnippets.splice(idx, 1);
     };
 
     $scope.$watch('snippets', function() {

@@ -1,6 +1,8 @@
 .nav, .pagination, .carousel, .panel-title a { cursor: pointer; }
 html, body {
+  width:100%;
   height:100%;
+  overflow-x:hidden;
 }
 
 .red {

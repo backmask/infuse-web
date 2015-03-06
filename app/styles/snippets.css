@@ -11,3 +11,8 @@
 #snippets .list-group-item:not(.add) {
   padding: 8px;
 }
+
+#snippets input {
+  border: 0;
+  background: white;
+}
