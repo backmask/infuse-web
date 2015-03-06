@@ -6,6 +6,8 @@ angular.module('infuseWebAppDevice')
 
     r.manage = function(scope) {
       var clients = {};
+      var buildCallbacks = [];
+      var releaseCallbacks = [];
 
       var setupMatch = function(match) {
         match.disabled = true;
@@ -210,7 +212,7 @@ angular.module('infuseWebAppDevice')
 
         var autoReleaseClient = function() {
           if (childScope.activeVisualizations <= 0 && !childScope.manualWatch) {
-            scope.releaseClient(clientUuid);
+            release(clientUuid);
           }
         };
 
@@ -227,12 +229,18 @@ angular.module('infuseWebAppDevice')
       var get = function(uuid, lazyBuild) {
         if (!clients[uuid] && lazyBuild) {
           clients[uuid] = build(uuid);
+          buildCallbacks.forEach(function(cb) {
+            cb(clients[uuid]);
+          });
         }
         return clients[uuid];
       };
 
       var release = function(uuid) {
         if (!clients[uuid]) { return; }
+        releaseCallbacks.forEach(function(cb) {
+          cb(clients[uuid]);
+        });
         clients[uuid].$destroy();
         delete clients[uuid];
       };
@@ -245,7 +253,9 @@ angular.module('infuseWebAppDevice')
         setupMatch: setupMatch,
         get: get,
         release: release,
-        getAll: getAll
+        getAll: getAll,
+        onRelease: function(cb) { releaseCallbacks.push(cb); },
+        onBuild: function(cb) { buildCallbacks.push(cb); }
       };
     };
 

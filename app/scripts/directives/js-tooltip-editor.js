@@ -6,8 +6,7 @@ angular.module('infuseWebAppCommon')
       restrict: 'A',
       scope: {
         script: '=',
-        pushMode: '@',
-        jsName: '@'
+        pushMode: '@'
       },
       templateUrl: 'views/directives/js-tooltip-editor.html',
       transclude: true,
@@ -21,7 +20,9 @@ angular.module('infuseWebAppCommon')
         };
 
         scope.toggleEditor = function() {
-          scope.editor.show = !scope.editor.show;
+          scope.$apply(function() {
+            scope.editor.show = !scope.editor.show;
+          });
         };
         scope.save = function() {
           scope.editor.show = false;

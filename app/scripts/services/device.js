@@ -1,20 +1,6 @@
 'use strict';
 
 angular.module('infuseWebAppDevice')
-  .factory('connection', function() {
-    var activeConnections = [];
-    var r = {};
-
-    r.connect = function(connection) {
-      activeConnections.push(connection);
-    };
-
-    r.getAll = function() {
-      return activeConnections;
-    };
-
-    return r;
-  })
   .factory('device', function(localStorageService) {
     var registeredDevices = [];
     var registeredDeviceConfigurators = {};

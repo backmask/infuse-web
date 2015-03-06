@@ -1,0 +1,13 @@
+#snippets .actions {
+  position:absolute;
+  top: 5px;
+  right: 5px;
+}
+
+#snippets .text {
+  font-size: 0.8em;
+}
+
+#snippets .list-group-item:not(.add) {
+  padding: 8px;
+}

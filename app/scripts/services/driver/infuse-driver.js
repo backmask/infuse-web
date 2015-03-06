@@ -152,11 +152,7 @@ angular.module('infuseWebAppDevice')
         return scope.doRequest('overview/factory');
       };
 
-      scope.getClient = clientDriver.get;
-      scope.releaseClient = clientDriver.release;
-      scope.getClients = clientDriver.getAll;
-      scope.setupMatch = clientDriver.setupMatch;
-
+      scope.client = clientDriver;
       return scope;
     };
 

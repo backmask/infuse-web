@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('infuseWebAppCommon')
-  .directive('smartTooltip', function($interval, $timeout) {
+  .directive('smartTooltip', function($window, $interval, $timeout) {
     return {
       restrict: 'E',
       scope: {
@@ -72,7 +72,11 @@ angular.module('infuseWebAppCommon')
           }
 
           var left = p.xAnchor - p.containerWidth / 2;
-          if (left < 0) {
+          var right = $window.innerWidth - p.xAnchor - p.containerWidth/2;
+          if (right < 0) {
+            arrow.css('margin-left', -right + 'px');
+            left = $window.innerWidth - p.containerWidth - 10;
+          } else if (left < 0) {
             arrow.css('margin-left', (left - 11) + 'px');
             left = 0;
           } else {
@@ -80,6 +84,7 @@ angular.module('infuseWebAppCommon')
           }
 
           container.css('left', (left + p.xOffset) + 'px');
+          container.css('right', '');
         };
 
         var setDisplay = function(show) {

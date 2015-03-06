@@ -1,0 +1,17 @@
+<div ng-controller="SnippetsCtrl" id="snippets">
+  <li class="list-group-item snippet" ng-repeat="snippet in snippets">
+    <div class="text">
+      <span>{{snippet.name}}</span><br/>
+    </div>
+    <div class="actions" ng-if="!snippet.configMode">
+      <div class="btn btn-xs btn-default" js-tooltip-editor script="snippet.script">
+        <span class="glyphicon glyphicon-edit"></span>
+      </div>
+      <a class="btn btn-xs btn-primary" ng-click="execute(snippet)">Execute</a>
+    </div>
+
+    <!-- New snippet dropdown -->
+    <li class="list-group-item add" ng-click="add()">
+      <span class="glyphicon glyphicon-plus"></span> New snippet
+    </li>
+</div>

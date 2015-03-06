@@ -14,14 +14,8 @@ angular.module('infuseWebAppConnect', [
     $scope.connect = function(dev) {
       dev.connecting = true;
 
-      var deviceScope = $scope.$new();
-      dev.driverFactory(deviceScope, dev);
-      dev.visualizationFactory(deviceScope);
-      connectionManager.handleConnection(deviceScope);
-
-      deviceScope.$watch('pristine == false', function() {
-        dev.connecting = false;
-      });
+      connectionManager.openConnection(dev)
+        .then(function() { dev.connecting = false; });
     };
 
     $scope.add = function(configurator) {

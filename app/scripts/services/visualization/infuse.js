@@ -20,7 +20,7 @@ angular.module('infuseWebAppVisualization')
       scope.defaultView = views[0];
       scope.getView = function(name) {
         for (var i = 0; i < views.length; ++i) {
-          if (views[i].name === name) {
+          if (views[i].name === name || views[i].shortName === name) {
             return views[i];
           }
         }
