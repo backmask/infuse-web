@@ -22,9 +22,7 @@ angular.module('d3')
 
         if (angular.isArray($scope.scale)) {
           this.yScale.domain($scope.scale);
-        } else if ($scope.scale === 'auto') {
-          this.yScale.domain([0, 0]);
-        } else {
+        } else if ($scope.scale !== 'auto') {
           this.yScale.domain([-1, 1]);
         }
       },
@@ -33,9 +31,9 @@ angular.module('d3')
         element[0].style.height = scope.height;
 
         if (scope.scale === 'auto') {
+          var min = Number.MAX_VALUE;
+          var max = Number.MIN_VALUE;
           ctrl.refreshScale = function(data) {
-            var min = ctrl.yScale.domain()[0];
-            var max = ctrl.yScale.domain()[1];
             data.forEach(function(d) {
               if (min > d) { min = d; }
               if (max < d) { max = d; }
