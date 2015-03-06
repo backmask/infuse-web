@@ -79,33 +79,35 @@ angular.module('infuseWebAppDevice')
         }, 1000);
 
         var refreshClient = function() {
-          scope.doRequest('session/client/describe', { uuid: clientUuid })
-            .then(function(d) {
-              var desc = d.data.description;
-              if (d.data.self) {
-                childScope.deviceType = 'terminal';
-              } else {
-                childScope.deviceType = desc.family;
-              }
-              childScope.smallIcon = infuseIconFactory.getIcon(childScope.deviceType);
-              childScope.clientDescription = d.data;
-            });
+          return $q.all([
+            scope.doRequest('session/client/describe', { uuid: clientUuid })
+              .then(function(d) {
+                var desc = d.data.description;
+                if (d.data.self) {
+                  childScope.deviceType = 'terminal';
+                } else {
+                  childScope.deviceType = desc.family;
+                }
+                childScope.smallIcon = infuseIconFactory.getIcon(childScope.deviceType);
+                childScope.clientDescription = d.data;
+              }),
 
-          scope.doRequest('match/client', { uuid: clientUuid })
-            .then(function(d) {
-              refreshMatches(clientUuid, d.data.matches);
-              childScope.interface = d.data.interface;
-              childScope.matches = d.data.matches.map(consolidateMatch);
-            });
+            scope.doRequest('match/client', { uuid: clientUuid })
+              .then(function(d) {
+                refreshMatches(clientUuid, d.data.matches);
+                childScope.interface = d.data.interface;
+                childScope.matches = d.data.matches.map(consolidateMatch);
+              }),
 
-          childScope.matchStructures(['battery'])
-            .then(function(d) {
-              if (d.data.length > 0) {
-                childScope.pipeNode(d.data[0].endPoint, function(d) {
-                  childScope.battery = d.data.value;
-                });
-              }
-            });
+            childScope.matchStructures(['battery'])
+              .then(function(d) {
+                if (d.data.length > 0) {
+                  childScope.pipeNode(d.data[0].endPoint, function(d) {
+                    childScope.battery = d.data.value;
+                  });
+                }
+              })
+          ]);
         };
 
         childScope.doGetSessionClientPipeline = function() {
@@ -221,8 +223,7 @@ angular.module('infuseWebAppDevice')
           autoReleaseClient();
         });
 
-        refreshClient();
-
+        childScope.refresh = refreshClient();
         return childScope;
       };
 

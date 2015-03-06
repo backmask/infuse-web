@@ -81,7 +81,7 @@ i.fa-fw {
 }
 
 .ico-quadcopter {
-  background:url(images/quadcopter.png);
+  background:url(../images/quadcopter.png);
   background-size:contain;
   height:16px;
   background-repeat:no-repeat;
