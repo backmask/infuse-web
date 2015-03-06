@@ -7,6 +7,7 @@ angular.module('infuseWebAppCommon')
       scope: {
         script: '=',
         pushMode: '@',
+        jsName: '@',
         onToggle: '&'
       },
       templateUrl: 'views/directives/js-tooltip-editor.html',
