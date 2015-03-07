@@ -106,7 +106,8 @@ angular.module('d3')
       require: '^d3Plot',
       scope: {
         color: '=',
-        data: '='
+        data: '=',
+        label: '='
       },
       link: function(scope, element, attrs, d3Plot) {
         var repaint = function(data) {
@@ -123,6 +124,18 @@ angular.module('d3')
         var path = d3.select(element[0].parentNode).append('path')
           .style('stroke', scope.color)
           .attr('class', 'line');
+
+        var label = d3.select(element[0].parentNode).append('g')
+          .attr('transform', 'translate(2, ' + ($(element).index() * 13 + 1) + ')');
+        label.append('rect')
+          .attr('width', 12)
+          .attr('height', 12)
+          .style('stoke', '1px solid black')
+          .style('fill', scope.color);
+        label.append('text')
+          .attr('x', 14)
+          .attr('y', 10)
+          .text(scope.label);
 
         scope.$watchCollection('data', function(val) {
           if (d3Plot.refreshScale) {

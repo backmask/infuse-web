@@ -25,15 +25,43 @@ angular.module('infuseWebApp')
       return connectionManager.openConnection(device);
     };
 
-    r.plotStructures = function(subclient, structUids, filter) {
+    r.plotStructures = function(subclient, structUids, filter, seriesMapper) {
       var pipe;
+      seriesMapper = seriesMapper || function(uid, payload) {
+        var label = uid;
+        if (payload.symbol) {
+          label += '[' + payload.symbol + ']';
+        }
+        return label;
+      };
 
       var setupPipe = function(sc) {
         var idx = 0;
+        var seriesMap = {};
+
+        var getSeries = function(label) {
+          var r = seriesMap[label];
+          if (!r) {
+            console.log(label);
+            r = {
+              color: window.randomColor({ luminosity: 'bright'}),
+              label: label,
+              data: []
+            };
+            seriesMap[label] = r;
+            sc.series.push(r);
+          }
+          return r;
+        };
+
         pipe = subclient.pipeStructures(structUids, function(d) {
+          var label = seriesMapper(d.dataUid, d.data);
           var res = filter ? filter(d.dataUid, d.data, ++idx) : d.data.value;
           if (!isNaN(res)) {
-            sc.series[0].data.push(res);
+            var s = getSeries(label);
+            if (s) {
+              s.data.push(res);
+            }
           }
         });
       };
@@ -42,10 +70,7 @@ angular.module('infuseWebApp')
         subclient.getView('plot'),
         subclient, {
           onInit: setupPipe,
-          series: [{
-            color: window.randomColor({ luminosity: 'bright'}),
-            data: []
-          }]
+          series: []
         });
 
       subclient.$on('$destroy', function() {

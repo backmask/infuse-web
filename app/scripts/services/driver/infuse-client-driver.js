@@ -191,7 +191,7 @@ angular.module('infuseWebAppDevice')
             });
         };
 
-        childScope.pipeStructures = function(uids, callback) {
+        childScope.pipeStructures = function(uids, callback, matchFirst) {
           return childScope.matchStructures(uids)
             .then(function(d) {
               if (d.data.length === 0) {
@@ -199,7 +199,22 @@ angular.module('infuseWebAppDevice')
                 notifier.error(err + ' on ' + clientUuid);
                 return $q.reject(err);
               }
-              return childScope.pipeNode(d.data[0].endPoint, callback);
+              else if (d.data.length === 1 || matchFirst) {
+                return childScope.pipeNode(d.data[0].endPoint, callback);
+              } else {
+                var pipes = [];
+                d.data.forEach(function(endPoint) {
+                  pipes.push(childScope.pipeNode(endPoint.endPoint, callback));
+                });
+                return $q.all(pipes).then(function(p) {
+                  return {
+                    pipes: p,
+                    destroy: function() {
+                      p.forEach(function(pp) { pp.destroy(); });
+                    }
+                  };
+                });
+              }
             });
         };
 
