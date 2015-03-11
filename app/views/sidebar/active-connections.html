@@ -54,7 +54,7 @@
             <span class="glyphicon glyphicon-link"></span>
           </a>
           <ul class="dropdown-menu add-dropdown">
-            <li ng-repeat="match in subdevice.matches" ng-click="device.setupMatch(match)">
+            <li ng-repeat="match in subdevice.matches" ng-click="device.client.setupMatch(match)">
               <span class="types">{{match.types.join(', ')}}</span>
               <span class="pull-right target">
                 <span class="direction" ng-class="{outgoing: match.outgoing}">
