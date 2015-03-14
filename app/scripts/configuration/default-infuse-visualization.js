@@ -44,7 +44,10 @@ angular.module('infuseWebAppVisualization')
       hidden: true
     }]);
     infuseVisualizationFactory.setDeviceViews({
-      'controller': ['Controller display'],
-      'flight.quadcopter': ['Flight instruments']
+      views: [],
+      controller: ['controller'],
+      flight : {
+        quadcopter: ['flight']
+      }
     });
   });

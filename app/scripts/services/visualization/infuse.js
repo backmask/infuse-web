@@ -18,6 +18,7 @@ angular.module('infuseWebAppVisualization')
     r.build = function(scope) {
       scope.views = views;
       scope.defaultView = views[0];
+
       scope.getView = function(name) {
         for (var i = 0; i < views.length; ++i) {
           if (views[i].name === name || views[i].shortName === name) {
@@ -25,19 +26,28 @@ angular.module('infuseWebAppVisualization')
           }
         }
       };
+
       scope.getDeviceViews = function(name) {
-        var r = [];
-        var v = deviceViews[name];
-        if (!v) { return r; }
-        v.forEach(function(val) { r.push(indexedViews[val]); });
-        return r;
+        var nameParts = name.split('.');
+        var matchedViews = recurGetViews(deviceViews, nameParts, 0);
+        return matchedViews.map(function(val) { return indexedViews[val]; });
       };
+
+      var recurGetViews = function(views, types, idx) {
+        if (!angular.isObject(views)) {
+          return views || [];
+        }
+        return (views.views || []).concat(recurGetViews(views[types[idx]], types, ++idx));
+      };
+
       return scope;
     };
+
     r.setViews = function(v) {
       views = v;
-      views.forEach(function(val) { indexedViews[val.name] = val; });
+      views.forEach(function(val) { indexedViews[val.shortName] = val; });
     };
+
     r.setDeviceViews = function(v) {
       deviceViews = v;
     };
