@@ -144,6 +144,16 @@ angular.module('infuseWebAppDevice')
           }).then(function() { notifier.verbose('Removed ' + nodeUri + ' from ' + clientUuid); });
         };
 
+        childScope.doRecord = function(uuid) {
+          return scope.doRequest('record/client', { uuid: uuid || clientUuid })
+            .then(function() { notifier.verbose('Started recording ' + (uuid || clientUuid)); });
+        };
+
+        childScope.doGetRecordList = function(uuid) {
+          return scope.doRequest('record/client/list', { uuid: uuid || clientUuid })
+            .then(function(d) { return d.data.records; });
+        };
+
         childScope.addPipePacker = function(contextKey) {
           return childScope.doAddNode({
             instanceType: 'packer',
