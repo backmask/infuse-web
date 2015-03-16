@@ -13,6 +13,11 @@ angular.module('infuseWebAppVisualization')
       template: 'views/infuse/processing-pipeline.html',
       controller: 'ProcessingPipelineCtrl'
     }, {
+      name: 'Recorder/Playback',
+      shortName: 'record',
+      template: 'views/infuse/record.html',
+      controller: 'RecordCtrl'
+    }, {
       name: 'Client processing pipeline',
       shortName: 'client-pipeline',
       template: 'views/infuse/client-processing-pipeline.html',

@@ -152,6 +152,11 @@ angular.module('infuseWebAppDevice')
         return scope.doRequest('overview/factory');
       };
 
+      scope.doGetRecordList = function() {
+        return scope.doRequest('record/list')
+          .then(function(d) { return d.data.clients; });
+      };
+
       scope.client = clientDriver;
       return scope;
     };

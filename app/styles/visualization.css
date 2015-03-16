@@ -139,3 +139,19 @@ div[ui-codemirror] .CodeMirror {
   margin-right:4px;
   color:#aaa;
 }
+
+.records .details {
+  background-color:#eee;
+}
+
+.records .details .btn {
+  font-size: 10px;
+}
+
+.records tr.client {
+  cursor: pointer;
+}
+
+.records.table-condensed tbody > tr.details > td {
+  vertical-align: middle;
+}

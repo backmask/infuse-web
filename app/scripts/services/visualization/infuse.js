@@ -28,6 +28,9 @@ angular.module('infuseWebAppVisualization')
       };
 
       scope.getDeviceViews = function(name) {
+        if (!name) {
+          return [];
+        }
         var nameParts = name.split('.');
         var matchedViews = recurGetViews(deviceViews, nameParts, 0);
         return matchedViews.map(function(val) { return indexedViews[val]; });

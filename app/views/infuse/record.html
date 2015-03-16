@@ -1,0 +1,23 @@
+<table class="table table-condensed records small">
+  <thead>
+    <tr>
+      <th>Family</th>
+      <th>Name</th>
+      <th>Path</th>
+      <th>Records</th>
+    </tr>
+  </thead>
+  <tr class="smaller client" ng-repeat-start="d in clients" ng-click="toggled[d] = !toggled[d]">
+    <td>{{d.description.family}}</td>
+    <td>{{d.description.name}}</td>
+    <td>{{d.path}}</td>
+    <td>
+      {{d.records.length}}
+      <i class="fa fa-plus-square-o" style="font-size:14px"></i>
+    </td>
+  </tr>
+  <tr class="smaller details" ng-repeat-end ng-repeat="r in d.records" ng-show="toggled[d]">
+    <td colspan="3">{{r}}</td>
+    <td><a class="btn btn-xs btn-default" ng-click="playback(d, r)">Play</a></td>
+  </tr>
+</table>
