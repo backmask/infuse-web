@@ -60,8 +60,8 @@ angular.module('infuseWebAppVisualization')
           color: gatewayColor,
           id: gwNode.port,
           info: {
-            title: 'Gateway',
-            description: gwNode.protocol + ' @' + gwNode.port
+            title: gwNode.name,
+            description: gwNode.protocol + (gwNode.port > 0 ? ' @' + gwNode.port : '')
           }});
         links.push({ from: 'root', to: gwNode.port });
         gwNode.clients.forEach(function(client) {

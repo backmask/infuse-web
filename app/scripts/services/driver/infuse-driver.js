@@ -157,6 +157,14 @@ angular.module('infuseWebAppDevice')
           .then(function(d) { return d.data.clients; });
       };
 
+      scope.doPlayback = function(path, record) {
+        return scope.doRequest('play', { path: path, record: record })
+          .then(function(d) {
+            notifier.info('Started playback ' + path + ' ' + record + ' on ' + d.data.uuid);
+            return d.data.uuid;
+          });
+      };
+
       scope.client = clientDriver;
       return scope;
     };
