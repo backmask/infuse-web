@@ -19,6 +19,7 @@ angular.module('d3')
         this.graphHeight = 0;
         this.xScale = d3.scale.linear();
         this.yScale = d3.scale.linear();
+        this.seriesCount = 0;
 
         if (angular.isArray($scope.scale)) {
           this.yScale.domain($scope.scale);
@@ -126,7 +127,7 @@ angular.module('d3')
           .attr('class', 'line');
 
         var label = d3.select(element[0].parentNode).append('g')
-          .attr('transform', 'translate(2, ' + ($(element).index() * 13 + 1) + ')');
+          .attr('transform', 'translate(2, ' + ((d3Plot.seriesCount++) * 13 + 1) + ')');
         label.append('rect')
           .attr('width', 12)
           .attr('height', 12)

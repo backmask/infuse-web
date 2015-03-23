@@ -13,7 +13,7 @@
     <td>{{d.path}}</td>
     <td>
       {{d.records.length}}
-      <i class="fa fa-plus-square-o" style="font-size:14px"></i>
+      <i class="fa" ng-class="{ 'fa-plus-square-o':!toggled[d], 'fa-minus-square-o':toggled[d] }" style="font-size:14px"></i>
     </td>
   </tr>
   <tr class="smaller details" ng-repeat-end ng-repeat="r in d.records" ng-show="toggled[d]">

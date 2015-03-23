@@ -136,7 +136,7 @@ angular.module('d3')
           .nodes([])
           .linkDistance(45)
           .gravity(0.05)
-          .charge(-250)
+          .charge(-50)
           .on('tick', tick);
 
         var node = svg.selectAll('.node'),
