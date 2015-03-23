@@ -37,7 +37,7 @@ angular.module('infuseWebAppVisualization')
       };
 
       var recurGetViews = function(views, types, idx) {
-        if (!angular.isObject(views)) {
+        if (!angular.isObject(views) || angular.isArray(views)) {
           return views || [];
         }
         return (views.views || []).concat(recurGetViews(views[types[idx]], types, ++idx));
