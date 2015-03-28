@@ -5,6 +5,7 @@
       <th>Name</th>
       <th>Path</th>
       <th>Records</th>
+      <th>Playbacks</th>
     </tr>
   </thead>
   <tr class="smaller client" ng-repeat-start="d in clients" ng-click="toggled[d] = !toggled[d]">
@@ -13,11 +14,33 @@
     <td>{{d.path}}</td>
     <td>
       {{d.records.length}}
+    </td>
+    <td>
+      <span class="playbacks">{{playbacks[d.path].total || 0}} ({{playbacks[d.path].running || 0}})</span>
       <i class="fa" ng-class="{ 'fa-plus-square-o':!toggled[d], 'fa-minus-square-o':toggled[d] }" style="font-size:14px"></i>
     </td>
   </tr>
-  <tr class="smaller details" ng-repeat-end ng-repeat="r in d.records" ng-show="toggled[d]">
-    <td colspan="3">{{r}}</td>
+  <tr class="smaller details" ng-repeat-start="r in d.records" ng-show="toggled[d]">
+    <td colspan="4">{{r}}</td>
     <td><a class="btn btn-xs btn-default" ng-click="playback(d, r)">Play</a></td>
   </tr>
+  <tr class="smaller playback"
+    ng-repeat-end
+    ng-repeat="p in playbacks[d.path][r]"
+    ng-show="toggled[d]"
+    ng-class="{running:p.status.isRunning}"
+  >
+    <td colspan="2">{{p.status.time | time}} / {{p.status.endTime | time}}</td>
+    <td>{{(p.status.time / p.status.endTime * 100) | number}}%</td>
+    <td colspan="2" ng-if="p.status.isRunning">
+      <a class="btn btn-xs btn-default" ng-click="rewind(p.uuid)">Rewind</a>
+      <a class="btn btn-xs btn-default" ng-click="pause(p.uuid)">Pause</a>
+      <a class="btn btn-xs btn-default" ng-click="kill(p.uuid)">Kill</a>
+    </td>
+    <td colspan="2" ng-if="!p.status.isRunning">
+      <a class="btn btn-xs btn-default" ng-click="rewind(p.uuid)">Rewind</a>
+      <a class="btn btn-xs btn-default" ng-click="kill(p.uuid)">Kill</a>
+    </td>
+  </tr>
+  <tr ng-repeat-end ng-hide="true"></tr>
 </table>

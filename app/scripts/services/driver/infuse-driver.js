@@ -165,6 +165,19 @@ angular.module('infuseWebAppDevice')
           });
       };
 
+      scope.doGetPlaybackList = function() {
+        return scope.doRequest('play/list')
+          .then(function(d) { return d.data.playbacks; });
+      };
+
+      scope.doKillPlayback = function(uuid) {
+        return scope.doRequest('play/kill', { uuid: uuid })
+          .then(function() {
+            notifier.info('Killed playback ' + uuid);
+            return true;
+          });
+      };
+
       scope.client = clientDriver;
       return scope;
     };

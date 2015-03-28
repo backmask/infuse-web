@@ -155,3 +155,19 @@ div[ui-codemirror] .CodeMirror {
 .records.table-condensed tbody > tr.details > td {
   vertical-align: middle;
 }
+
+.records .playback {
+  background-color:#FF8F8F;
+}
+
+.records .playback.running {
+  background-color:#8FDB5B;
+}
+
+.records .playback.paused {
+  background-color:#EEF098;
+}
+
+.records .playback .btn {
+  font-size: 10px;
+}
