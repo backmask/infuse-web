@@ -35,6 +35,9 @@ angular.module('infuseWebAppVisualization')
     };
 
     $scope.kill = $scope.doKillPlayback;
+    $scope.rewind = $scope.doRewindPlayback;
+    $scope.pause = $scope.doPausePlayback;
+    $scope.resume = $scope.doResumePlayback;
 
     var updatePlaybackInterval = $interval(function() {
       $scope.doGetPlaybackList().then(updatePlaybackList);
@@ -42,7 +45,7 @@ angular.module('infuseWebAppVisualization')
 
     $scope.doGetRecordList().then(updateRecordList);
 
-    $scope.$on('destroy', function() {
-      updatePlaybackInterval.cancel();
+    $scope.$on('$destroy', function() {
+      $interval.cancel(updatePlaybackInterval);
     });
   });

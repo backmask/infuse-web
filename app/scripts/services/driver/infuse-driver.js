@@ -106,6 +106,7 @@ angular.module('infuseWebAppDevice')
         };
 
         var responseTimeout = $timeout(function() {
+          notifier.warning(method + ' timed out');
           deferredResponse.reject(method + ' timed out');
           delete responseCallbacks[context];
         }, 1000);
@@ -177,6 +178,33 @@ angular.module('infuseWebAppDevice')
             return true;
           });
       };
+
+      scope.doRewindPlayback = function(uuid, time) {
+        return scope.doRequest('play/rewind', {
+            uuid: uuid,
+            time: time || 0
+          })
+          .then(function() {
+            notifier.info('Rewound playback ' + uuid);
+            return true;
+          });
+      };
+
+      scope.doPausePlayback = function(uuid) {
+        return scope.doRequest('play/pause', { uuid: uuid })
+          .then(function() {
+            notifier.info('Paused playback ' + uuid);
+            return true;
+          });
+        };
+
+      scope.doResumePlayback = function(uuid) {
+        return scope.doRequest('play/resume', { uuid: uuid })
+          .then(function() {
+            notifier.info('Resumed playback ' + uuid);
+            return true;
+          });
+        };
 
       scope.client = clientDriver;
       return scope;

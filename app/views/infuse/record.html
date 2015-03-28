@@ -32,13 +32,10 @@
   >
     <td colspan="2">{{p.status.time | time}} / {{p.status.endTime | time}}</td>
     <td>{{(p.status.time / p.status.endTime * 100) | number}}%</td>
-    <td colspan="2" ng-if="p.status.isRunning">
-      <a class="btn btn-xs btn-default" ng-click="rewind(p.uuid)">Rewind</a>
-      <a class="btn btn-xs btn-default" ng-click="pause(p.uuid)">Pause</a>
-      <a class="btn btn-xs btn-default" ng-click="kill(p.uuid)">Kill</a>
-    </td>
-    <td colspan="2" ng-if="!p.status.isRunning">
-      <a class="btn btn-xs btn-default" ng-click="rewind(p.uuid)">Rewind</a>
+    <td colspan="2">
+      <a ng-if="p.status.time > 0" class="btn btn-xs btn-default" ng-click="rewind(p.uuid)">Rewind</a>
+      <a ng-if="p.status.isRunning" class="btn btn-xs btn-default" ng-click="pause(p.uuid)">Pause</a>
+      <a ng-if="!p.status.isRunning && p.status.time < p.status.endTime" class="btn btn-xs btn-default" ng-click="resume(p.uuid)">Resume</a>
       <a class="btn btn-xs btn-default" ng-click="kill(p.uuid)">Kill</a>
     </td>
   </tr>
