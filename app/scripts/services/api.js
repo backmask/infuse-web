@@ -42,7 +42,6 @@ angular.module('infuseWebApp')
         var getSeries = function(label) {
           var r = seriesMap[label];
           if (!r) {
-            console.log(label);
             r = {
               color: window.randomColor({ luminosity: 'bright'}),
               label: label,

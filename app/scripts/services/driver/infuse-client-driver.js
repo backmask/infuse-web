@@ -99,14 +99,9 @@ angular.module('infuseWebAppDevice')
                 childScope.matches = d.data.matches.map(consolidateMatch);
               }),
 
-            childScope.matchStructures(['battery'])
-              .then(function(d) {
-                if (d.data.length > 0) {
-                  childScope.pipeNode(d.data[0].endPoint, function(d) {
-                    childScope.battery = d.data.value;
-                  });
-                }
-              })
+            childScope.pipeStructures(['battery'], function(d) {
+              childScope.battery = d.data.value;
+            })
           ]);
         };
 
@@ -160,27 +155,42 @@ angular.module('infuseWebAppDevice')
             uid: contextKey,
             type: 'json.response.packer',
             final: true,
-            danglingInitial: true,
             config: { context: contextKey }
           }, 'self');
+        };
+
+        childScope.addFilter = function(uri, target, acceptedUids) {
+          return childScope.doAddNode({
+              instanceType: 'interpreter',
+              uid: uri,
+              to: [target],
+              type: 'filter',
+              config: { acceptedUid: acceptedUids }
+            }, 'self');
         };
 
         childScope.matchStructures = function(uids) {
           return scope.doRequest('match/client/node', { uid: uids, uuid: clientUuid });
         };
 
-        childScope.pipeNode = function(pipeableNode, callback) {
+        childScope.pipeNode = function(pipeableNode, acceptedUids, callback) {
           var packerUri = 'packer:' +
             pipeableNode.uri + ':' +
             pipeableNode.stream + ':' +
             pipeableNode.target.substr(0, 5) + ':' +
             Math.floor(Math.random() * 1000);
-          return childScope.addPipePacker(packerUri)
+
+          var filterUri = 'filter:' + acceptedUids.join(':');
+
+          var packerFuture = childScope.addPipePacker(packerUri);
+          var filterFuture = childScope.addFilter(filterUri, packerUri, acceptedUids);
+
+          $q.all([packerFuture, filterFuture])
             .then(function() {
               return childScope.doSetPipe(
                 'processor',
                 pipeableNode,
-                { uri: packerUri, stream: 'in' },
+                { uri: filterUri, stream: 'in' },
                 'self'
               );
             })
@@ -191,6 +201,7 @@ angular.module('infuseWebAppDevice')
                 packerUri: packerUri,
                 destroy: function() {
                   childScope.doRemoveNode(packerUri, 'self');
+                  childScope.doRemoveNode(filterUri, 'self');
                   childScope.doRemovePipe(p.data.uuid, 'self');
                   childScope.removeCallback(packerUri);
                   pipes.splice(pipes.indexOf(pipe), 1);
@@ -206,15 +217,15 @@ angular.module('infuseWebAppDevice')
             .then(function(d) {
               if (d.data.length === 0) {
                 var err = 'Failed to match ' + uids.join(', ');
-                notifier.error(err + ' on ' + clientUuid);
                 return $q.reject(err);
               }
-              else if (d.data.length === 1 || matchFirst) {
-                return childScope.pipeNode(d.data[0].endPoint, callback);
+
+              if (d.data.length === 1 || matchFirst) {
+                return childScope.pipeNode(d.data[0].endPoint, uids, callback);
               } else {
                 var pipes = [];
                 d.data.forEach(function(endPoint) {
-                  pipes.push(childScope.pipeNode(endPoint.endPoint, callback));
+                  pipes.push(childScope.pipeNode(endPoint.endPoint, uids, callback));
                 });
                 return $q.all(pipes).then(function(p) {
                   return {

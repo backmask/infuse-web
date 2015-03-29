@@ -8,12 +8,18 @@ angular.module('infuseWebAppVisualization')
       data: []
     };
     $scope.motors = {};
+    $scope.altitude = {
+      color: 'blue',
+      data: []
+    };
 
     var receiveData = function(d) {
       if (d.dataUid === 'gyroscope') {
         $scope.gyroscope = d.data;
       } else if (d.dataUid === 'thrust') {
         handleThrust(d.data);
+      } else if (d.dataUid === 'barometer.asl') {
+        handleAsl(d.data);
       }
     };
 
@@ -30,6 +36,10 @@ angular.module('infuseWebAppVisualization')
         };
       }
       $scope.motors[d.symbol].data.push(d.value);
+    };
+
+    var handleAsl = function(d) {
+      $scope.altitude.data.push(d.value);
     };
 
     var thrustPipe = $scope.pipeStructures(['thrust'], receiveData);
