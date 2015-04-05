@@ -47,12 +47,23 @@ angular.module('infuseWebAppVisualization')
       template: 'views/infuse/flight-instruments.html',
       controller: 'FlightInstrumentsCtrl',
       hidden: true
+    }, {
+      name: 'Pid debug',
+      shortName: 'pid',
+      template: 'views/infuse/pid.html',
+      controller: 'PidCtrl',
+      hidden: true
     }]);
+
     infuseVisualizationFactory.setDeviceViews({
       views: [],
       controller: ['controller'],
       flight : {
         quadcopter: ['flight']
       }
+    });
+
+    infuseVisualizationFactory.setPipelineNodeViews({
+      'pid.controller': ['pid']
     });
   });

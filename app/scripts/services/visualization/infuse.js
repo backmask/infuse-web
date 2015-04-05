@@ -15,6 +15,7 @@ angular.module('infuseWebAppVisualization')
     var views = [];
     var indexedViews = {};
     var deviceViews = {};
+    var pipelineNodeViews = {};
     r.build = function(scope) {
       scope.views = views;
       scope.defaultView = views[0];
@@ -36,6 +37,10 @@ angular.module('infuseWebAppVisualization')
         return matchedViews.map(function(val) { return indexedViews[val]; });
       };
 
+      scope.getPipelineNodeViews = function(node) {
+        return pipelineNodeViews[node] || [];
+      };
+
       var recurGetViews = function(views, types, idx) {
         if (!angular.isObject(views) || angular.isArray(views)) {
           return views || [];
@@ -54,6 +59,11 @@ angular.module('infuseWebAppVisualization')
     r.setDeviceViews = function(v) {
       deviceViews = v;
     };
+
+    r.setPipelineNodeViews = function(v) {
+      pipelineNodeViews = v;
+    };
+
     return r;
   })
   .factory('leapVisualizationFactory', function() {

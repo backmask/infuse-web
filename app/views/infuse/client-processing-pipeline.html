@@ -13,6 +13,9 @@
     class="small"
   >
     <div ng-if="nodeSelected.info.hasActions" class="tooltip-actions">
+      <a ng-repeat="(label, cb) in nodeSelected.info.actions" class="btn btn-primary btn-xs" ng-click="cb()">
+        {{label}}
+      </a>
       <a ng-if="nodeSelected.info.canPipe" class="btn btn-primary btn-xs" ng-click="nodeSelected.info.pipe()">
         View
       </a>

@@ -17,7 +17,7 @@ angular.module('infuseWebAppVisualization')
     var unpackerColor = '#ffb800';
 
     var addNode = function(node, nodes, links, color) {
-      nodes.push({
+      var nd = {
         color: color,
         id: node.uid,
         info: {
@@ -35,7 +35,24 @@ angular.module('infuseWebAppVisualization')
             $scope.doRemoveNode(node.uid);
           }
         }
-      });
+      };
+
+      var views = $scope.getPipelineNodeViews(node.type);
+      if (views.length > 0) {
+        nd.info.actions = {};
+        views.forEach(function(v) {
+          var view = $scope.getView(v);
+          nd.info.actions[view.name] = function() {
+            visualizationManager.visualize(
+              view,
+              $scope,
+              { nodeUid: node.uid }
+            );
+          };
+        });
+      }
+
+      nodes.push(nd);
 
       if (node.final) {
         links.push({ from: node.uid, to: 'final' });
