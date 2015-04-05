@@ -79,7 +79,7 @@ angular.module('infuseWebAppVisualization')
       target: $scope.sessionClientUuid,
       stream: 'out',
       uri: $scope.nodeUid
-    }, receiveData);
+    }, null, receiveData);
 
     $scope.$on('$destroy', function() {
       pipe.then(function(p) { p.destroy(); });

@@ -180,17 +180,19 @@ angular.module('infuseWebAppDevice')
             pipeableNode.target.substr(0, 5) + ':' +
             Math.floor(Math.random() * 1000);
 
-          var filterUri = 'filter:' + acceptedUids.join(':');
+          var filterUri = acceptedUids ? ('filter:' + acceptedUids.join(':')) : null;
 
-          var packerFuture = childScope.addPipePacker(packerUri);
-          var filterFuture = childScope.addFilter(filterUri, packerUri, acceptedUids);
-
-          $q.all([packerFuture, filterFuture])
+          return childScope.addPipePacker(packerUri)
+            .then(function() {
+              if (filterUri) {
+                return childScope.addFilter(filterUri, packerUri, acceptedUids);
+              }
+            })
             .then(function() {
               return childScope.doSetPipe(
                 'processor',
                 pipeableNode,
-                { uri: filterUri, stream: 'in' },
+                { uri: filterUri || packerUri, stream: 'in' },
                 'self'
               );
             })
@@ -201,7 +203,9 @@ angular.module('infuseWebAppDevice')
                 packerUri: packerUri,
                 destroy: function() {
                   childScope.doRemoveNode(packerUri, 'self');
-                  childScope.doRemoveNode(filterUri, 'self');
+                  if (filterUri) {
+                    childScope.doRemoveNode(filterUri, 'self');
+                  }
                   childScope.doRemovePipe(p.data.uuid, 'self');
                   childScope.removeCallback(packerUri);
                   pipes.splice(pipes.indexOf(pipe), 1);
