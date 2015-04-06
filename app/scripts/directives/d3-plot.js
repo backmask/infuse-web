@@ -34,11 +34,36 @@ angular.module('d3')
         if (scope.scale === 'auto') {
           var min = Number.MAX_VALUE;
           var max = Number.MIN_VALUE;
+          var recalibrateMinCount = 100;
+          var recalibrateMaxCount = 100;
+
           ctrl.refreshScale = function(data) {
+            var tMin = Number.MAX_VALUE;
+            var tMax = Number.MIN_VALUE;
+
             data.forEach(function(d) {
-              if (min > d) { min = d; }
-              if (max < d) { max = d; }
+              if (tMin > d) { tMin = d; }
+              if (tMax < d) { tMax = d; }
             });
+
+            var distance = max - min;
+            var shouldRecalibrateMax = Math.abs((tMax+min)/distance) < 0.5;
+            var shouldRecalibrateMin = Math.abs((tMin+min)/distance) > 0.5;
+
+            if (tMax > max || (shouldRecalibrateMax && --recalibrateMaxCount <= 0)) {
+              max = tMax;
+              recalibrateMaxCount = 100;
+            } else if (!shouldRecalibrateMax) {
+              recalibrateMaxCount = 100;
+            }
+
+            if (tMin < min || (shouldRecalibrateMin && --recalibrateMinCount <= 0)) {
+              min = tMin;
+              recalibrateMinCount = 100;
+            } else if (!shouldRecalibrateMin) {
+              recalibrateMinCount = 100;
+            }
+
             if (ctrl.yScale.domain()[0] !== min || ctrl.yScale.domain()[1] !== max) {
               ctrl.yScale.domain([min, max]);
               updateScale(ctrl.graphWidth, ctrl.graphHeight);

@@ -1,1 +1,20 @@
-pid
+<div style="overflow:hidden;height:100%">
+  <d3-plot width="50%" height="70%" scale="'auto'" style="float:left">
+    <d3-series label="'p'" color="'cornflowerblue'" data="data.response.p"></d3-series>
+    <d3-series label="'i'" color="'lightgreen'" data="data.response.i"></d3-series>
+    <d3-series label="'d'" color="'lightcoral'" data="data.response.d"></d3-series>
+    <d3-series label="'sum'" color="'black'" data="data.response.sum"></d3-series>
+  </d3-plot>
+  <d3-plot width="50%" height="70%" scale="'auto'" style="float:left">
+    <d3-series label="'target'" color="'lightgreen'" data="data.target"></d3-series>
+    <d3-series label="'actual'" color="'black'" data="data.actual"></d3-series>
+  </d3-plot>
+  <div class="form-inline form-small">
+    <div class="input-group" style="padding:2px;width:33%" ng-repeat="key in modelOrder">
+      <div class="input-group-addon">{{key}}</div>
+      <input type="number" class="form-control" ng-model="model[key]" />
+    </div>
+    <a class="btn btn-xs btn-default" ng-click="reset()">Reset</a>
+    <a class="btn btn-xs btn-primary" ng-click="upload()">Upload</a>
+  </div>
+</div>

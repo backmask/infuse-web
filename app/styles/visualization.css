@@ -171,3 +171,16 @@ div[ui-codemirror] .CodeMirror {
 .records .playback .btn {
   font-size: 10px;
 }
+
+.form-small {
+  font-size: 0.6em;
+}
+
+.form-small .input-group-addon {
+  padding: 2px;
+}
+
+.form-small .form-control {
+  padding: 0 0 2px 2px;
+  height: 22px;
+}

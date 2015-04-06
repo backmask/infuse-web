@@ -119,7 +119,7 @@ angular.module('infuseWebAppDevice')
         };
 
         childScope.doAddNode = function(node, uuid) {
-          return scope.doRequest('session/client/pipeline/addnode', {
+          return scope.doRequest('session/client/pipeline/node/add', {
             uuid: uuid || clientUuid,
             node: node
           });
@@ -133,10 +133,18 @@ angular.module('infuseWebAppDevice')
         };
 
         childScope.doRemoveNode = function(nodeUri, uuid) {
-          return scope.doRequest('session/client/pipeline/removenode', {
+          return scope.doRequest('session/client/pipeline/node/remove', {
             uuid: uuid || clientUuid,
             nodeUid: nodeUri
           }).then(function() { notifier.verbose('Removed ' + nodeUri + ' from ' + clientUuid); });
+        };
+
+        childScope.doConfigureNode = function(nodeUri, config, uuid) {
+          return scope.doRequest('session/client/pipeline/node/configure', {
+            uuid: uuid || clientUuid,
+            nodeUid: nodeUri,
+            config: config
+          }).then(function() { notifier.verbose('Configured ' + nodeUri + ' from ' + clientUuid + ' ' + JSON.stringify(config)); });
         };
 
         childScope.doRecord = function(uuid) {
