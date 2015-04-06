@@ -41,7 +41,7 @@ angular.module('infuseWebAppVisualization')
       $scope.data.response.sum.push(p + i + d);
 
       $scope.data.target.push(data.setPoint.target);
-      $scope.data.actual.push(data.setPoint.target + data.status.error);
+      $scope.data.actual.push(data.setPoint.target - data.status.error);
     };
 
     $scope.reset = function() {

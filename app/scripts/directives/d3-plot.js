@@ -33,13 +33,13 @@ angular.module('d3')
 
         if (scope.scale === 'auto') {
           var min = Number.MAX_VALUE;
-          var max = Number.MIN_VALUE;
+          var max = -Number.MAX_VALUE;
           var recalibrateMinCount = 100;
           var recalibrateMaxCount = 100;
 
           ctrl.refreshScale = function(data) {
             var tMin = Number.MAX_VALUE;
-            var tMax = Number.MIN_VALUE;
+            var tMax = -Number.MAX_VALUE;
 
             data.forEach(function(d) {
               if (tMin > d) { tMin = d; }
@@ -47,8 +47,8 @@ angular.module('d3')
             });
 
             var distance = max - min;
-            var shouldRecalibrateMax = Math.abs((tMax+min)/distance) < 0.5;
-            var shouldRecalibrateMin = Math.abs((tMin+min)/distance) > 0.5;
+            var shouldRecalibrateMax = Math.abs((tMax-min)/distance) < 0.25;
+            var shouldRecalibrateMin = Math.abs((tMin-min)/distance) > 0.75;
 
             if (tMax > max || (shouldRecalibrateMax && --recalibrateMaxCount <= 0)) {
               max = tMax;
