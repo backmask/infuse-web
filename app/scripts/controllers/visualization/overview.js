@@ -15,6 +15,12 @@ angular.module('infuseWebAppVisualization')
     var nodeClientColor = '#999';
     var previousData = {};
 
+    var killCb = function(uuid) {
+      return function() {
+        $scope.client.get(uuid, false).doKill();
+      };
+    };
+
     var showPipelineCb = function(uuid) {
       return function() {
         visualizationManager.visualize(
@@ -75,6 +81,7 @@ angular.module('infuseWebAppVisualization')
               isSessionClient: true,
               showPipeline: showPipelineCb(client.uuid),
               watch: watchCb(client.uuid),
+              kill: killCb(client.uuid),
               details: client.description
             }});
           links.push({ from: gwNode.port, to: client.uuid });

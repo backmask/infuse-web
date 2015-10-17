@@ -105,6 +105,10 @@ angular.module('infuseWebAppDevice')
           ]);
         };
 
+        childScope.doKill = function() {
+          return scope.doRequest('session/client/disconnect', { uuid: clientUuid });
+        };
+
         childScope.doGetSessionClientPipeline = function() {
           return scope.doRequest('session/client/pipeline', { uuid: clientUuid });
         };
