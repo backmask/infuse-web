@@ -69,8 +69,12 @@ angular.module('infuseWebAppDevice')
         childScope.battery = false;
 
         var pollInterval = $interval(function() {
-          scope.doRequest('session/client/ping', { uuid: clientUuid })
-            .then(function() { childScope.connected = true; },
+          scope.doRequest('session/client/status', { uuid: clientUuid })
+            .then(
+              function(stats) {
+                childScope.stats = stats.data;
+                childScope.connected = true;
+              },
               function() {
                 childScope.connected = false;
                 $interval.cancel(pollInterval);

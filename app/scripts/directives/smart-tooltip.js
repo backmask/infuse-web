@@ -9,13 +9,14 @@ angular.module('infuseWebAppCommon')
         title: '=',
         subtitle: '=',
         anchor: '=?',
-        showOnHover: '@'
+        showOnHover: '@',
+        showOnClick: '@'
       },
       transclude: true,
       link: function(scope, element) {
         var container = element.find('.tooltip-container');
         var arrow = element.find('.arrow');
-        var anchor = scope.hasOwnProperty('anchor') ? false : element.parent();
+        var anchor = false;
         var autoRefresh = false;
         var previousSnapshot = false;
         var enterMousePosition = false;
@@ -113,6 +114,10 @@ angular.module('infuseWebAppCommon')
           $(window).on('mousemove', trackMouse);
         };
 
+        var onClickAnchor = function(e) {
+          onHoverAnchor(e);
+        };
+
         var getDistance = function(point, container) {
           var offset = container.offset();
 
@@ -138,16 +143,25 @@ angular.module('infuseWebAppCommon')
         };
 
         var refreshAnchor = function(newAnchor) {
-          if (newAnchor && newAnchor !== anchor) {
-            if (scope.showOnHover) {
-              if (anchor) {
-                anchor.off('mousemove', onHoverAnchor);
-              }
-              newAnchor.on('mousemove', onHoverAnchor);
-            }
-            anchor = newAnchor;
-            refreshPosition();
+          var nAnchor = newAnchor || element.parent();
+          if (nAnchor === anchor) {
+            return;
           }
+
+          if (scope.showOnHover) {
+            if (anchor) {
+              anchor.off('mousemove', onHoverAnchor);
+            }
+            nAnchor.on('mousemove', onHoverAnchor);
+          } else if (scope.showOnClick) {
+            if (anchor) {
+              anchor.off('click', onClickAnchor);
+            }
+            nAnchor.on('click', onClickAnchor);
+          }
+
+          anchor = nAnchor;
+          refreshPosition();
         };
 
         element.click(function(e) {

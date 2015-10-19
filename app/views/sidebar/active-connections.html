@@ -79,6 +79,17 @@
           </ul>
         </div>
 
+        <!-- View stats -->
+        <a class="btn btn-default btn-xs" ng-if="subdevice.stats">
+          <smart-tooltip class="small" show-on-click="true">
+            <div style="width:200px">Received: {{subdevice.stats.bytesReceived | shortNumber : device.unit}}</div>
+            <div>Sent: {{subdevice.stats.bytesSent | shortNumber : device.unit}}</div>
+            <div>Connected since: {{subdevice.stats.connectedSince | amTimeAgo }}</div>
+            <div>Last active: {{subdevice.stats.inactiveSince | amTimeAgo }}</div>
+          </smart-tooltip>
+          <span class="glyphicon glyphicon-stats"></span>
+        </a>
+
         <!-- Remove watch -->
         <a class="btn btn-default btn-xs" ng-click="subdevice.noWatch = true">
           <span class="glyphicon glyphicon-remove"></span>

@@ -11,6 +11,7 @@ angular.module('infuseWebApp', [
   'ngSanitize',
   'ngRoute',
   'ngAnimate',
+  'angularMoment',
   'd3',
   'ui.bootstrap',
   'LocalStorageModule',
