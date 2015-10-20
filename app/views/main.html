@@ -1,5 +1,22 @@
-<div class="row fill">
-  <div class="col-md-8 content fill" ng-include src="'views/visualization.html'"></div>
-  <div class="col-md-2 notifications fill" ng-include src="'views/notifications.html'"></div>
-  <div class="col-md-2 sidebar fill" ng-include src="'views/sidebar/sidebar.html'"></div>
+<div class="row navbar">
+  <span class="navbar-brand"></span>
+  <ul class="nav navbar-nav navbar-right">
+    <li><a href="#dashboard">dashboard</a></li>
+  </ul>
+</div>
+<div class="container">
+  <div class="row row-centered">
+    <div class="well col-md-4 col-centered">
+      <h4>Sign in</h4>
+      <div class="input-group">
+        <input type="text" class="form-control input-lg" placeholder="Login" name="login" />
+      </div>
+      <br/>
+      <div class="input-group">
+        <input type="password" class="form-control input-lg" placeholder="Password" name="password" />
+      </div>
+      <br/>
+      <a class="btn btn-lg btn-primary center-block" href="#">Login</a>
+    </div>
+  </div>
 </div>

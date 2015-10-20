@@ -7,6 +7,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title></title>
+    <base href="/" />
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
@@ -17,7 +18,6 @@
     <!-- build:css({.tmp,app}) styles/main.css -->
     <!-- include: "type": "css", "files": "styles/**/*.css" -->
     <!-- endbuild -->
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   </head>
   <body ng-app="infuseWebApp">
     <!--[if lt IE 7]>
@@ -25,7 +25,7 @@
     <![endif]-->
 
     <!-- Add your site or application content here -->
-    <div class="container-fluid fill" ng-include src="'views/main.html'"></div>
+    <div class="container-fluid fill" ng-view></div>
 
     <!--[if lt IE 9]>
     <script src="bower_components/es5-shim/es5-shim.js"></script>
