@@ -2,7 +2,7 @@
   border-radius: 1px;
 }
 
-.input-group {
+.input-group, .login button {
   width:100%;
 }
 
