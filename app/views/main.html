@@ -1,7 +1,8 @@
 <div class="row navbar">
   <span class="navbar-brand"></span>
   <ul class="nav navbar-nav navbar-right">
-    <li><a href="#dashboard">dashboard</a></li>
+    <li><a href="#inspector">Inspector</a></li>
   </ul>
 </div>
 <div class="container" ng-include src="'views/main/login.html'" ng-if="!isAuthenticated()"></div>
+<div class="container" ng-include src="'views/main/dashboard.html'" ng-if="isAuthenticated()"></div>
