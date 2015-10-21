@@ -8,9 +8,11 @@ angular.module('infuseWebApp')
       r.openConnection = function(device) {
         var deviceScope = $rootScope.$new();
         deviceScope.device = device;
-        device.driverFactory(deviceScope, device);
-        device.visualizationFactory(deviceScope);
-        return r.handleConnection(deviceScope);
+        return device.driverFactory(deviceScope, device)
+          .then(function() {
+            device.visualizationFactory(deviceScope);
+            r.handleConnection(deviceScope);
+          });
       };
 
       r.closeConnection = function(connection) {
@@ -23,8 +25,6 @@ angular.module('infuseWebApp')
       };
 
       r.handleConnection = function(connection) {
-        var connectedDeferred = $q.defer();
-
         managedConnections.push(connection);
         connection.downloadSpeed = instrumentConvert.toSpeed(connection, 'download');
         connection.uploadSpeed = instrumentConvert.toSpeed(connection, 'upload');
@@ -36,7 +36,6 @@ angular.module('infuseWebApp')
 
         connection.$watch('connected', function(newValue) {
           if (newValue) {
-            connectedDeferred.resolve(connection);
             notifier.notify('success', 'Connected to ' + connection.name);
           } else if (!connection.pristine) {
             notifier.notify('verbose emphasize', 'Disconnected from ' + connection.name);
@@ -52,15 +51,12 @@ angular.module('infuseWebApp')
 
         connection.$watch('error', function(newValue) {
           if (newValue) {
-            connectedDeferred.reject(connection);
             notifier.notify('error', 'Connection error on ' + connection.name + (connection.status ? ', reason: ' + connection.status : ''));
             if (!connection.pristine && !connection.connected) {
               managedConnections.splice(managedConnections.indexOf(connection), 1);
             }
           }
         });
-
-        return connectedDeferred.promise;
       };
 
       return r;

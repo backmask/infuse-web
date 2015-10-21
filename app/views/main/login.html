@@ -1,0 +1,35 @@
+<div class="row row-centered login" ng-controller="LoginCtrl">
+  <div class="well col-md-4 col-centered">
+    <div class="login-header">
+      <h4>Sign in</h4>
+      <div class="pull-right" dropdown-toggle dropdown>
+        <div class="btn btn-default">
+          <span class="name">{{gateway.name}}</span>
+          <span class="understate">{{gateway.description}}</span>
+          <span class="glyphicon glyphicon-triangle-bottom"></span>
+        </div>
+        <ul class="dropdown-menu add-dropdown">
+          <li ng-repeat="gw in gateways" ng-click="gateway = gw">
+            <img ng-src="{{gw.icon}}" class="pull-left img-circle" />
+            <div class="pull-left text">
+              <span class="name">{{gw.name}}</span><br/>
+              <small>{{gw.description}}</small>
+            </div>
+            <div style="clear:both"></div>
+          </li>
+        </ul>
+      </div>
+      <div style="clear:both"></div>
+    </div>
+    <div class="input-group">
+      <input type="text" class="form-control input-lg" placeholder="Login" name="login" ng-model="login" />
+    </div>
+    <br/>
+    <div class="input-group">
+      <input type="password" class="form-control input-lg" placeholder="Password" name="password" ng-model="password" />
+    </div>
+    <br/>
+    <a class="btn btn-lg btn-primary center-block" ng-click="doLogin(login, password, gateway)">Login</a>
+    <div class="alert alert-danger" ng-if="connectionError">{{connectionError.error.message || connectionError }}</div>
+  </div>
+</div>

@@ -4,19 +4,4 @@
     <li><a href="#dashboard">dashboard</a></li>
   </ul>
 </div>
-<div class="container">
-  <div class="row row-centered">
-    <div class="well col-md-4 col-centered">
-      <h4>Sign in</h4>
-      <div class="input-group">
-        <input type="text" class="form-control input-lg" placeholder="Login" name="login" />
-      </div>
-      <br/>
-      <div class="input-group">
-        <input type="password" class="form-control input-lg" placeholder="Password" name="password" />
-      </div>
-      <br/>
-      <a class="btn btn-lg btn-primary center-block" href="#">Login</a>
-    </div>
-  </div>
-</div>
+<div class="container" ng-include src="'views/main/login.html'" ng-if="!isAuthenticated()"></div>

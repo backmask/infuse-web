@@ -15,7 +15,7 @@ angular.module('infuseWebAppConnect', [
       dev.connecting = true;
 
       connectionManager.openConnection(dev)
-        .then(function() { dev.connecting = false; });
+        .finally(function() { dev.connecting = false; });
     };
 
     $scope.add = function(configurator) {

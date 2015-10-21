@@ -5,6 +5,7 @@ angular.module('infuseWebAppDevice')
     var r = {};
 
     r.build = function(scope, configuration) {
+      var deferred = $q.defer();
       var driver = new WebSocket(configuration.url);
       var onDataCallbacks = [];
       var onSendCallbacks = [];
@@ -34,13 +35,17 @@ angular.module('infuseWebAppDevice')
             configuration.init(scope).then(
               function() {
                 scope.initialized = true;
+                deferred.resolve(scope);
               },
               function(e) {
                 scope.error = true;
                 scope.status = e.error.message;
+                deferred.reject(e);
+                scope.close();
               }
             );
           } else {
+            deferred.resolve(scope);
             scope.initialized = true;
           }
         });
@@ -48,6 +53,9 @@ angular.module('infuseWebAppDevice')
 
       driver.onerror = function() {
         scope.$apply(function() {
+          if (!scope.pristine) {
+            deferred.reject();
+          }
           scope.pristine = false;
           scope.connected = false;
           scope.error = true;
@@ -58,7 +66,6 @@ angular.module('infuseWebAppDevice')
         scope.$apply(function() {
           scope.pristine = false;
           scope.connected = false;
-          scope.error = false;
         });
       };
 
@@ -207,7 +214,7 @@ angular.module('infuseWebAppDevice')
         };
 
       scope.client = clientDriver;
-      return scope;
+      return deferred.promise;
     };
 
     return r;
