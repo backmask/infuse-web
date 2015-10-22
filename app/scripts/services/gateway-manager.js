@@ -11,9 +11,12 @@ angular.module('infuseWebApp')
         gw.init = function(driver) {
           return driver.doLogin(login, password);
         };
-        gatewayConnection = gw;
+
         return connectionManager.openConnection(gw)
-          .then(function() { isAuthenticated = true; });
+          .then(function(driver) {
+            gatewayConnection = driver;
+            isAuthenticated = true;
+          });
       };
 
       r.disconnect = function() {
@@ -26,6 +29,10 @@ angular.module('infuseWebApp')
 
       r.isConnected = function() {
         return gatewayConnection && isAuthenticated;
+      };
+
+      r.getConnection = function() {
+        return gatewayConnection;
       };
 
       return r;

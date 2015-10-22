@@ -203,7 +203,7 @@ angular.module('infuseWebAppDevice')
             notifier.info('Paused playback ' + uuid);
             return true;
           });
-        };
+      };
 
       scope.doResumePlayback = function(uuid) {
         return scope.doRequest('play/resume', { uuid: uuid })
@@ -211,7 +211,11 @@ angular.module('infuseWebAppDevice')
             notifier.info('Resumed playback ' + uuid);
             return true;
           });
-        };
+      };
+
+      scope.doGetAllDevices = function() {
+        return scope.doRequest('device/all');
+      };
 
       scope.client = clientDriver;
       return deferred.promise;

@@ -12,6 +12,7 @@ angular.module('infuseWebApp')
           .then(function() {
             device.visualizationFactory(deviceScope);
             r.handleConnection(deviceScope);
+            return deviceScope;
           });
       };
 
