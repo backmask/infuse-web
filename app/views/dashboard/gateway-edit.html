@@ -1,0 +1,15 @@
+<div class="row row-centered login" ng-controller="GatewayEditCtrl">
+  <div class="well col-md-6 col-centered" ng-if="gateways.length === 0">
+      <h4>Choose your gateway</h4>
+      <div class="input-group">
+        <span class="input-group-addon">ws://</span>
+        <input type="text" class="form-control input-lg" placeholder="Host" ng-model="host" />
+        <span class="input-group-addon">:</span>
+        <input type="number" class="form-control input-lg" placeholder="Port" ng-model="port" />
+        <span class="input-group-btn">
+          <button class="btn btn-lg btn-primary" ng-click="addFirst(host, port)">Ok</button>
+        </span>
+      </div>
+    </form>
+  </div>
+</div>

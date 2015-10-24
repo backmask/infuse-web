@@ -1,9 +1,11 @@
 'use strict';
 
 angular.module('infuseWebApp')
-  .controller('LoginCtrl', function ($scope, device, gatewayManager) {
-    $scope.gateways = device.getRegisteredDevices()
-      .filter(function(d) { return d.configurator === 'Infuse'; });
+  .controller('LoginCtrl', function ($scope, $state, gatewayManager) {
+    $scope.gateways = gatewayManager.getGateways();
+    if ($scope.gateways.length === 0) {
+      $state.go('^.gatewayEdit');
+    }
 
     $scope.gateway = $scope.gateways[0] || {
       name: 'No gateway selected'
@@ -13,7 +15,8 @@ angular.module('infuseWebApp')
       $scope.connecting = true;
       $scope.connectionError = false;
       gatewayManager.connect(gateway, login, password)
-        .catch(function(e) { $scope.connectionError = e; })
+        .then(function() {  $state.go('^.dashboard'); },
+          function(e) { $scope.connectionError = e; })
         .finally(function() { $scope.connecting = false; });
     };
   });

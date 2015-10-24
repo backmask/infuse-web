@@ -1,18 +1,28 @@
 'use strict';
 
 angular.module('infuseWebApp')
-  .config(function($routeProvider, $locationProvider) {
-    $routeProvider
-    .when('/inspector', {
-      templateUrl: 'views/inspector.html'
-    })
-    .when('/home', {
-      templateUrl: 'views/main.html',
-      controller: 'MainCtrl'
-    })
-    .otherwise({
-      redirectTo: '/home'
-    });
+  .config(function($stateProvider, $urlRouterProvider) {
+    $urlRouterProvider.otherwise('/main');
 
-    //$locationProvider.html5Mode(true);
+    $stateProvider
+      .state('inspector', {
+        url: '/inspector',
+        templateUrl: 'views/inspector.html'
+      })
+      .state('main', {
+        url: '/main',
+        templateUrl: 'views/main.html'
+      })
+      .state('main.dashboard', {
+        url: '/dashboard',
+        templateUrl: 'views/dashboard/dashboard.html'
+      })
+      .state('main.gatewayEdit', {
+        url: '/gateway-edit',
+        templateUrl: 'views/dashboard/gateway-edit.html'
+      })
+      .state('main.login', {
+        url: '/login',
+        templateUrl: 'views/dashboard/login.html'
+      });
   });

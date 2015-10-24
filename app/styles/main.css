@@ -1,4 +1,4 @@
-.btn, .alert {
+.btn, .alert, .input-group-addon {
   border-radius: 1px;
 }
 
@@ -62,4 +62,12 @@ body#infuse {
 
 .understate {
   color: #aaa;
+}
+
+.manage-gateways {
+  background-color:rgb(199, 229, 255);
+}
+
+.add-dropdown .manage-gateways:hover {
+  background-color:#B6DDFF;
 }
