@@ -1,0 +1,11 @@
+<h4>Your devices</h4>
+<table class="table">
+  <tr ng-repeat="device in devices">
+    <td>{{device.description.family}}</td>
+    <td>{{device.description.name}}</td>
+    <td>
+      <button class="btn btn-sm btn-default" ng-click="editDevice(device)"><span class="glyphicon glyphicon-cog"></span></button>
+    </td>
+  </tr>
+</table>
+<div><button class="btn btn-md btn-primary" ng-click="newDevice()">New device</button></div>

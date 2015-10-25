@@ -1,4 +1,4 @@
-.btn, .alert, .input-group-addon, .form-control {
+.btn, .alert, .input-group-addon, .form-control, .multiSelect > button {
   border-radius: 1px;
 }
 
@@ -90,4 +90,24 @@ li.manage-gateways {
 .table>thead>tr>td:last-child,
 .table>thead>tr>th:last-child {
   padding-right: 0;
+}
+
+.multiSelect > button {
+  background-image:none;
+  background-color: white;
+}
+
+.multiSelect > button:hover {
+  background-image:none;
+  background-color: white;
+}
+
+.multiSelect .multiSelectItem {
+  min-height:22px;
+}
+
+.multiSelect .multiSelectItem:hover, .multiSelect .multiSelectGroup:hover {
+  background-image:none !important;
+  background-color:#ccc;
+  color:inherit !important;
 }

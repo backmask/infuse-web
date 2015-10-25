@@ -10,6 +10,7 @@ angular.module('infuseWebApp', [
   'ngResource',
   'ngSanitize',
   'ngAnimate',
+  'isteven-multi-select',
   'angularMoment',
   'd3',
   'ui.bootstrap',

@@ -20,7 +20,9 @@
     "install": "~1.0.4",
     "bootstrap-css": "~3.3.4",
     "angular-moment": "1.0.0-beta.2",
-    "angular-ui-router": "~0.2.15"
+    "angular-ui-router": "~0.2.15",
+    "isteven-angular-multiselect": "~4.0.0",
+    "components-font-awesome": "~4.4.0"
   },
   "devDependencies": {
     "angular-mocks": "latest",

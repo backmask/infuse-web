@@ -217,6 +217,14 @@ angular.module('infuseWebAppDevice')
         return scope.doRequest('device/all');
       };
 
+      scope.doAddDevice = function(device) {
+        return scope.doRequest('device/add', device);
+      };
+
+      scope.doRemoveDevice = function(deviceId) {
+        return scope.doRequest('device/remove', { deviceId: deviceId });
+      };
+
       scope.client = clientDriver;
       return deferred.promise;
     };

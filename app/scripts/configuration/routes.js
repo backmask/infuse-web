@@ -15,7 +15,7 @@ angular.module('infuseWebApp')
       })
       .state('main.dashboard', {
         url: '/dashboard',
-        templateUrl: 'views/dashboard/dashboard.html'
+        templateUrl: 'views/dashboard/dashboard.html',
       })
       .state('main.gatewayEdit', {
         url: '/gateway-edit',
@@ -24,5 +24,10 @@ angular.module('infuseWebApp')
       .state('main.login', {
         url: '/login',
         templateUrl: 'views/dashboard/login.html'
+      })
+      .state('main.dashboard.device-edit', {
+        views: {
+          device: { templateUrl: 'views/dashboard/devices-edit.html' }
+        }
       });
   });
