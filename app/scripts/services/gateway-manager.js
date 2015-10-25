@@ -46,6 +46,11 @@ angular.module('infuseWebApp')
         return gateways;
       };
 
+      r.setGateways = function(gws) {
+        gateways = gws;
+        localStorageService.set('gateways', gateways);
+      };
+
       r.registerGateway = function(name, host, port) {
         gateways.push({ name: name, host: host, port: port });
         localStorageService.set('gateways', gateways);

@@ -1,8 +1,12 @@
-.btn, .alert, .input-group-addon {
+.btn, .alert, .input-group-addon, .form-control {
   border-radius: 1px;
 }
 
 .input-group, .login button {
+  width:100%;
+}
+
+.btn-fill {
   width:100%;
 }
 
@@ -64,10 +68,26 @@ body#infuse {
   color: #aaa;
 }
 
-.manage-gateways {
-  background-color:rgb(199, 229, 255);
+li.manage-gateways {
+  border-top:1px solid #efefef;
+  margin-top:10px;
+  padding-top:10px;
 }
 
-.add-dropdown .manage-gateways:hover {
-  background-color:#B6DDFF;
+.table>tbody>tr>td:first-child,
+.table>tbody>tr>th:first-child,
+.table>tfoot>tr>td:first-child,
+.table>tfoot>tr>th:first-child,
+.table>thead>tr>td:first-child,
+.table>thead>tr>th:first-child {
+  padding-left: 0;
+}
+
+.table>tbody>tr>td:last-child,
+.table>tbody>tr>th:last-child,
+.table>tfoot>tr>td:last-child,
+.table>tfoot>tr>th:last-child,
+.table>thead>tr>td:last-child,
+.table>thead>tr>th:last-child {
+  padding-right: 0;
 }

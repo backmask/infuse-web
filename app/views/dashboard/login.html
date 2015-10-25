@@ -9,12 +9,12 @@
             <span class="glyphicon glyphicon-triangle-bottom"></span>
           </div>
           <ul class="dropdown-menu add-dropdown">
-            <li ng-repeat="gw in gateways" ng-click="gateway = gw">
+            <li ng-repeat="gw in gateways" ng-click="useGateway(gw)">
               <span class="name">{{gw.name}}</span>
               <span class="understate"> ({{gw.host}}:{{gw.port}})</small>
             </li>
             <li class="manage-gateways" ui-sref="main.gatewayEdit">
-              Manage gateways
+              <span class="glyphicon glyphicon-cog"></span> Manage gateways
             </li>
           </ul>
         </div>

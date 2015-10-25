@@ -11,6 +11,10 @@ angular.module('infuseWebApp')
       name: 'No gateway selected'
     };
 
+    $scope.useGateway = function(gw) {
+      $scope.gateway = gw;
+    };
+
     $scope.doLogin = function(login, password, gateway) {
       $scope.connecting = true;
       $scope.connectionError = false;

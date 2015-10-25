@@ -1,4 +1,4 @@
-<div class="row row-centered login" ng-controller="GatewayEditCtrl">
+<div class="row row-centered" ng-controller="GatewayEditCtrl">
   <div class="well col-md-6 col-centered" ng-if="gateways.length === 0">
       <h4>Choose your gateway</h4>
       <div class="input-group">
@@ -11,5 +11,33 @@
         </span>
       </div>
     </form>
+  </div>
+  <div class="well col-md-6 col-centered" ng-if="gateways.length > 0">
+    <div class="login-header">
+      <h4>Gateway edition</h4>
+      <button class="btn btn-md btn-primary pull-right" ng-click="updateAndLeave()">Ok</button>
+    </div>
+    <table class="table" style="margin-bottom:0">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Host</th>
+          <th>Port</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tr ng-repeat="gateway in gateways">
+        <td><input type="text" class="form-control input-md" ng-model="gateway.name" /></td>
+        <td><input type="text" class="form-control input-md" ng-model="gateway.host" /></td>
+        <td><input type="number" class="form-control input-md" ng-model="gateway.port" /></td>
+        <td><button class="btn btn-md btn-danger" ng-click="deleteGateway(gateway)">Remove</button></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td style="padding-bottom:0"><button class="btn btn-md btn-success btn-fill" ng-click="addNewGateway()">New</button></td>
+      </tr>
+    </table>
   </div>
 </div>
