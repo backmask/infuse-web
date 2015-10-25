@@ -1,11 +1,14 @@
 <h4>Your devices</h4>
-<table class="table">
-  <tr ng-repeat="device in devices">
-    <td>{{device.description.family}}</td>
-    <td>{{device.description.name}}</td>
-    <td>
-      <button class="btn btn-sm btn-default" ng-click="editDevice(device)"><span class="glyphicon glyphicon-cog"></span></button>
-    </td>
-  </tr>
-</table>
+<div>
+  <div class="device-row" ng-repeat="device in devices">
+    <div class="pull-left" ng-bind-html="getFamilyIcon(device.description.family)"></div>
+    <div class="pull-left">
+      <span>{{device.description.name}}</span>
+      <span class="understate">{{device.description.location}}</span><br/>
+      <span class="small">Last seen: placeholder</span>
+    </div>
+    <button class="btn btn-sm btn-default pull-right" ng-click="editDevice(device)"><span class="glyphicon glyphicon-cog"></span></button>
+    <div style="clear:both"></div>
+  </div>
+</div>
 <div><button class="btn btn-md btn-primary" ng-click="newDevice()">New device</button></div>

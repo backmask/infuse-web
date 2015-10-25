@@ -111,3 +111,17 @@ li.manage-gateways {
   background-color:#ccc;
   color:inherit !important;
 }
+
+img.icon {
+  max-width:22px;
+  max-height:22px;
+}
+
+.device-row {
+  padding:3px 0 3px 0;
+  border-top:1px solid #efefef;
+}
+
+.device-row:last-child {
+  margin-bottom: 15px;
+}
