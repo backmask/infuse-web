@@ -1,0 +1,16 @@
+<h4>Api keys</h4>
+<div>You can use api keys to send commands from the device. These keys should be kept private.</div><hr/>
+<div ng-if="refreshingKeys"><i class="fa fa-circle-o-notch fa-spin"></i> Loading keys</div>
+<div ng-if="!refreshingKeys" class="input-group" style="margin-top:5px" ng-repeat="key in keys">
+  <input class="form-control input-md" type="text" ng-model="key" ng-readonly="true" />
+  <span class="input-group-btn">
+    <button class="btn btn-md btn-danger" ng-click="deleteApiKey(key)">
+      <i class="fa fa-trash-o"></i>
+    </button>
+  </span>
+</div>
+<div ng-if="!refreshingKeys && keys.length === 0"><b>You have no api key for this device</b></div><br/>
+<div class="pull-right">
+  <button class="btn btn-md btn-success" ng-click="newApiKey(device)">Create new key</button>
+  <button class="btn btn-md btn-primary" ng-click="stopEditingApiKeys()">Done</button>
+</div>

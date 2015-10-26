@@ -225,6 +225,27 @@ angular.module('infuseWebAppDevice')
         return scope.doRequest('device/remove', { deviceId: deviceId });
       };
 
+      scope.doGetDeviceApiKeys = function(deviceId) {
+        return scope.doRequest('device/api/all')
+          .then(function(d) {
+            var r = [];
+            for (var key in d.data) {
+              if (d.data[key].deviceId === deviceId) {
+                r.push(key);
+              }
+            }
+            return r;
+          });
+      };
+
+      scope.doCreateApiKey = function(deviceId) {
+        return scope.doRequest('device/api/create', { deviceId: deviceId });
+      };
+
+      scope.doRemoveApiKey = function(apiKey) {
+        return scope.doRequest('device/api/remove', { apiKey: apiKey});
+      };
+
       scope.client = clientDriver;
       return deferred.promise;
     };

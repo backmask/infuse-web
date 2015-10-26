@@ -7,7 +7,10 @@
       <span class="understate">{{device.description.location}}</span><br/>
       <span class="small">Last seen: placeholder</span>
     </div>
-    <button class="btn btn-sm btn-default pull-right" ng-click="editDevice(device)"><span class="glyphicon glyphicon-cog"></span></button>
+    <div class="pull-right">
+      <button class="btn btn-sm btn-default" ng-click="editApiKeys(device)"><i class="fa fa-key"></i></button>
+      <button class="btn btn-sm btn-default" ng-click="editDevice(device)"><span class="glyphicon glyphicon-cog"></span></button>
+    </div>
     <div style="clear:both"></div>
   </div>
 </div>

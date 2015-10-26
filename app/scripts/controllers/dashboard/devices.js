@@ -105,6 +105,29 @@ angular.module('infuseWebApp')
       $scope.editingDevice = false;
     };
 
+    $scope.editApiKeys = function(device) {
+      $scope.editingApiKeys = true;
+      $scope.refreshingKeys = true;
+      $scope.device = angular.copy(device);
+      gatewayManager.getConnection().doGetDeviceApiKeys(device.deviceId)
+        .then(function(d) { $scope.keys = d; })
+        .finally(function() { $scope.refreshingKeys = false; });
+    };
+
+    $scope.newApiKey = function(device) {
+      gatewayManager.getConnection().doCreateApiKey(device.deviceId)
+        .then(function(d) { $scope.keys.push(d.data.apiKey); });
+    };
+
+    $scope.deleteApiKey = function(apiKey) {
+      gatewayManager.getConnection().doRemoveApiKey(apiKey)
+        .then(function() { $scope.keys.splice($scope.keys.indexOf(apiKey)); });
+    };
+
+    $scope.stopEditingApiKeys = function() {
+      $scope.editingApiKeys = false;
+    };
+
     $scope.getFamilyIcon = function(familyId) {
       for (var i = 0; i < $scope.families.length; ++i) {
         if ($scope.families[i].id === familyId) {
