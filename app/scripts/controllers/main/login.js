@@ -1,18 +1,17 @@
 'use strict';
 
 angular.module('infuseWebApp')
-  .controller('LoginCtrl', function ($scope, $state, gatewayManager) {
+  .controller('LoginCtrl', function ($scope, $state, gatewayManager, localStorageService) {
     $scope.gateways = gatewayManager.getGateways();
     if ($scope.gateways.length === 0) {
       $state.go('^.gatewayEdit');
     }
 
-    $scope.gateway = $scope.gateways[0] || {
-      name: 'No gateway selected'
-    };
+    $scope.gateway = localStorageService.get('default_gw') || $scope.gateways[0];
 
     $scope.useGateway = function(gw) {
       $scope.gateway = gw;
+      localStorageService.set('default_gw', gw);
     };
 
     $scope.doLogin = function(login, password, gateway) {
