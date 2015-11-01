@@ -5,7 +5,12 @@
     <div class="pull-left">
       <span>{{device.description.name}}</span>
       <span class="understate">{{device.description.location}}</span><br/>
-      <span class="small">Last seen: placeholder</span>
+      <span class="small">Last seen: {{device.stats.lastConnection | amTimeAgo}}</span><br/>
+      <span class="small understate">
+        Seen {{device.stats.timesSeen | shortNumber}} times
+        <span class="glyphicon glyphicon-arrow-up"></span> {{device.stats.bytesUploaded | shortNumber}}B
+        <span class="glyphicon glyphicon-arrow-down"></span> {{device.stats.bytesDownloaded | shortNumber}}B
+      </span>
     </div>
     <div class="pull-right">
       <button class="btn btn-sm btn-default" ng-click="editApiKeys(device)"><i class="fa fa-key"></i></button>
