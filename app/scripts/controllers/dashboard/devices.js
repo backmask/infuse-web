@@ -47,6 +47,7 @@ angular.module('infuseWebApp')
       { msGroup: false },
       { name: '<b>Weather</b>', msGroup: true },
       { id: 'barometer', name: 'Barometer', icon: '<img class="icon" src="images/barometer.png" />' },
+      { id: 'humidity', name: 'Humidity', icon: '<i class="fa fa-tint"></i>' },
       { id: 'temperature', name: 'Temperature', icon: '<img class="icon" src="images/thermometer.png" />' },
       { msGroup: false }
     ].map(fillDefaultIcon);
