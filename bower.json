@@ -22,7 +22,8 @@
     "angular-moment": "1.0.0-beta.2",
     "angular-ui-router": "~0.2.15",
     "isteven-angular-multiselect": "~4.0.0",
-    "components-font-awesome": "~4.4.0"
+    "components-font-awesome": "~4.4.0",
+    "metrics-graphics": "~2.7.0"
   },
   "devDependencies": {
     "angular-mocks": "latest",

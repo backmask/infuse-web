@@ -28,6 +28,10 @@
   box-shadow: 0 1px 0 #cfcfcf;
 }
 
+.well-condensed {
+  padding:0;
+}
+
 .well h4 {
   padding-bottom: 10px;
 }
@@ -124,4 +128,9 @@ img.icon {
 
 .device-row:last-child {
   margin-bottom: 15px;
+}
+
+#dashboard .col-lg-4 {
+  padding-left:5px;
+  padding-right:5px;
 }

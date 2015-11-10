@@ -1,3 +1,15 @@
-<div class="row">
-  <div class="well col-lg-4 col-xs-5" ng-include src="'views/dashboard/devices.html'"></div>
+<div class="row" ng-controller="DashboardCtrl" id="dashboard">
+  <div class="col-lg-4 col-xs-5">
+    <div class="well" ng-include src="'views/dashboard/devices.html'"></div>
+  </div>
+  <div class="col-lg-4 col-xs-5">
+    <div class="well" ng-repeat="v in views">
+      <dynamic-include src="v.src" controller="v.controller" scope="v.scope" />
+    </div>
+  </div>
+  <div class="col-lg-4 col-xs-5">
+    <!-- <div class="well" ng-repeat="v in views">
+      <dynamic-include src="v.src" controller="v.controller" scope="v.scope" />
+    </div> -->
+  </div>
 </div>
