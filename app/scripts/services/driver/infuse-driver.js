@@ -12,6 +12,7 @@ angular.module('infuseWebAppDevice')
       var responseCallbacks = {};
       var clientDriver = infuseClientDriverFactory.manage(scope);
       var throttledApply = throttle(function() { scope.$apply(); }, 40);
+
       scope.name = configuration.name;
       scope.description = configuration.description;
       scope.icon = configuration.icon;
@@ -214,7 +215,15 @@ angular.module('infuseWebAppDevice')
       };
 
       scope.doGetAllDevices = function() {
-        return scope.doRequest('device/all');
+        return scope.doRequest('device/all')
+          .then(function(d) {
+            scope.devices = d.data.devices;
+            // sad fix for isteven-multi-select
+            scope.devices.forEach(function(dev) {
+              dev['description.name'] = true;
+            });
+            return d;
+          });
       };
 
       scope.doAddDevice = function(device) {
