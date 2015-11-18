@@ -58,7 +58,7 @@ angular.module('infuseWebApp')
 
     var refreshDevices = function() {
       return gw.doGetAllDevices()
-        .then(function(d) { $scope.devices = d.data.devices; console.log(d.data.devices);});
+        .then(function(d) { $scope.devices = d.data.devices; });
     };
 
     $scope.editDevice = function(device) {

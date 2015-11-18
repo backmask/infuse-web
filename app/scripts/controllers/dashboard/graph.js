@@ -12,12 +12,14 @@ angular.module('infuseWebApp')
     }];
 
     var convertData = function(data) {
-      var r = data.data.results[0].series[0].values.map(function(v) {
-        return {
-          date: new Date(v[0]),
-          value: v[1]
-        };
-      }).filter(function(v) { return v.value; });
+      var r = data.data.results[0].series.map(function(s) {
+        return s.values.map(function(v) {
+          return {
+            date: new Date(v[0]),
+            value: v[1]
+          };
+        }).filter(function(v) { return v.value; });
+      });
 
       return r;
     };
@@ -37,7 +39,6 @@ angular.module('infuseWebApp')
           };
         });
       });
-      console.log('series', $scope.series);
     });
 
     $scope.refreshSerie = function(serie) {

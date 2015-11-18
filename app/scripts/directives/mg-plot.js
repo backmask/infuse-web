@@ -29,8 +29,6 @@ angular.module('infuseWebAppCommon')
           'top': 10
         };
 
-        console.log(element);
-
         var repaint = function() {
           if (graphic.data && graphic.data.length > 0) {
             MG.data_graphic(graphic);
