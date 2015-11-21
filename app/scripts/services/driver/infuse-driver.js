@@ -255,6 +255,14 @@ angular.module('infuseWebAppDevice')
         return scope.doRequest('device/api/remove', { apiKey: apiKey});
       };
 
+      scope.doGetDashboard = function() {
+        return scope.doRequest('storage/read', { 'name': 'dashboard.json' });
+      };
+
+      scope.doSetDashboard = function(dashboardConfig) {
+        return scope.doRequest('storage/write', { 'dashboard.json': dashboardConfig });
+      };
+
       scope.client = clientDriver;
       return deferred.promise;
     };
