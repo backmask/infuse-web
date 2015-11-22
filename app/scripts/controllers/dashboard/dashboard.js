@@ -90,6 +90,17 @@ angular.module('infuseWebApp')
       $scope.activeViews.push(bootstrapView(view));
     };
 
+    $scope.shiftTile = function(index, direction) {
+      var moved = $scope.activeViews.splice(index, 1);
+      $scope.activeViews.splice(index + direction, 0, moved[0]);
+      $scope.dashboardModified = true;
+    };
+
+    $scope.removeTile = function(index) {
+      $scope.activeViews.splice(index, 1);
+      $scope.dashboardModified = true;
+    };
+
     if (connection) {
       $scope.revertDashboard()
         .then(function() { $scope.loading = false; })

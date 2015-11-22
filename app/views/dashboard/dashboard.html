@@ -9,6 +9,11 @@
     <!-- Tiles -->
     <div class="col-lg-4 col-xs-5" ng-repeat="v in activeViews">
       <div class="well">
+        <div ng-if="!dashboardLocked">
+          <button class="btn btn-sm btn-danger"  ng-click="removeTile($index)"><i class="fa fa-trash-o"></i></button>
+          <button class="btn btn-sm btn-default" ng-class="{ disabled: $first}" ng-click="shiftTile($index, -1)"><i class="fa fa-arrow-left"></i></button>
+          <button class="btn btn-sm btn-default" ng-class="{ disabled: $last }" ng-click="shiftTile($index, 1)"><i class="fa fa-arrow-right"></i></button>
+        </div>
         <dynamic-include src="v.src" controller="v.controller" scope="v.scope" />
       </div>
     </div>
