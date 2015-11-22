@@ -1,5 +1,3 @@
-<div ng-controller="DevicesCtrl">
-  <div ng-if="!editingDevice && !editingApiKeys" ng-include src="'views/dashboard/devices-view.html'"></div>
-  <div ng-if="editingDevice" ng-include src="'views/dashboard/devices-edit.html'"></div>
-  <div ng-if="editingApiKeys" ng-include src="'views/dashboard/devices-edit-apikeys.html'"></div>
-</div>
+<div ng-if="!editingDevice && !editingApiKeys" ng-include src="'views/dashboard/devices-view.html'"></div>
+<div ng-if="editingDevice" ng-include src="'views/dashboard/devices-edit.html'"></div>
+<div ng-if="editingApiKeys" ng-include src="'views/dashboard/devices-edit-apikeys.html'"></div>

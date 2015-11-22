@@ -1,10 +1,11 @@
-<h4 style="display:inline-block">Temperature</h4>
+<h4 style="display:inline-block" ng-if="!setup">{{settings.name}}</h4>
+<input type="text" ng-if="setup" class="form-control input-md" style="display:inline-block;width:auto;margin-bottom:15px" ng-model="settings.name" />
 <div class="pull-right">
   <button ng-show="!setup" class="btn btn-sm btn-default" ng-click="setup = true"><span class="glyphicon glyphicon-cog"></span></button>
   <button ng-show="setup" class="btn btn-sm btn-success" ng-click="setup = false;finishSetup()">Ok</button>
 </div>
 <div ng-if="setup">
-  <form class="form-horizontal" ng-repeat="serie in series">
+  <form class="form-horizontal" ng-repeat="serie in settings.series">
     <div class="form-group">
       <label for="device" class="col-sm-2 control-label">Device</label>
       <div class="col-sm-10">

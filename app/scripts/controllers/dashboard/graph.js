@@ -3,15 +3,25 @@
 angular.module('infuseWebApp')
   .controller('GraphCtrl', function ($scope) {
     $scope.data = [];
-    $scope.setup = false;
-
-    $scope.series = [{
-      devicesId: [$scope.deviceId],
-      name: 'temperature',
-      value: 'celcius'
-    }];
+    $scope.settings = $scope.settings || {
+      name: 'New graph',
+      series: []
+    };
+    $scope.setup = $scope.settings.series.length === 0;
+    if ($scope.setup) {
+      $scope.settings.series.push({
+        devicesId: [],
+        name: 'Measurement name',
+        value: 'Measurement value'
+      });
+    }
 
     var convertData = function(data) {
+      // No data-point returned
+      if (!data.data) {
+        return [];
+      }
+
       var r = data.data.results[0].series.map(function(s) {
         return s.values.map(function(v) {
           return {
@@ -30,7 +40,7 @@ angular.module('infuseWebApp')
 
     $scope.$watch('devices', function(d) {
       if (!d) { return; }
-      $scope.series.forEach(function (s) {
+      $scope.settings.series.forEach(function (s) {
         s._devices = d.map(function(dev) {
           return {
             name: dev.description.name + ' (' + dev.description.location + ')',
@@ -58,17 +68,18 @@ angular.module('infuseWebApp')
     };
 
     $scope.refreshAll = function() {
-      $scope.series.forEach($scope.refreshSerie);
+      $scope.settings.series.forEach($scope.refreshSerie);
     };
 
     $scope.finishSetup = function() {
-      $scope.series.forEach(function(s) {
+      $scope.settings.series.forEach(function(s) {
         s.devicesId = s._device
           .filter(function(d) { return d.ticked; })
           .map(function(d) { return d.id; });
       });
 
       $scope.refreshAll();
+      $scope.$emit('settingsUpdated');
     };
 
     $scope.refreshAll();

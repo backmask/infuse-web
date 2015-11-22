@@ -256,7 +256,8 @@ angular.module('infuseWebAppDevice')
       };
 
       scope.doGetDashboard = function() {
-        return scope.doRequest('storage/read', { 'name': 'dashboard.json' });
+        return scope.doRequest('storage/read', { 'name': 'dashboard.json' })
+          .then(function(d) { return d.data; });
       };
 
       scope.doSetDashboard = function(dashboardConfig) {

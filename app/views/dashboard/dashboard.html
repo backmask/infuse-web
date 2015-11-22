@@ -6,18 +6,40 @@
     </div>
   </div>
   <div class="row" ng-if="!loading">
-    <div class="col-lg-4 col-xs-5">
-      <div class="well" ng-include src="'views/dashboard/devices.html'"></div>
-    </div>
-    <div class="col-lg-4 col-xs-5">
-      <div class="well" ng-repeat="v in views">
+    <!-- Tiles -->
+    <div class="col-lg-4 col-xs-5" ng-repeat="v in activeViews">
+      <div class="well">
         <dynamic-include src="v.src" controller="v.controller" scope="v.scope" />
       </div>
     </div>
-    <div class="col-lg-4 col-xs-5">
-      <!-- <div class="well" ng-repeat="v in views">
-        <dynamic-include src="v.src" controller="v.controller" scope="v.scope" />
-      </div> -->
+
+    <!-- New tile creation -->
+    <div class="col-lg-4 col-xs-5" ng-if="!dashboardLocked">
+      <div class="well">
+        <div class="input-group">
+          <span class="input-group-addon" id="sizing-addon1">New tile</span>
+          <isteven-multi-select
+              class="select-fill"
+              input-model="availableTiles"
+              output-model="selectedTile"
+              button-label="icon name"
+              item-label="icon name"
+              tick-property="ticked"
+              selection-mode="single"
+              helper-elements="filter"
+          >
+          </isteven-multi-select>
+          <div class="input-group-btn">
+            <button class="btn btn-md btn-success" ng-click="addTile(selectedTile[0].id)">Add</button>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
+  <!-- Unlock bottom right actions -->
+  <div class="dashboard-edit">
+    <button ng-if="dashboardModified" class="btn btn-md btn-success" ng-click="saveDashboard()">Save dashboard</button>
+    <button ng-if="dashboardModified" class="btn btn-md" ng-click="revertDashboard()">Revert dashboard</button>
+    <button class="btn btn-md" ng-click="toggleDashboardLock()"><i class="fa fa-lock" ng-class="{ 'fa-lock': dashboardLocked, 'fa-unlock': !dashboardLocked }"></i></button>
   </div>
 </div>
