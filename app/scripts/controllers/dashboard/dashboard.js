@@ -37,9 +37,7 @@ angular.module('infuseWebApp')
     var createNewDashboard = function() {
       $scope.dashboardModified = true;
       $scope.dashboardConfig = {
-        views: [{
-          name: 'devices'
-        }]
+        views: []
       };
     };
 

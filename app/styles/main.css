@@ -53,8 +53,19 @@
   border: 0;
 }
 
-#infuse .navbar li {
+#infuse .navbar li a {
   min-height: 50px;
+  color: #777;
+}
+
+#infuse .navbar li.active a {
+  border-bottom: 2px solid #4285f4;
+  font-weight: bold;
+  color: #555;
+}
+
+#infuse .navbar li a:hover {
+  background-color: #e7e7e7;
 }
 
 .danger {

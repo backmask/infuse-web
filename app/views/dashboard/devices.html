@@ -1,3 +1,9 @@
-<div ng-if="!editingDevice && !editingApiKeys" ng-include src="'views/dashboard/devices-view.html'"></div>
-<div ng-if="editingDevice" ng-include src="'views/dashboard/devices-edit.html'"></div>
-<div ng-if="editingApiKeys" ng-include src="'views/dashboard/devices-edit-apikeys.html'"></div>
+<div class="row">
+  <div class="col-xs-6">
+    <div class="well" ng-include src="'views/dashboard/devices-view.html'"></div>
+  </div>
+  <div class="col-xs-6">
+    <div class="well clearfix" ng-if="editingDevice" ng-include src="'views/dashboard/devices-edit.html'"></div>
+    <div class="well clearfix" ng-if="editingApiKeys" ng-include src="'views/dashboard/devices-edit-apikeys.html'"></div>
+  </div>
+</div>

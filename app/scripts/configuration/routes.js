@@ -17,6 +17,11 @@ angular.module('infuseWebApp')
         url: '/dashboard',
         templateUrl: 'views/dashboard/dashboard.html',
       })
+      .state('main.devices', {
+        url: '/devices',
+        controller: 'DevicesCtrl',
+        templateUrl: 'views/dashboard/devices.html',
+      })
       .state('main.gatewayEdit', {
         url: '/gateway-edit',
         templateUrl: 'views/dashboard/gateway-edit.html'

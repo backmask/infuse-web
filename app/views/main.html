@@ -2,6 +2,10 @@
   <ul class="nav navbar-nav navbar-left">
     <li class="danger" ng-if="reconnecting"><span class="navbar-text"><i class="fa fa-circle-o-notch fa-spin"></i> Reconnecting</span></li>
   </ul>
+  <ul class="nav navbar-nav navbar-left" ng-if="gw.isConnected()">
+    <li ui-sref-active="active"><a ui-sref="main.dashboard">Dashboard</a></li>
+    <li ui-sref-active="active"><a ui-sref="main.devices">Devices</a></li>
+  </ul>
   <ul class="nav navbar-nav navbar-right">
     <li><a ui-sref="inspector">Inspector</a></li>
   </ul>
