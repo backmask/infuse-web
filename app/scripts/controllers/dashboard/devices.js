@@ -52,6 +52,16 @@ angular.module('infuseWebApp')
       { msGroup: false }
     ].map(fillDefaultIcon);
 
+    $scope.logLevels = [
+      { id: 0, name: 'All' },
+      { id: 1, name: 'Debug' },
+      { id: 2, name: 'Verbose' },
+      { id: 4, name: 'Info' },
+      { id: 8, name: 'Warning' },
+      { id: 16, name: 'Error' },
+      { id: 32, name: 'None' }
+    ];
+
     $scope.readers = [
       { id: 'flight.command', name: 'Flight command' }
     ].map(fillDefaultIcon);
@@ -68,6 +78,7 @@ angular.module('infuseWebApp')
       setCheckedValues([$scope.device.description.family], $scope.families);
       setCheckedValues($scope.device.description.sensors, $scope.sensors);
       setCheckedValues($scope.device.description.readers, $scope.readers);
+      setCheckedValues([$scope.device.logging.logLevel], $scope.logLevels);
     };
 
     $scope.newDevice = function() {
@@ -86,12 +97,20 @@ angular.module('infuseWebApp')
       savedDevice.description.family = savedDevice.description.family.length > 0 ? savedDevice.description.family[0].id : '';
       savedDevice.description.sensors = savedDevice.description.sensors.map(mapId);
       savedDevice.description.readers = savedDevice.description.readers.map(mapId);
+      savedDevice.logging.logLevel = savedDevice.logging.logLevel.length > 0 ? savedDevice.logging.logLevel[0].id : 0;
 
-      gatewayManager.getConnection().doAddDevice(savedDevice)
-        .then(function() {
-          $scope.editingDevice = false;
-          return refreshDevices();
-        });
+      var doneCb = function() {
+        $scope.editingDevice = false;
+        return refreshDevices();
+      };
+
+      if (device.deviceId) {
+        gatewayManager.getConnection().doUpdateDevice(savedDevice)
+          .then(doneCb);
+      } else {
+        gatewayManager.getConnection().doAddDevice(savedDevice)
+          .then(doneCb);
+      }
     };
 
     $scope.deleteDevice = function(device) {

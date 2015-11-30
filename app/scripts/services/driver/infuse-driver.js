@@ -230,6 +230,10 @@ angular.module('infuseWebAppDevice')
         return scope.doRequest('device/add', device);
       };
 
+      scope.doUpdateDevice = function(device) {
+        return scope.doRequest('device/update', device);
+      };
+
       scope.doRemoveDevice = function(deviceId) {
         return scope.doRequest('device/remove', { deviceId: deviceId });
       };

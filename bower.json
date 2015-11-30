@@ -23,7 +23,8 @@
     "angular-ui-router": "~0.2.15",
     "isteven-angular-multiselect": "~4.0.0",
     "components-font-awesome": "~4.4.0",
-    "metrics-graphics": "~2.7.0"
+    "metrics-graphics": "~2.7.0",
+    "awesome-bootstrap-checkbox": "~0.3.5"
   },
   "devDependencies": {
     "angular-mocks": "latest",

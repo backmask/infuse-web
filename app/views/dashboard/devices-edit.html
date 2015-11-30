@@ -69,7 +69,32 @@
       </isteven-multi-select>
     </div>
   </div>
+  <hr/>
+  <h4>Logging</h4>
+  <div class="form-group">
+    <label for="family" class="col-sm-2 control-label">Message level</label>
+    <div class="col-sm-10">
+      <isteven-multi-select
+          input-model="logLevels"
+          output-model="device.logging.logLevel"
+          button-label="name"
+          item-label="name"
+          tick-property="ticked"
+          selection-mode="single"
+          helper-elements=""
+      >
+      </isteven-multi-select>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="family" class="col-sm-2 control-label">Record</label>
+    <div class="checkbox col-sm-10">
+      <input type="checkbox" id="recordIO" ng-model="device.logging.logIO">
+      <label for="recordIO">Input/Output</label>
+    </div>
+  </div>
 </form>
+<hr/>
 <div class="pull-right">
   <button class="btn btn-md btn-default" ng-click="stopEdit()">Cancel</button>
   <button class="btn btn-md btn-danger" ng-click="deleteDevice(device)">Delete</button>

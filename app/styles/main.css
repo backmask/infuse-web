@@ -2,6 +2,14 @@
   border-radius: 1px;
 }
 
+.checkbox {
+  padding-left: 35px;
+}
+
+.checkbox label::after {
+  font-size: 0.9em;
+}
+
 .input-group, .login button {
   width:100%;
 }
@@ -136,10 +144,17 @@ li.manage-gateways {
   min-height:22px;
 }
 
-.multiSelect .multiSelectItem:hover, .multiSelect .multiSelectGroup:hover {
+.multiSelect .multiSelectItem:hover,
+.multiSelect .multiSelectGroup:hover {
   background-image:none !important;
   background-color:#ccc;
   color:inherit !important;
+}
+
+.multiSelect .multiSelectFocus {
+  background-image:none !important;
+  color:inherit !important;
+  border-color: white !important;
 }
 
 img.icon {
