@@ -1,1 +1,12 @@
 <h4 style="display:inline-block">Messages</h4>
+<div infinite-scroll="fetchLogs()" infinite-scroll-distance="3">
+  <table class="table" style="margin-bottom:0">
+    <tr ng-repeat="log in logs">
+      <td>{{log.time | amCalendar}}</td>
+      <td>{{log.deviceId}}</td>
+      <td>{{log.level}}</td>
+      <td>{{log.uri}}</td>
+      <td>{{log.content}}</td>
+    </tr>
+  </table>
+</div>

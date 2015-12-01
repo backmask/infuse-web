@@ -15,6 +15,7 @@ angular.module('infuseWebApp', [
   'd3',
   'ui.bootstrap',
   'ui.router',
+  'infinite-scroll',
   'LocalStorageModule',
   'infuseWebAppConnect',
   'infuseWebAppNotification',
