@@ -1,9 +1,12 @@
 'use strict';
 
 angular.module('infuseWebApp')
-  .controller('DevicesCtrl', function ($scope, gatewayManager) {
-    var gw = gatewayManager.getConnection();
+  .controller('DevicesCtrl', function ($scope, devices) {
     $scope.devices = [];
+
+    devices.onDevices(function(dev) {
+      $scope.devices = dev;
+    }, $scope);
 
     function fillDefaultIcon(d) {
       if (!d.icon && !d.hasOwnProperty('msGroup')) {
@@ -66,11 +69,6 @@ angular.module('infuseWebApp')
       { id: 'flight.command', name: 'Flight command' }
     ].map(fillDefaultIcon);
 
-    var refreshDevices = function() {
-      return gw.doGetAllDevices()
-        .then(function(d) { $scope.devices = d.data.devices; });
-    };
-
     $scope.editDevice = function(device) {
       $scope.editingDevice = true;
       $scope.device = angular.copy(device);
@@ -101,7 +99,7 @@ angular.module('infuseWebApp')
 
       var doneCb = function() {
         $scope.editingDevice = false;
-        return refreshDevices();
+        return devices.refreshDevices();
       };
 
       if (device.deviceId) {
@@ -117,7 +115,7 @@ angular.module('infuseWebApp')
       gatewayManager.getConnection().doRemoveDevice(device.deviceId)
         .then(function() {
           $scope.editingDevice = false;
-          return refreshDevices();
+          return devices.refreshDevices();
         });
     };
 
@@ -156,6 +154,4 @@ angular.module('infuseWebApp')
       }
       return '<i class="fa fa-question"></i>';
     };
-
-    refreshDevices();
   });

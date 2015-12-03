@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('infuseWebApp')
-  .controller('GraphCtrl', function ($scope) {
+  .controller('GraphCtrl', function ($scope, devices) {
     $scope.data = [];
     $scope.settings = $scope.settings || {
       name: 'New graph',
@@ -38,7 +38,7 @@ angular.module('infuseWebApp')
       $scope.data = data;
     };
 
-    $scope.$watch('devices', function(d) {
+    devices.onDevices(function(d) {
       if (!d) { return; }
       $scope.settings.series.forEach(function (s) {
         s._devices = d.map(function(dev) {
@@ -49,7 +49,7 @@ angular.module('infuseWebApp')
           };
         });
       });
-    });
+    }, $scope);
 
     $scope.refreshSerie = function(serie) {
       var rq = {
