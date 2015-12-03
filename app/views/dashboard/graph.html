@@ -9,16 +9,7 @@
     <div class="form-group">
       <label for="device" class="col-sm-2 control-label">Device</label>
       <div class="col-sm-10">
-        <isteven-multi-select
-            input-model="serie._devices"
-            output-model="serie._device"
-            button-label="name"
-            item-label="name"
-            tick-property="ticked"
-            selection-mode="multiple"
-            helper-elements="filter"
-        >
-        </isteven-multi-select>
+        <devices-select multiple value="serie.devicesId" />
       </div>
     </div>
     <div class="form-group">

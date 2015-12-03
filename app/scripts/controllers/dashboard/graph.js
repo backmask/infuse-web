@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('infuseWebApp')
-  .controller('GraphCtrl', function ($scope, devices) {
+  .controller('GraphCtrl', function ($scope) {
     $scope.data = [];
     $scope.settings = $scope.settings || {
       name: 'New graph',
@@ -38,19 +38,6 @@ angular.module('infuseWebApp')
       $scope.data = data;
     };
 
-    devices.onDevices(function(d) {
-      if (!d) { return; }
-      $scope.settings.series.forEach(function (s) {
-        s._devices = d.map(function(dev) {
-          return {
-            name: dev.description.name + ' (' + dev.description.location + ')',
-            id: dev.deviceId,
-            ticked: s.devicesId.indexOf(dev.deviceId) !== -1
-          };
-        });
-      });
-    }, $scope);
-
     $scope.refreshSerie = function(serie) {
       var rq = {
         deviceId: serie.devicesId,
@@ -72,12 +59,6 @@ angular.module('infuseWebApp')
     };
 
     $scope.finishSetup = function() {
-      $scope.settings.series.forEach(function(s) {
-        s.devicesId = s._device
-          .filter(function(d) { return d.ticked; })
-          .map(function(d) { return d.id; });
-      });
-
       $scope.refreshAll();
       $scope.$emit('settingsUpdated');
     };

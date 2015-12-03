@@ -114,7 +114,6 @@ angular.module('infuseWebApp')
 
       connection.$on('settingsUpdated', function() {
         var viewsConfig = getViewsConfig();
-        console.log($scope.dashboardConfig.views, viewsConfig);
         $scope.dashboardModified = !angular.equals($scope.dashboardConfig.views, viewsConfig);
       });
     } else {
