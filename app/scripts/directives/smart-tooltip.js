@@ -13,7 +13,9 @@ angular.module('infuseWebAppCommon')
         showOnClick: '@'
       },
       transclude: true,
-      link: function(scope, element) {
+      link: function(scope, element, attrs) {
+        var showOnHover = angular.isDefined(attrs['showOnHover']);
+        var showOnClick = angular.isDefined(attrs['showOnClick']);
         var container = element.find('.tooltip-container');
         var arrow = element.find('.arrow');
         var anchor = false;
@@ -92,18 +94,16 @@ angular.module('infuseWebAppCommon')
           if (show) {
             $interval.cancel(autoRefresh);
             autoRefresh = $interval(refreshPosition, 25);
-            $timeout(function() {
-              refreshPosition();
-              container.toggleClass('in', true);
-              if (enterMousePosition) {
-                enterMouseDistance = getDistance(enterMousePosition, container);
-              }
-            });
+            refreshPosition();
+            container.addClass('in');
+            if (enterMousePosition) {
+              enterMouseDistance = getDistance(enterMousePosition, container);
+            }
           } else {
             $interval.cancel(autoRefresh);
             $(window).off('mousemove', trackMouse);
             autoRefresh = false;
-            container.toggleClass('in', false);
+            container.removeClass('in');
           }
         };
 
@@ -148,12 +148,12 @@ angular.module('infuseWebAppCommon')
             return;
           }
 
-          if (scope.showOnHover) {
+          if (showOnHover) {
             if (anchor) {
               anchor.off('mousemove', onHoverAnchor);
             }
             nAnchor.on('mousemove', onHoverAnchor);
-          } else if (scope.showOnClick) {
+          } else if (showOnClick) {
             if (anchor) {
               anchor.off('click', onClickAnchor);
             }
