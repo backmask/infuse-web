@@ -1,12 +1,11 @@
 'use strict';
 
 angular.module('infuseWebApp')
-  .controller('DashboardCtrl', function ($scope, gatewayManager) {
+  .controller('DashboardCtrl', function ($scope, gatewayManager, devices, dashboardConfig) {
     var connection = gatewayManager.getConnection();
     $scope.loading = true;
-    $scope.dashboardModified = false;
     $scope.dashboardLocked = true;
-    $scope.dashboardConfig = {};
+    $scope.dashboard = dashboardConfig.get();
     $scope.loadingError = false;
     $scope.activeViews = [];
 
@@ -34,13 +33,6 @@ angular.module('infuseWebApp')
       };
     });
 
-    var createNewDashboard = function() {
-      $scope.dashboardModified = true;
-      $scope.dashboardConfig = {
-        views: []
-      };
-    };
-
     var bootstrapView = function(viewConfig) {
       var instance = angular.copy(dashboardTiles[viewConfig.name]);
       instance.scope = connection.$new();
@@ -51,6 +43,7 @@ angular.module('infuseWebApp')
     };
 
     var bootstrapDashboard = function(config) {
+      $scope.loading = false;
       $scope.activeViews = config.views.map(bootstrapView);
     };
 
@@ -63,20 +56,8 @@ angular.module('infuseWebApp')
       });
     };
 
-    $scope.saveDashboard = function() {
-      $scope.dashboardConfig.views = getViewsConfig();
-      connection.doSetDashboard($scope.dashboardConfig)
-        .then(function() { $scope.dashboardModified = false; });
-    };
-
-    $scope.revertDashboard = function() {
-      return connection.doGetDashboard()
-        .then(function(d) {
-          $scope.dashboardModified = false;
-          $scope.dashboardConfig = d;
-          bootstrapDashboard(d);
-        });
-    };
+    $scope.saveDashboard = dashboardConfig.save;
+    $scope.revertDashboard = dashboardConfig.revert;
 
     $scope.toggleDashboardLock = function() {
       $scope.dashboardLocked = !$scope.dashboardLocked;
@@ -84,37 +65,26 @@ angular.module('infuseWebApp')
 
     $scope.addTile = function(id) {
       var view = { name: id };
-      $scope.dashboardModified = true;
+      $scope.dashboard.modified = true;
       $scope.activeViews.push(bootstrapView(view));
+      dashboardConfig.setViews(getViewsConfig());
     };
 
     $scope.shiftTile = function(index, direction) {
       var moved = $scope.activeViews.splice(index, 1);
       $scope.activeViews.splice(index + direction, 0, moved[0]);
-      $scope.dashboardModified = true;
+      dashboardConfig.setViews(getViewsConfig());
     };
 
     $scope.removeTile = function(index) {
       $scope.activeViews.splice(index, 1);
-      $scope.dashboardModified = true;
+      dashboardConfig.setViews(getViewsConfig());
     };
 
     if (connection) {
-      $scope.revertDashboard()
-        .then(function() { $scope.loading = false; })
-        .catch(function(e) {
-          if (e.error.message === 'Could not open dashboard.json') {
-            createNewDashboard();
-            bootstrapDashboard($scope.dashboardConfig);
-            $scope.loading = false;
-          } else {
-            $scope.loadingError = e.error.message;
-          }
-        });
-
+      dashboardConfig.onUpdate(bootstrapDashboard, $scope);
       connection.$on('settingsUpdated', function() {
-        var viewsConfig = getViewsConfig();
-        $scope.dashboardModified = !angular.equals($scope.dashboardConfig.views, viewsConfig);
+        dashboardConfig.setViews(getViewsConfig());
       });
     } else {
       $scope.loadingError = 'Not connected to gateway';

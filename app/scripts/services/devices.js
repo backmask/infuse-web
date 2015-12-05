@@ -1,10 +1,30 @@
 'use strict';
 
 angular.module('infuseWebApp')
-  .factory('devices', function($q, gatewayManager) {
+  .factory('devices', function($q, gatewayManager, dashboardConfig) {
     var r = {};
     var devices = [];
     var devicesRefreshedCallbacks = [];
+    var dashboard = dashboardConfig.get();
+
+    var updateColors = function() {
+      var updated = false;
+      devices.forEach(function(dev) {
+        var devConfig = dashboard.config.devices[dev.deviceId];
+        if (!devConfig) {
+          dashboard.config.devices[dev.deviceId] = devConfig = {};
+        }
+        if (!devConfig.color) {
+          devConfig.color = window.randomColor({ luminosity: 'light'});
+          updated = true;
+        }
+        dev.color = devConfig.color;
+      });
+
+      if (updated && !dashboard.modified) {
+        dashboardConfig.save();
+      }
+    };
 
     r.getDevices = function() {
       return devices;
@@ -15,6 +35,7 @@ angular.module('infuseWebApp')
       if (gw) {
         return gw.doGetAllDevices().then(function (d) {
           devices = d.data.devices;
+          updateColors();
           devicesRefreshedCallbacks.forEach(function(cb) { cb(devices); });
         });
       }

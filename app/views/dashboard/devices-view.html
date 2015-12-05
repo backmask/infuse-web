@@ -1,7 +1,7 @@
 <h4 style="display:inline-block">Your devices</h4>
 <div class="pull-right"><button class="btn btn-md btn-primary" ng-click="newDevice()">New device</button></div>
 <div>
-  <div class="device-row" ng-repeat="device in devices">
+  <div class="device-row" ng-repeat="device in devices" style="border-left:5px solid {{device.color}}">
     <div class="pull-left" ng-bind-html="getFamilyIcon(device.description.family)"></div>
     <div class="pull-left">
       <span>{{device.description.name}}</span>

@@ -12,7 +12,10 @@ angular.module('infuseWebApp')
 
         var refreshContent = function(device) {
           scope.content = device.description.name.substr(0, 1);
-          elt.find('.badge')[0].style.backgroundColor = window.randomColor({ luminosity: 'light'});
+          elt.find('.badge')[0].style.backgroundColor = device.color;
+
+          scope.deviceIcon = devicesIcon.getFamilyIcon(device.description.family);
+          scope.deviceDescription = device.description;
         };
 
         devices.onDevices(function(dev) {
@@ -25,6 +28,14 @@ angular.module('infuseWebApp')
         }, scope);
       },
       template: '' +
-        '<span class="badge" ng-bind-html="content"></span>'
+        '<span class="badge">' +
+        '  <span ng-bind-html="content"></span>' +
+        '  <smart-tooltip show-on-hover class="deviceTooltip">' +
+        '    <span class="pull-left" ng-bind-html="deviceIcon"></span>' +
+        '    <span class="deviceName">{{deviceDescription.name}}</span>' +
+        '    <span class="deviceLocation">@{{deviceDescription.location}}</span><br/>' +
+        '    <span class="deviceId">{{id}}</span>' +
+        '  </smart-tooltip>' +
+        '</span>'
     }
   });

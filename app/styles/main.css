@@ -210,3 +210,20 @@ img.icon {
   text-shadow: 0 0 1px #777;
   font-size: 0.8em;
 }
+
+.deviceTooltip {
+  color: #777;
+  text-shadow: none;
+  font-size: 0.8em;
+  vertical-align: middle;
+}
+
+.deviceTooltip .deviceLocation {
+  font-size: 0.8em;
+  color: #aaa;
+}
+
+.deviceTooltip .deviceId {
+  font-size: 0.8em;
+  color: #aaa;
+}

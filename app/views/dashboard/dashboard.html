@@ -43,8 +43,8 @@
   </div>
   <!-- Unlock bottom right actions -->
   <div class="dashboard-edit">
-    <button ng-if="dashboardModified" class="btn btn-md btn-success" ng-click="saveDashboard()">Save dashboard</button>
-    <button ng-if="dashboardModified" class="btn btn-md" ng-click="revertDashboard()">Revert dashboard</button>
+    <button ng-if="dashboard.modified" class="btn btn-md btn-success" ng-click="saveDashboard()">Save dashboard</button>
+    <button ng-if="dashboard.modified" class="btn btn-md" ng-click="revertDashboard()">Revert dashboard</button>
     <button class="btn btn-md" ng-click="toggleDashboardLock()"><i class="fa fa-lock" ng-class="{ 'fa-lock': dashboardLocked, 'fa-unlock': !dashboardLocked }"></i></button>
   </div>
 </div>
