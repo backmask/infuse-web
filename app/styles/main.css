@@ -185,3 +185,28 @@ img.icon {
 .multiSelect > button {
   min-height: 34px !important;
 }
+
+.logs-view {
+  font-size: 0.8em;
+}
+
+.logs-view .log-level {
+  background-color: #ccc;
+}
+
+.logs-view .log-info {
+  background-color: #009FFF;
+}
+
+.logs-view .log-warning {
+  background-color: rgb(212, 199, 28);
+}
+
+.logs-view .log-error {
+  background-color: #F00;
+}
+
+.logs-view .badge {
+  text-shadow: 0 0 1px #777;
+  font-size: 0.8em;
+}

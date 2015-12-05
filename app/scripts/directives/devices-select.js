@@ -6,7 +6,8 @@ angular.module('infuseWebApp')
         restrict: 'E',
         scope: {
           multiple: '@',
-          value: '='
+          value: '=',
+          maxLabels: '@'
         },
         link: function(scope, elt, attrs) {
           var isMultiple = angular.isDefined(attrs.multiple);
@@ -51,6 +52,7 @@ angular.module('infuseWebApp')
           '<isteven-multi-select ' +
           'input-model="devices" ' +
           'output-model="selectedDevices" ' +
+          'max-labels="{{maxLabels}}" ' +
           'button-label="name" ' +
           'item-label="name" ' +
           'tick-property="ticked" ' +

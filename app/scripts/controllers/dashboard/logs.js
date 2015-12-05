@@ -1,9 +1,9 @@
 'use strict';
 
 angular.module('infuseWebApp')
-  .controller('LogsCtrl', function ($scope, gatewayManager) {
+  .controller('LogsCtrl', function ($scope, gatewayManager, devices) {
     var gw = gatewayManager.getConnection();
-    var rq = {
+    $scope.request = {
       deviceId: [],
       startTime: new Date(new Date() - 24 * 3600 * 1000).toISOString(),
       endTime: new Date().toISOString(),
@@ -11,7 +11,6 @@ angular.module('infuseWebApp')
       offset: 0
     };
 
-    $scope.devices = [];
     $scope.logs = [];
 
     var mapLogEntries = function(rawLog) {
@@ -26,17 +25,23 @@ angular.module('infuseWebApp')
     };
 
     $scope.fetchLogs = function() {
-      console.log('rq', rq);
-      gw.doRequest('/timeseries/get/logs', rq)
+      gw.doRequest('/timeseries/get/logs', $scope.request)
         .then(function(d) {
           $scope.logs = mapLogEntries(d.data.results[0].series[0]);
         });
     };
 
-    gw.doGetAllDevices()
-      .then(function(d) {
-        $scope.devices = d.data.devices;
-        rq.deviceId = d.data.devices.map(function(dev) { return dev.deviceId; });
-        $scope.fetchLogs();
+    $scope.$watch('request', $scope.fetchLogs, true);
+
+    var gotDevices = false;
+    devices.onDevices(function(dev) {
+      if (gotDevices || dev.length === 0) {
+        return;
+      }
+      gotDevices = true;
+      $scope.request.deviceId = dev.map(function (dev) {
+        return dev.deviceId;
       });
+      $scope.fetchLogs();
+    });
   });

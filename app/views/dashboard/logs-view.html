@@ -1,10 +1,14 @@
 <h4 style="display:inline-block">Messages</h4>
+<span class="pull-right">
+  <i class="fa fa-filter"></i>
+  <devices-select multiple max-labels="0" value="request.deviceId"></devices-select>
+</span>
 <div infinite-scroll="fetchLogs()" infinite-scroll-distance="3">
-  <table class="table" style="margin-bottom:0">
+  <table class="table logs-view" style="margin-bottom:0">
     <tr ng-repeat="log in logs">
+      <td><span class="badge log-level log-{{log.level}}">{{log.level}}</span></td>
+      <td><device-badge id="log.deviceId" /></td>
       <td>{{log.time | amCalendar}}</td>
-      <td>{{log.deviceId}}</td>
-      <td>{{log.level}}</td>
       <td>{{log.uri}}</td>
       <td>{{log.content}}</td>
     </tr>

@@ -1,19 +1,12 @@
 'use strict';
 
 angular.module('infuseWebApp')
-  .controller('DevicesCtrl', function ($scope, devices) {
+  .controller('DevicesCtrl', function ($scope, devices, devicesIcon) {
     $scope.devices = [];
 
     devices.onDevices(function(dev) {
       $scope.devices = dev;
     }, $scope);
-
-    function fillDefaultIcon(d) {
-      if (!d.icon && !d.hasOwnProperty('msGroup')) {
-        d.icon = '<i class="fa fa-question"></i>';
-      }
-      return d;
-    }
 
     function setCheckedValues(toCheck, detailedValues) {
       var map = {};
@@ -28,11 +21,7 @@ angular.module('infuseWebApp')
       return expandedValue.id;
     }
 
-    $scope.families = [
-      { id: 'sensor', name: 'Sensor', icon: '<i class="fa fa-wifi"></i>' },
-      { id: 'sensor.temperature', name: 'Thermometer', icon: '<img class="icon" src="images/thermometer.png" />' },
-      { id: 'controller', name: 'Controller', icon: '<i class="fa fa-gamepad"></i>' }
-    ].map(fillDefaultIcon);
+    $scope.families = devicesIcon.familiesList;
 
     $scope.sensors = [
       { name: '<b>Controller</b>', msGroup: true },
@@ -53,7 +42,7 @@ angular.module('infuseWebApp')
       { id: 'humidity', name: 'Humidity', icon: '<i class="fa fa-tint"></i>' },
       { id: 'temperature', name: 'Temperature', icon: '<img class="icon" src="images/thermometer.png" />' },
       { msGroup: false }
-    ].map(fillDefaultIcon);
+    ];
 
     $scope.logLevels = [
       { id: 0, name: 'All' },
@@ -67,7 +56,7 @@ angular.module('infuseWebApp')
 
     $scope.readers = [
       { id: 'flight.command', name: 'Flight command' }
-    ].map(fillDefaultIcon);
+    ];
 
     $scope.editDevice = function(device) {
       $scope.editingDevice = true;
@@ -146,12 +135,5 @@ angular.module('infuseWebApp')
       $scope.editingApiKeys = false;
     };
 
-    $scope.getFamilyIcon = function(familyId) {
-      for (var i = 0; i < $scope.families.length; ++i) {
-        if ($scope.families[i].id === familyId) {
-          return $scope.families[i].icon;
-        }
-      }
-      return '<i class="fa fa-question"></i>';
-    };
+    $scope.getFamilyIcon = devicesIcon.getFamilyIcon;
   });
