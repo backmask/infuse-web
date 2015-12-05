@@ -46,11 +46,11 @@ angular.module('infuseWebApp')
       devicesRefreshedCallbacks.push(cb);
 
       var unsubscribe = function() {
-        devicesRefreshedCallbacks.splice(devicesRefreshedCallbacks.find(cb), 1);
+        devicesRefreshedCallbacks.splice(devicesRefreshedCallbacks.indexOf(cb), 1);
       };
 
       if (scope) {
-        scope.$on('destroy', unsubscribe);
+        scope.$on('$destroy', unsubscribe);
       }
 
       cb(devices);
