@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('infuseWebApp')
-  .controller('DevicesCtrl', function ($scope, devices, devicesIcon) {
+  .controller('DevicesCtrl', function ($scope, devices, devicesIcon, gatewayManager) {
     $scope.devices = [];
 
     devices.onDevices(function(dev) {

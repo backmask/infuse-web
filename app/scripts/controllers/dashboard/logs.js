@@ -11,7 +11,18 @@ angular.module('infuseWebApp')
       offset: 0
     };
 
-    $scope.logs = [];
+    var logFilters = {
+      'message': ['message'],
+      'io': ['input', 'output']
+    };
+
+    $scope.logs = {};
+
+    var getRequest = function(logType) {
+      var copy = angular.copy($scope.request);
+      copy.logType = logType;
+      return copy;
+    };
 
     var mapLogEntries = function(rawLog) {
       var columns = rawLog.columns;
@@ -24,14 +35,23 @@ angular.module('infuseWebApp')
       });
     };
 
-    $scope.fetchLogs = function() {
-      gw.doRequest('/timeseries/get/logs', $scope.request)
-        .then(function(d) {
-          $scope.logs = mapLogEntries(d.data.results[0].series[0]);
-        });
+    var refreshAllLogs = function() {
+      for (var key in logFilters) {
+        $scope.fetchLogs(key);
+      }
     };
 
-    $scope.$watch('request', $scope.fetchLogs, true);
+    $scope.fetchLogs = function(target) {
+      if (gw) {
+        gw.doRequest('/timeseries/get/logs', getRequest(logFilters[target]))
+          .then(function (d) {
+            var log = d.data.results[0].series ? mapLogEntries(d.data.results[0].series[0]) : [];
+            $scope.logs[target] = log;
+          });
+      }
+    };
+
+    $scope.$watch('request', refreshAllLogs, true);
 
     var gotDevices = false;
     devices.onDevices(function(dev) {
@@ -42,6 +62,7 @@ angular.module('infuseWebApp')
       $scope.request.deviceId = dev.map(function (dev) {
         return dev.deviceId;
       });
-      $scope.fetchLogs();
+
+      refreshAllLogs();
     });
   });

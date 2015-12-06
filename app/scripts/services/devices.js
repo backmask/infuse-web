@@ -77,7 +77,7 @@ angular.module('infuseWebApp')
       for (var key in obj) {
         var val = angular.copy(obj[key]);
         val.id = key;
-        arr.push(key);
+        arr.push(val);
       }
 
       return arr.sort(function(a, b) { return a.name > b.name; });;
