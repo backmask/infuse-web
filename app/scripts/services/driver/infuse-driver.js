@@ -9,7 +9,7 @@ angular.module('infuseWebAppDevice')
       var driver = new WebSocket(configuration.url);
       var onDataCallbacks = [];
       var onSendCallbacks = [];
-      var responseCallbacks = {};
+      var pendingRequests = {};
       var clientDriver = infuseClientDriverFactory.manage(scope);
       var throttledApply = throttle(function() { scope.$apply(); }, 40);
 
@@ -77,8 +77,8 @@ angular.module('infuseWebAppDevice')
           cb(data);
         });
 
-        if (data.context && responseCallbacks[data.context]) {
-          responseCallbacks[data.context](data);
+        if (data.context && pendingRequests[data.context]) {
+          pendingRequests[data.context].onResponse(data);
         }
         throttledApply();
       };
@@ -97,11 +97,13 @@ angular.module('infuseWebAppDevice')
       };
 
       scope.setCallback = function(context, cb) {
-        responseCallbacks[context] = cb;
+        if (pendingRequests[context]) {
+          pendingRequests[context].onResponse = cb;
+        }
       };
 
       scope.removeCallback = function(context) {
-        delete responseCallbacks[context];
+        delete pendingRequests[context];
       };
 
       scope.doRequest = function(method, parameters) {
@@ -113,21 +115,40 @@ angular.module('infuseWebAppDevice')
           params: parameters
         };
 
-        var responseTimeout = $timeout(function() {
+        var pendingRq = {};
+        pendingRq.timeout = $timeout(function() {
+          pendingRq.cleanUp();
+
           notifier.warning(method + ' timed out');
           deferredResponse.reject(method + ' timed out');
-          delete responseCallbacks[context];
         }, 1000);
 
-        responseCallbacks[context] = function(data) {
-          $timeout.cancel(responseTimeout);
-          delete responseCallbacks[context];
+        pendingRq.cleanUp = function() {
+          $timeout.cancel(pendingRq.timeout);
+          delete pendingRequests[context];
+        };
+
+        pendingRq.onResponse = function(data) {
+          pendingRq.cleanUp();
+
           if (data.error) {
             notifier.error(method + ' failed', data.error.message);
             deferredResponse.reject(data);
           } else {
             deferredResponse.resolve(data);
           }
+        };
+
+        pendingRequests[context] = pendingRq;
+
+        deferredResponse.promise.overrides = function(overrideKey) {
+          for (var ctx in pendingRequests) {
+            if (angular.equals(pendingRequests[ctx].overrideKey, overrideKey)) {
+              pendingRequests[ctx].cleanUp();
+            }
+          }
+          pendingRequests[context].overrideKey = overrideKey;
+          return deferredResponse.promise;
         };
 
         scope.send(JSON.stringify(json));

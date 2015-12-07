@@ -44,6 +44,7 @@ angular.module('infuseWebApp')
     $scope.fetchLogs = function(target) {
       if (gw) {
         gw.doRequest('/timeseries/get/logs', getRequest(logFilters[target]))
+          .overrides(target)
           .then(function (d) {
             var log = d.data.results[0].series ? mapLogEntries(d.data.results[0].series[0]) : [];
             $scope.logs[target] = log;
