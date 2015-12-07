@@ -1,16 +1,16 @@
 <h4 style="display:inline-block">IO</h4>
-<span class="pull-right">
-  <i class="fa fa-filter"></i>
-  <devices-select multiple max-labels="0" value="request.deviceId"></devices-select>
-</span>
 <div infinite-scroll="fetchLogs('io')" infinite-scroll-distance="3">
   <table class="table logs-view" style="margin-bottom:0">
-    <tr ng-repeat="log in logs.io">
-      <td><span class="badge log-level log-{{log.level}}">{{log.level}}</span></td>
+    <tr ng-repeat-start="log in logs.io" style="height:0%">
+      <td><span class="badge log-level log-{{log.type}}">{{log.type}}</span></td>
       <td><device-badge id="log.deviceId" /></td>
-      <td>{{log.time | amCalendar}}</td>
-      <td>{{log.uri}}</td>
-      <td>{{log.content}}</td>
+      <td rowspan="2"><code>{{log.content}}</code></td>
+    </tr>
+    <tr ng-repeat-end>
+      <td colspan="2" style="border:0">
+        {{log.time | amCalendar}}<br/>
+        <span style="font-weight:bold">{{log.uri}}</span>
+      </td>
     </tr>
   </table>
 </div>

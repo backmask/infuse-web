@@ -1,3 +1,16 @@
+code {
+  display: block;
+  padding: 5px;
+  margin: 0;
+  color: #333;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  white-space: pre-wrap;
+}
+
 .btn, .alert, .input-group-addon, .form-control, .multiSelect > button {
   border-radius: 1px;
 }
@@ -204,6 +217,14 @@ img.icon {
 
 .logs-view .log-error {
   background-color: #F00;
+}
+
+.logs-view .log-input {
+  background-color: #A0D87F;
+}
+
+.logs-view .log-output {
+  background-color: #FF7979;
 }
 
 .logs-view .badge {

@@ -1,8 +1,4 @@
 <h4 style="display:inline-block">Messages</h4>
-<span class="pull-right">
-  <i class="fa fa-filter"></i>
-  <devices-select multiple max-labels="0" value="request.deviceId"></devices-select>
-</span>
 <div infinite-scroll="fetchLogs('message')" infinite-scroll-distance="3">
   <table class="table logs-view" style="margin-bottom:0">
     <tr ng-repeat="log in logs.message">
