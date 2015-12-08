@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('infuseWebApp')
-  .controller('LogsCtrl', function ($scope, gatewayManager, devices) {
+  .controller('LogsCtrl', function ($scope, $q, gatewayManager, devices) {
     var gw = gatewayManager.getConnection();
     $scope.request = {
       deviceId: [],
@@ -16,7 +16,10 @@ angular.module('infuseWebApp')
       'io': ['input', 'output']
     };
 
-    $scope.logs = {};
+    $scope.logs = {
+      'message': [],
+      'io': []
+    };
 
     var getRequest = function(logType) {
       var copy = angular.copy($scope.request);
@@ -41,15 +44,28 @@ angular.module('infuseWebApp')
       }
     };
 
-    $scope.fetchLogs = function(target) {
+    var doLogsRequest = function(target, rq) {
       if (gw) {
-        gw.doRequest('/timeseries/get/logs', getRequest(logFilters[target]))
+        return gw.doRequest('/timeseries/get/logs', rq)
           .overrides(target)
           .then(function (d) {
-            var log = d.data.results[0].series ? mapLogEntries(d.data.results[0].series[0]) : [];
-            $scope.logs[target] = log;
+            return d.data.results[0].series ? mapLogEntries(d.data.results[0].series[0]) : [];
           });
       }
+      return $q.when([]);
+    };
+
+    $scope.fetchMoreLogs = function(target) {
+      console.log('more', target);
+      var rq = getRequest(logFilters[target]);
+      rq.offset = $scope.logs[target].length;
+      doLogsRequest(target, rq)
+        .then(function(log) { $scope.logs[target] = $scope.logs[target].concat(log); });
+    };
+
+    $scope.fetchLogs = function(target) {
+      doLogsRequest(target, getRequest(logFilters[target]))
+        .then(function(log) { $scope.logs[target] = log; });
     };
 
     $scope.$watch('request', refreshAllLogs, true);

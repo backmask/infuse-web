@@ -1,5 +1,8 @@
 <h4 style="display:inline-block">IO</h4>
-<div infinite-scroll="fetchLogs('io')" infinite-scroll-distance="3">
+<div
+  infinite-scroll="fetchMoreLogs('io')"
+  infinite-scroll-distance="3"
+  infinite-scroll-parent="true">
   <table class="table logs-view" style="margin-bottom:0">
     <tr ng-repeat-start="log in logs.io" style="height:0%">
       <td><span class="badge log-level log-{{log.type}}">{{log.type}}</span></td>
