@@ -5,8 +5,8 @@ angular.module('infuseWebApp')
     var gw = gatewayManager.getConnection();
     $scope.request = {
       deviceId: [],
-      startTime: new Date(new Date() - 24 * 3600 * 1000).toISOString(),
-      endTime: new Date().toISOString(),
+      startTime: "",
+      endTime: "",
       limit: 20,
       offset: 0
     };
@@ -55,6 +55,11 @@ angular.module('infuseWebApp')
       return $q.when([]);
     };
 
+    $scope.refresh = function () {
+      $scope.request.startTime = new Date(new Date() - 24 * 3600 * 1000).toISOString();
+      $scope.request.endTime = new Date().toISOString();
+    };
+
     $scope.fetchMoreLogs = function(target) {
       var rq = getRequest(logFilters[target]);
       rq.offset = $scope.logs[target].length;
@@ -67,6 +72,7 @@ angular.module('infuseWebApp')
         .then(function(log) { $scope.logs[target] = log; });
     };
 
+    $scope.refresh();
     $scope.$watch('request', refreshAllLogs, true);
 
     var gotDevices = false;
