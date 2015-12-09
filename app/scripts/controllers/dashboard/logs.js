@@ -7,7 +7,7 @@ angular.module('infuseWebApp')
       deviceId: [],
       startTime: new Date(new Date() - 24 * 3600 * 1000).toISOString(),
       endTime: new Date().toISOString(),
-      limit: 10,
+      limit: 20,
       offset: 0
     };
 
@@ -56,7 +56,6 @@ angular.module('infuseWebApp')
     };
 
     $scope.fetchMoreLogs = function(target) {
-      console.log('more', target);
       var rq = getRequest(logFilters[target]);
       rq.offset = $scope.logs[target].length;
       doLogsRequest(target, rq)
