@@ -1,8 +1,8 @@
 <div class="row navbar" ng-controller="MainCtrl">
-  <ul class="nav navbar-nav navbar-left">
-    <li class="danger" ng-if="reconnecting"><span class="navbar-text"><i class="fa fa-circle-o-notch fa-spin"></i> Reconnecting</span></li>
+  <ul class="nav navbar-nav navbar-left" style="height:52px">
+    <li class="danger fill" ng-if="reconnecting"><span class="navbar-text"><i class="fa fa-circle-o-notch fa-spin"></i> Reconnecting</span></li>
   </ul>
-  <ul class="nav navbar-nav navbar-left" ng-if="gw.isConnected()">
+  <ul class="nav navbar-nav navbar-left" ng-if="isConnected">
     <li ui-sref-active="active"><a ui-sref="main.dashboard">Dashboard</a></li>
     <li ui-sref-active="active"><a ui-sref="main.devices">Devices</a></li>
     <li ui-sref-active="active"><a ui-sref="main.logs">Logs</a></li>

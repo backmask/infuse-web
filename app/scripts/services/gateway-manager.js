@@ -1,14 +1,16 @@
 'use strict';
 
 angular.module('infuseWebApp')
-  .factory('gatewayManager', function($rootScope, localStorageService, device, connectionManager) {
+  .factory('gatewayManager', function($rootScope, $interval, localStorageService, device, connectionManager) {
     var r = {};
     var gatewayConnection = false;
     var isAuthenticated = false;
     var gateways = localStorageService.get('gateways') || [];
     var connectionCallbacks = [];
+    var lastConnectArgs = false;
 
     r.connect = function(gateway, login, password) {
+      lastConnectArgs = arguments;
       var gw = device.configure('Infuse', {
         name: 'Infuse',
         description: gateway.name,
@@ -24,8 +26,23 @@ angular.module('infuseWebApp')
         .then(function(driver) {
           gatewayConnection = driver;
           isAuthenticated = true;
-          connectionCallbacks.forEach(function(c) {c.alive(gatewayConnection); });
+          driver.$watch('connected', function(v) {
+            if (v && isAuthenticated) {
+              connectionCallbacks.forEach(function(c) { c.alive(gatewayConnection); });
+            } else if (!v && isAuthenticated) {
+              connectionCallbacks.forEach(function (c) { c.dead(); });
+            }
+          });
         });
+    };
+
+    r.reconnect = function() {
+      if (lastConnectArgs) {
+        var interval = $interval(function() {
+          r.connect.apply(null, lastConnectArgs)
+            .then(function () { $interval.cancel(interval); });
+        }, 1000);
+      }
     };
 
     r.disconnect = function() {
