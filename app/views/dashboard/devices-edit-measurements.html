@@ -1,8 +1,9 @@
 <h4>Measurements</h4>
+<div>Measurements provide a way to abstract the data that may be logged by the device. The device should register a list of available measurements, which can then be freely mapped to a different database</div>
 <div ng-if="refreshingMeasurements"><i class="fa fa-circle-o-notch fa-spin"></i> Loading measurements</div>
 <table ng-if="!refreshingMeasurements && measurements.length >= 1" class="table" style="margin-top:5px">
   <thead>
-    <th>Description</th>
+    <th>Name</th>
     <th>Table</th>
     <th>Column</th>
     <th></th>
@@ -18,8 +19,8 @@
     </td>
   </tr>
 </table>
-<div ng-if="!refreshingMeasurements && !(measurements.length >= 1)"><b>You have no measurement configured for this device</b></div><br/>
+<div ng-if="!refreshingMeasurements && !(measurements.length >= 1)" style="margin-top:10px"><b>You have no measurement configured for this device</b></div><br/>
 <div class="pull-right">
   <button class="btn btn-md btn-success" ng-click="newMeasurement(device)">Create new measurement</button>
-  <button class="btn btn-md btn-primary" ng-click="stopEditingApiKeys()">Done</button>
+  <button class="btn btn-md btn-primary" ng-click="stopEditingMeasurements()">Done</button>
 </div>

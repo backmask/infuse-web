@@ -185,5 +185,9 @@ angular.module('infuseWebApp')
       return !angular.equals(measurement.val, measurement.original);
     };
 
+    $scope.stopEditingMeasurements = function() {
+      $scope.editingMeasurements = false;
+    };
+
     $scope.getFamilyIcon = devicesIcon.getFamilyIcon;
   });
