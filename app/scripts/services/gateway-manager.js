@@ -81,7 +81,7 @@ angular.module('infuseWebApp')
       connectionCallbacks.push(cb);
       return {
         unsubscribe: function() {
-          connectionCallbacks.splice(connectionCallbacks.find(cb, 1));
+          connectionCallbacks.splice(connectionCallbacks.indexOf(cb), 1);
         }
       };
     };

@@ -135,5 +135,55 @@ angular.module('infuseWebApp')
       $scope.editingApiKeys = false;
     };
 
+    $scope.editMeasurements = function(device) {
+      $scope.editingMeasurements = true;
+      $scope.refreshingMeasurements = true;
+      $scope.device = angular.copy(device);
+      gatewayManager.getConnection().doRequest('/watch/timeseries/measurement/get', { deviceId: device.deviceId })
+        .then(function(d) {
+          $scope.measurements = d.data.map(function(v) {
+            return {
+              val: angular.copy(v),
+              original: angular.copy(v)
+            };
+          });
+        })
+        .finally(function() { $scope.refreshingMeasurements = false; });
+    };
+
+    $scope.newMeasurement = function() {
+      $scope.measurements.push({
+        val: {
+          description: 'New measurement',
+          table: 'Table',
+          column: 'Column',
+          deviceId: $scope.device.deviceId
+        }
+      });
+    };
+
+    $scope.saveMeasurement = function(measurement) {
+      measurement.loading = true;
+      gatewayManager.getConnection().doRequest('/watch/timeseries/measurement/add', measurement.val)
+        .then(function(d) {
+          measurement.val = angular.copy(d.data[0]);
+          measurement.original = angular.copy(measurement.val);
+        })
+        .finally(function() { measurement.loading = false; })
+    };
+
+    $scope.deleteMeasurement = function(measurement) {
+      measurement.loading = true;
+      gatewayManager.getConnection().doRequest('/watch/timeseries/measurement/remove', measurement.val)
+        .then(function() {
+          $scope.measurements.splice($scope.measurements.indexOf(measurement), 1);
+        })
+        .finally(function() { measurement.loading = false; })
+    };
+
+    $scope.isMeasurementModified = function(measurement) {
+      return !angular.equals(measurement.val, measurement.original);
+    };
+
     $scope.getFamilyIcon = devicesIcon.getFamilyIcon;
   });
