@@ -1,0 +1,35 @@
+<h4>Watched</h4>
+<div>Triggers events when measurements reach thresholds</div>
+<div ng-if="refreshingWatch"><i class="fa fa-circle-o-notch fa-spin"></i> Loading watches</div>
+<table ng-if="!refreshingWatch && watch.length >= 1" class="table" style="margin-top:5px">
+  <thead>
+  <th>Name</th>
+  <th>Measurement</th>
+  <th></th>
+  </thead>
+  <tr ng-repeat="w in watch">
+    <td><input class="form-control input-md" type="text" ng-model="w.val.name" /></td>
+    <td>
+      <isteven-multi-select
+        input-model="w.measurements"
+        output-model="w.measurement"
+        button-label="name"
+        item-label="name"
+        tick-property="ticked"
+        selection-mode="single"
+        on-item-click="refreshMesurementValue(w)"
+        helper-elements="filter">
+      </isteven-multi-select>
+    </td>
+    <td style="white-space: nowrap">
+      <i ng-if="w.loading" class="fa fa-circle-o-notch fa-spin"></i>
+      <button ng-if="!w.loading && w.val.id" class="btn btn-md btn-danger" ng-click="deleteWatch(w)"><i class="fa fa-trash-o"></i></button>
+      <button ng-if="!w.loading && isWatchModified(w)" class="btn btn-md btn-success" ng-click="saveWatch(w)"><i class="fa fa-check"></i></button>
+    </td>
+  </tr>
+</table>
+<div ng-if="!refreshingWatch && !(watch.length >= 1)" style="margin-top:10px"><b>You have no watch configured</b></div><br/>
+<div class="pull-right">
+  <button class="btn btn-md btn-success" ng-click="newWatch()">Create new watch</button>
+</div>
+<div class="clearfix"></div>

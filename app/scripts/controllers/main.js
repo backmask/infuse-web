@@ -15,7 +15,6 @@ angular.module('infuseWebApp')
     };
 
     var onDead = function() {
-      console.log('onDead');
       $scope.reconnecting = $scope.isConnected;
       gatewayManager.reconnect();
     };

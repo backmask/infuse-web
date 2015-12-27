@@ -4,6 +4,7 @@ angular.module('infuseWebApp')
   .factory('devices', function($q, gatewayManager, dashboardConfig) {
     var r = {};
     var devices = [];
+    var indexedDevices = {};
     var devicesRefreshedCallbacks = [];
     var dashboard = dashboardConfig.get();
 
@@ -30,11 +31,18 @@ angular.module('infuseWebApp')
       return devices;
     };
 
+    r.get = function(deviceId) {
+      return indexedDevices[deviceId];
+    };
+
     r.refreshDevices = function() {
       var gw = gatewayManager.getConnection();
       if (gw) {
         return gw.doGetAllDevices().then(function (d) {
           devices = d.data.devices;
+          indexedDevices = {};
+          devices.forEach(function(d) { indexedDevices[d.deviceId] = d; });
+
           updateColors();
           devicesRefreshedCallbacks.forEach(function(cb) { cb(devices); });
         });

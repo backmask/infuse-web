@@ -15,17 +15,22 @@ angular.module('infuseWebApp')
       })
       .state('main.dashboard', {
         url: '/dashboard',
-        templateUrl: 'views/dashboard/dashboard.html',
+        templateUrl: 'views/dashboard/dashboard.html'
       })
       .state('main.devices', {
         url: '/devices',
         controller: 'DevicesCtrl',
-        templateUrl: 'views/dashboard/devices/devices.html',
+        templateUrl: 'views/dashboard/devices/devices.html'
       })
       .state('main.logs', {
         url: '/logs',
         controller: 'LogsCtrl',
-        templateUrl: 'views/dashboard/logs/logs.html',
+        templateUrl: 'views/dashboard/logs/logs.html'
+      })
+      .state('main.watch', {
+        url: '/watch',
+        controller: 'WatchCtrl',
+        templateUrl: 'views/dashboard/watch/watch.html'
       })
       .state('main.gatewayEdit', {
         url: '/gateway-edit',
