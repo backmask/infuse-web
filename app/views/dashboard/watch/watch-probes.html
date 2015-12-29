@@ -1,0 +1,36 @@
+<h4>Probes</h4>
+<div ng-if="refreshingProbes"><i class="fa fa-circle-o-notch fa-spin"></i> Loading probes</div>
+<table ng-if="!refreshingProbes && probes.length >= 1" class="table" style="margin-top:5px">
+  <thead>
+  <th>Event name</th>
+  <th>Type</th>
+  <th>Threshold</th>
+  <th></th>
+  </thead>
+  <tr ng-repeat="p in probes">
+    <td><input class="form-control input-md" type="text" ng-model="p.val.eventName" /></td>
+    <td>
+      <isteven-multi-select
+        input-model="p.probesType"
+        output-model="p.probeType"
+        button-label="name"
+        item-label="name"
+        tick-property="ticked"
+        selection-mode="single"
+        on-item-click="refreshProbeValue(p)"
+        helper-elements="">
+      </isteven-multi-select>
+    </td>
+    <td><input class="form-control input-md" type="number" ng-model="p.val.threshold" /></td>
+    <td style="white-space: nowrap">
+      <i ng-if="p.loading" class="fa fa-circle-o-notch fa-spin"></i>
+      <button ng-if="!p.loading && p.val.id" class="btn btn-md btn-danger" ng-click="deleteProbe(p)"><i class="fa fa-trash-o"></i></button>
+      <button ng-if="!p.loading && isProbeModified(p)" class="btn btn-md btn-success" ng-click="saveProbe(p)"><i class="fa fa-check"></i></button>
+    </td>
+  </tr>
+</table>
+<div ng-if="!refreshingProbes && !(probes.length >= 1)" style="margin-top:10px"><b>You have no probe configured</b></div><br/>
+<div class="pull-right">
+  <button class="btn btn-md btn-success" ng-click="newProbe()">Create new probe</button>
+</div>
+<div class="clearfix"></div>

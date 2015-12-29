@@ -23,6 +23,7 @@
     </td>
     <td style="white-space: nowrap">
       <i ng-if="w.loading" class="fa fa-circle-o-notch fa-spin"></i>
+      <button ng-if="!w.loading && w.val.id" class="btn btn-md btn-default" ng-click="editProbes(w)"><i class="fa fa-balance-scale"></i></button>
       <button ng-if="!w.loading && w.val.id" class="btn btn-md btn-danger" ng-click="deleteWatch(w)"><i class="fa fa-trash-o"></i></button>
       <button ng-if="!w.loading && isWatchModified(w)" class="btn btn-md btn-success" ng-click="saveWatch(w)"><i class="fa fa-check"></i></button>
     </td>

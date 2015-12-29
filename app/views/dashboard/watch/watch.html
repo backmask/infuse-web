@@ -6,4 +6,7 @@
     </div>
     <div class="well" ng-include src="'views/dashboard/watch/watch-view.html'"></div>
   </div>
+  <div class="col-xs-6">
+    <div class="well" ng-if="editingProbes" ng-include src="'views/dashboard/watch/watch-probes.html'"></div>
+  </div>
 </div>
