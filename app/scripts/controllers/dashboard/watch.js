@@ -152,6 +152,7 @@ angular.module('infuseWebApp')
       gatewayManager.getConnection().doRequest('/watch/timeseries/probe/add', p.val)
         .then(function(d) {
           p.val = angular.copy(d.data[0]);
+          p.val.watchId = $scope.selectedWatch.id;
           p.original = angular.copy(p.val);
         })
         .finally(function() { p.loading = false; })
