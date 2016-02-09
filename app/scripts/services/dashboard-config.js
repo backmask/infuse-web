@@ -45,8 +45,9 @@ angular.module('infuseWebApp')
     };
 
     r.setViews = function(views) {
+      debugger;
       model.config.views = views;
-      model.modified |= angular.equals(model.config, originalConfig);
+      model.modified = !angular.equals(model.config, originalConfig);
     };
 
     r.get = function() {

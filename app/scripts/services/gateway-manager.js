@@ -66,7 +66,7 @@ angular.module('infuseWebApp')
       return gateways;
     };
 
-    r.onConnection = function(aliveCallback, deadCallback) {
+    r.onConnection = function(aliveCallback, deadCallback, scope) {
       if (gatewayConnection && aliveCallback) {
         aliveCallback(gatewayConnection);
       } else if (deadCallback) {
@@ -78,12 +78,16 @@ angular.module('infuseWebApp')
         dead: deadCallback || angular.noop
       };
 
-      connectionCallbacks.push(cb);
-      return {
-        unsubscribe: function() {
-          connectionCallbacks.splice(connectionCallbacks.indexOf(cb), 1);
-        }
+      var unsubscribe = function() {
+        connectionCallbacks.splice(connectionCallbacks.indexOf(cb), 1);
       };
+
+      if (scope) {
+        scope.$on('$destroy', unsubscribe);
+      }
+
+      connectionCallbacks.push(cb);
+      return { unsubscribe: unsubscribe };
     };
 
     r.setGateways = function(gws) {

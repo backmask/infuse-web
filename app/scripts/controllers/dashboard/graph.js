@@ -11,8 +11,7 @@ angular.module('infuseWebApp')
     if ($scope.setup) {
       $scope.settings.series.push({
         devicesId: [],
-        name: 'Measurement name',
-        value: 'Measurement value'
+        measurementId: 0
       });
     }
 
@@ -40,16 +39,13 @@ angular.module('infuseWebApp')
 
     $scope.refreshSerie = function(serie) {
       var rq = {
-        deviceId: serie.devicesId,
         startTime: new Date(new Date() - 24 * 3600 * 1000).toISOString(),
         endTime: new Date().toISOString(),
-        name: serie.name,
-        tags: [],
-        values: [serie.value],
+        measurementId: serie.measurementId,
         timeResolution: '15m'
       };
 
-      $scope.doRequest('/timeseries/get', rq)
+      $scope.doRequest('/timeseries/get/measurement', rq)
         .then(convertData)
         .then(displayData);
     };
