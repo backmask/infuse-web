@@ -18,6 +18,12 @@
         <measurement-select devices-id="serie.devicesId" value="serie.measurementId" />
       </div>
     </div>
+    <div class="form-group">
+      <label for="watch" class="col-sm-4 control-label">Watch</label>
+      <div class="col-sm-8">
+        <watch-select multiple measurements-id="serie.measurementId" value="serie.watchId" />
+      </div>
+    </div>
   </form>
 </div>
 <mg-plot ng-if="!setup" width="100%" height="200px" data="data"></mg-plot>
