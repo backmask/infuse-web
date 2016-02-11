@@ -19,7 +19,7 @@ angular.module('infuseWebApp')
               .map(function(w) {
                 return {
                   name: w.name,
-                  id: w.watchId,
+                  id: w.id,
                   ticked: false
                 };
               });
