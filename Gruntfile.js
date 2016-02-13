@@ -250,6 +250,15 @@ module.exports = function (grunt) {
 
     // Copies remaining files to places other tasks can use
     copy: {
+      fixPath: {
+        expand: true,
+        cwd: '<%= yeoman.app %>/bower_components/mg-regions/dist',
+        dest: '<%= yeoman.app %>/bower_components/mg-regions/dist',
+        src: '*',
+        rename: function(dest, src) {
+          return dest + '/' + src.replace('mg_regions','mg-regions');
+        }
+      },
       dist: {
         files: [{
           expand: true,
@@ -317,6 +326,7 @@ module.exports = function (grunt) {
 
     grunt.task.run([
       'clean:server',
+      'copy:fixPath',
       'includeSource',
       'bower-install',
       'concurrent:server',
@@ -336,6 +346,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('build', [
     'clean:dist',
+    'copy:fixPath',
     'includeSource',
     'bower-install',
     'useminPrepare',

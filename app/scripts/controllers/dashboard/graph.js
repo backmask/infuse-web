@@ -62,6 +62,29 @@ angular.module('infuseWebApp')
       $scope.data = data;
     };
 
+    var displayRegions = function(startTime, endTime) {
+      return function(data) {
+        if (data.length == 0) {
+          $scope.regions = [];
+          return;
+        }
+
+        var regions = {};
+        data[0].forEach(function (m) {
+          if (!regions[m.event]) {
+            regions[m.event] = {
+              label: m.event,
+              date: [startTime, endTime]
+            };
+          }
+          regions[m.event].date[m.isOn ? 0 : 1] = m.date;
+        });
+
+        $scope.regions = Object.keys(regions)
+          .map(function(k) { return regions[k]; });
+      }
+    };
+
     var displayMarkers = function(data) {
       $scope.markers = data.length == 0 ? [] : data[0].map(function(m) {
         return {
@@ -89,7 +112,8 @@ angular.module('infuseWebApp')
 
         $scope.doRequest('/watch/timeseries/logs/get', watchRq)
           .then(convertSeries)
-          .then(displayMarkers);
+          .then(displayRegions(rq.startTime, rq.endTime));
+          //.then(displayMarkers);
       }
     };
 

@@ -8,7 +8,8 @@ angular.module('infuseWebAppCommon')
         width: '@',
         height: '@',
         data: '=',
-        markers: '='
+        markers: '=',
+        regions: '='
       },
       link: function(scope, element, attrs) {
         element[0].style.display = 'inline-block';
@@ -18,6 +19,7 @@ angular.module('infuseWebAppCommon')
         var graphic = {
           'data': scope.data,
           'markers': scope.markers,
+          'regions': scope.regions,
           'target': element[0],
           //'area': false,
           'full_width': true,
@@ -28,7 +30,7 @@ angular.module('infuseWebAppCommon')
           'min_y_from_data': true,
           'buffer': 0,
           'left': 25,
-          'top': 10
+          'top': 15
         };
 
         var repaint = function() {
@@ -44,6 +46,11 @@ angular.module('infuseWebAppCommon')
 
         scope.$watchCollection('markers', function(val) {
           graphic.markers = val;
+          repaint();
+        });
+
+        scope.$watchCollection('regions', function(val) {
+          graphic.regions = val;
           repaint();
         });
       }
