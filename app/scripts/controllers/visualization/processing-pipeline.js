@@ -14,6 +14,7 @@ angular.module('infuseWebAppVisualization')
     var interpreterColor = '#FFB800';
     var packerColor = '#FF005C';
     var structureColor = '#999';
+    var unknownColor = '#ccc';
 
     var curryAddLink = function(links, a, isBtoA) {
       return function(b) {
@@ -135,6 +136,30 @@ angular.module('infuseWebAppVisualization')
       });
     };
 
+    var addMissingNodes = function(nodes, links) {
+      // Check that all links point to registered nodes
+      var knownNodes = {};
+      nodes.forEach(function(n) {
+        knownNodes[n.id] = true;
+      });
+
+      var addUnknownNode = function(name) {
+        nodes.push({
+          color: unknownColor,
+          id: name,
+          info: {
+            name: name + ' (implicit)'
+          }
+        });
+        knownNodes[name] = true;
+      };
+
+      links.forEach(function(l) {
+        if (!knownNodes[l.from]) { addUnknownNode(l.from); }
+        if (!knownNodes[l.to]) { addUnknownNode(l.to); }
+      });
+    };
+
     var refresh = function(wsData, forceRefresh) {
       if (!forceRefresh && angular.equals(wsData.data, previousData.data)) {
         return;
@@ -160,6 +185,7 @@ angular.module('infuseWebAppVisualization')
         viewStructures(wsData.data, nodes, links);
       }
 
+      addMissingNodes(nodes, links);
       $scope.overview.nodes = nodes;
       $scope.overview.links = links;
     };
