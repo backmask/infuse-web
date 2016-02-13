@@ -7,7 +7,8 @@ angular.module('infuseWebAppCommon')
       scope: {
         width: '@',
         height: '@',
-        data: '='
+        data: '=',
+        markers: '='
       },
       link: function(scope, element, attrs) {
         element[0].style.display = 'inline-block';
@@ -16,6 +17,7 @@ angular.module('infuseWebAppCommon')
 
         var graphic = {
           'data': scope.data,
+          'markers': scope.markers,
           'target': element[0],
           //'area': false,
           'full_width': true,
@@ -37,6 +39,11 @@ angular.module('infuseWebAppCommon')
 
         scope.$watchCollection('data', function(val) {
           graphic.data = val;
+          repaint();
+        });
+
+        scope.$watchCollection('markers', function(val) {
+          graphic.markers = val;
           repaint();
         });
       }

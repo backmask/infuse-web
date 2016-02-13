@@ -11,7 +11,8 @@ angular.module('infuseWebApp')
     if ($scope.setup) {
       $scope.settings.series.push({
         devicesId: [],
-        measurementId: 0
+        measurementId: 0,
+        watchId: []
       });
     }
 
@@ -33,8 +34,41 @@ angular.module('infuseWebApp')
       return r;
     };
 
+    var convertSeries = function(data) {
+      // No data-point returned
+      if (!data.data || !data.data.results[0].series) {
+        return [];
+      }
+
+      var r = data.data.results[0].series.map(function(s) {
+        return s.values.map(function(v) {
+          var o = {};
+          for (var i = 0; i < s.columns.length; ++i) {
+            var col = s.columns[i];
+            if (col == 'time') {
+              o.date = new Date(v[i]);
+            } else {
+              o[s.columns[i]] = v[i];
+            }
+          }
+          return o;
+        });
+      });
+
+      return r;
+    };
+
     var displayData = function(data) {
       $scope.data = data;
+    };
+
+    var displayMarkers = function(data) {
+      $scope.markers = data.length == 0 ? [] : data[0].map(function(m) {
+        return {
+          date: m.date,
+          label: m.event
+        };
+      });
     };
 
     $scope.refreshSerie = function(serie) {
@@ -48,6 +82,15 @@ angular.module('infuseWebApp')
       $scope.doRequest('/timeseries/get/measurement', rq)
         .then(convertData)
         .then(displayData);
+
+      if (angular.isArray(serie.watchId) && serie.watchId.length > 0) {
+        var watchRq = angular.copy(rq);
+        watchRq.watchId = serie.watchId;
+
+        $scope.doRequest('/watch/timeseries/logs/get', watchRq)
+          .then(convertSeries)
+          .then(displayMarkers);
+      }
     };
 
     $scope.refreshAll = function() {
