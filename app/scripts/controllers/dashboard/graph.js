@@ -69,19 +69,46 @@ angular.module('infuseWebApp')
           return;
         }
 
+        // Events received are ordered by time from the most recent to the least recent
+        // An event may only be received if the state changed
+        // e.g. a 'Off' notification can only be followed by a 'On' for the same event
         var regions = {};
+
         data[0].forEach(function (m) {
+          // Aggregate by event name
+          // The event spans the whole graph by default because there
+          // will not be a notification for events toggled outside of the graph window
           if (!regions[m.event]) {
-            regions[m.event] = {
+            regions[m.event] = [{
               label: m.event,
-              date: [startTime, endTime]
-            };
+              date: [startTime, endTime],
+              gotLast: false
+            }];
           }
-          regions[m.event].date[m.isOn ? 0 : 1] = m.date;
+
+          var reg = regions[m.event];
+
+          // If we already have the On notification, create a second region,
+          // this event have been toggled a new time
+          if (reg[reg.length - 1].gotLast) {
+            reg.push({
+              label: m.event,
+              date: [startTime, endTime],
+              gotLast: false
+            });
+          }
+
+          // Set toggle time
+          reg[reg.length - 1].date[m.isOn ? 0 : 1] = m.date;
+          reg[reg.length - 1].gotLast |= m.isOn;
         });
 
-        $scope.regions = Object.keys(regions)
-          .map(function(k) { return regions[k]; });
+        var fmap = [];
+        for (var key in regions) {
+          fmap = fmap.concat(regions[key]);
+        }
+
+        $scope.regions = fmap;
       }
     };
 
@@ -99,7 +126,7 @@ angular.module('infuseWebApp')
         startTime: new Date(new Date() - 24 * 3600 * 1000).toISOString(),
         endTime: new Date().toISOString(),
         measurementId: serie.measurementId,
-        timeResolution: '15m'
+        timeResolution: '10m'
       };
 
       $scope.doRequest('/timeseries/get/measurement', rq)
