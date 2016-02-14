@@ -99,6 +99,8 @@ angular.module('infuseWebAppDevice')
       scope.setCallback = function(context, cb) {
         if (pendingRequests[context]) {
           pendingRequests[context].onResponse = cb;
+        } else {
+          pendingRequests[context] = { onResponse: cb };
         }
       };
 
