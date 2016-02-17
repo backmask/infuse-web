@@ -25,15 +25,31 @@ angular.module('infuseWebApp')
       return connectionManager.openConnection(device);
     };
 
+    r.plotNode = function(subclient, nodeUri, structUids, filter, seriesMapper) {
+      plotGenerator(subclient, function(cb) {
+        return subclient.pipeNode({
+          stream: 'out',
+          uri: nodeUri,
+          target: subclient.sessionClientUuid
+        }, structUids, cb);
+      }, filter, seriesMapper);
+    };
+
     r.plotStructures = function(subclient, structUids, filter, seriesMapper) {
+      plotGenerator(subclient, function(cb) {
+        return subclient.pipeStructures(structUids, cb);
+      }, filter, seriesMapper);
+    };
+
+    var plotGenerator = function(subclient, pipeFactory, filter, seriesMapper) {
       var pipe;
       seriesMapper = seriesMapper || function(uid, payload) {
-        var label = uid;
-        if (payload.symbol) {
-          label += '[' + payload.symbol + ']';
-        }
-        return label;
-      };
+          var label = uid;
+          if (payload.symbol) {
+            label += '[' + payload.symbol + ']';
+          }
+          return label;
+        };
 
       var setupPipe = function(sc) {
         var idx = 0;
@@ -53,7 +69,7 @@ angular.module('infuseWebApp')
           return r;
         };
 
-        pipe = subclient.pipeStructures(structUids, function(d) {
+        pipe = pipeFactory(function(d) {
           var label = seriesMapper(d.dataUid, d.data);
           var res = filter ? filter(d.dataUid, d.data, ++idx) : d.data.value;
           if (!isNaN(res)) {
