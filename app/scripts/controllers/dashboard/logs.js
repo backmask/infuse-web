@@ -7,23 +7,27 @@ angular.module('infuseWebApp')
       deviceId: [],
       startTime: "",
       endTime: "",
-      limit: 20,
+      limit: 30,
       offset: 0
     };
 
     var logFilters = {
       'message': ['message'],
-      'io': ['input', 'output']
+      'io': ['input', 'output'],
+      'event': []
     };
 
     $scope.logs = {
       'message': [],
-      'io': []
+      'io': [],
+      'event': []
     };
 
     var getRequest = function(logType) {
       var copy = angular.copy($scope.request);
-      copy.logType = logType;
+      if (logType) {
+        copy.logType = logType;
+      }
       return copy;
     };
 
@@ -55,21 +59,39 @@ angular.module('infuseWebApp')
       return $q.when([]);
     };
 
+    var doEventLogsRequest = function(rq) {
+      if (gw) {
+        return gw.doRequest('/watch/timeseries/logs/get', rq)
+          .overrides('event')
+          .then(function (d) {
+            return d.data.results[0].series ? mapLogEntries(d.data.results[0].series[0]) : [];
+          });
+      }
+      return $q.when([]);
+    };
+
     $scope.refresh = function () {
-      $scope.request.startTime = new Date(new Date() - 24 * 3600 * 1000).toISOString();
+      $scope.request.startTime = new Date(new Date() - 24 * 3600 * 1000 * 30).toISOString();
       $scope.request.endTime = new Date().toISOString();
     };
 
     $scope.fetchMoreLogs = function(target) {
-      var rq = getRequest(logFilters[target]);
+      var rq = getRequest(target == 'event' ? null : logFilters[target]);
       rq.offset = $scope.logs[target].length;
-      doLogsRequest(target, rq)
-        .then(function(log) { $scope.logs[target] = $scope.logs[target].concat(log); });
+
+      var query = target == 'event'
+        ? doEventLogsRequest(getRequest())
+        : doLogsRequest(target, getRequest(logFilters[target]));
+
+      query.then(function(log) { $scope.logs[target] = $scope.logs[target].concat(log); });
     };
 
     $scope.fetchLogs = function(target) {
-      doLogsRequest(target, getRequest(logFilters[target]))
-        .then(function(log) { $scope.logs[target] = log; });
+      var rq = target == 'event'
+        ? doEventLogsRequest(getRequest())
+        : doLogsRequest(target, getRequest(logFilters[target]));
+
+      rq.then(function(log) { $scope.logs[target] = log; });
     };
 
     $scope.refresh();

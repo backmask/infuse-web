@@ -1,0 +1,16 @@
+<h4 style="display:inline-block">Events</h4>
+<div infinite-scroll="fetchMoreLogs('event')"
+     infinite-scroll-distance="1"
+     infinite-scroll-parent="true">
+  <table class="table logs-view" style="margin-bottom:0">
+    <tr ng-repeat="event in logs.event" style="height:0%">
+      <td>
+        <span ng-if="event.isOn" class="badge log-level log-input">On</span>
+        <span ng-if="!event.isOn" class="badge log-level log-output">Off</span>
+      </td>
+      <td><device-badge id="event.deviceId" /></td>
+      <td>{{event.time | amCalendar}}</td>
+      <td>{{event.event}}</td>
+    </tr>
+  </table>
+</div>
