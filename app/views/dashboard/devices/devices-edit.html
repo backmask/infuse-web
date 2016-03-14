@@ -70,6 +70,8 @@
     </div>
   </div>
   <hr/>
+
+  <!-- Logging -->
   <div>
     <h4 style="float:left;vertical-align: top">Logging</h4>
     <h5 style="float:right;vertical-align: top">Records events by time and device as text format</h5>
@@ -98,6 +100,8 @@
     </div>
   </div>
   <hr/>
+
+  <!-- Recording -->
   <div>
     <h4 style="float:left;vertical-align: top">Recording</h4>
     <h5 style="float:right;vertical-align: top">Allows data playback for offline learning and debugging</h5>
@@ -120,6 +124,46 @@
     <label for="recordingMaxSize" class="col-sm-2 control-label">Max size (in MB)</label>
     <div class="col-sm-10">
       <input type="number" class="form-control" ng-model="device.recording.maxMbSize">
+    </div>
+  </div>
+  <hr/>
+
+  <!-- Pipeline -->
+  <div>
+    <h4 style="float:left;vertical-align: top">Pipeline</h4>
+    <h5 style="float:right;vertical-align: top">Server-side data handling configuration</h5>
+  </div>
+  <div style="clear:both"></div>
+  <div class="form-group">
+    <label for="pipelineType" class="col-sm-2 control-label">Pipeline type</label>
+    <div class="col-sm-10">
+      <select class="form-control"
+              ng-model="device.pipeline.pipelineType"
+              ng-options="pipelineTypes.indexOf(selectedItem) as selectedItem for selectedItem in pipelineTypes"></select>
+    </div>
+  </div>
+  <div class="form-group" ng-if="device.pipeline.pipelineType === 1">
+    <label for="pipelineName" class="col-sm-2 control-label">Pipeline name</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" ng-model="device.pipeline.pipelineName">
+    </div>
+  </div>
+  <div class="form-group" ng-if="device.pipeline.pipelineType === 2">
+    <label for="pipeline" class="col-sm-2 control-label">Pipeline</label>
+    <div style="width:100%;max-height:400px;overflow:auto;border:1px solid #ccc"
+         ui-codemirror="{lineNumbers: true, lineWrapping : true, mode: 'javascript', theme: 'default'}"
+         ng-model="device.pipeline.jsonExplicitPipeline" class="smaller"></div>
+  </div>
+  <div class="form-group">
+    <label for="segmenters" class="col-sm-2 control-label">Segmenters</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" ng-model="device.pipeline.csvSegmenters">
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="responder" class="col-sm-2 control-label">Responder</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" ng-model="device.pipeline.responder">
     </div>
   </div>
 </form>

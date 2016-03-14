@@ -58,6 +58,12 @@ angular.module('infuseWebApp')
       { id: 'flight.command', name: 'Flight command' }
     ];
 
+    $scope.pipelineTypes = [
+      'Auto',
+      'Named',
+      'Manual'
+    ];
+
     $scope.editDevice = function(device) {
       $scope.editingDevice = true;
       $scope.device = angular.copy(device);
@@ -66,6 +72,8 @@ angular.module('infuseWebApp')
       setCheckedValues($scope.device.description.sensors, $scope.sensors);
       setCheckedValues($scope.device.description.readers, $scope.readers);
       setCheckedValues([$scope.device.logging.logLevel], $scope.logLevels);
+      $scope.device.pipeline.jsonExplicitPipeline = JSON.stringify(device.pipeline.explicitPipeline, null, 2);
+      $scope.device.pipeline.csvSegmenters = device.pipeline.segmenters.join(';');
     };
 
     $scope.newDevice = function() {
@@ -85,6 +93,8 @@ angular.module('infuseWebApp')
       savedDevice.description.sensors = savedDevice.description.sensors.map(mapId);
       savedDevice.description.readers = savedDevice.description.readers.map(mapId);
       savedDevice.logging.logLevel = savedDevice.logging.logLevel.length > 0 ? savedDevice.logging.logLevel[0].id : 0;
+      savedDevice.pipeline.explicitPipeline = JSON.parse(savedDevice.pipeline.jsonExplicitPipeline);
+      savedDevice.pipeline.segmenters = savedDevice.pipeline.csvSegmenters.split(';');
 
       var doneCb = function() {
         $scope.editingDevice = false;
